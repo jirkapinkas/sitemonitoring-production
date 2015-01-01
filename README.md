@@ -2,7 +2,7 @@
 
 <h2>Standalone application (with HSQL database)</h2>
 
-<p>Just download <a href="https://sourceforge.net/projects/sitemonitoring/files/latest/download?source=files">compiled file</a>
+<p>Just download <a href="https://sourceforge.net/projects/sitemonitoring/files/latest/download?source=files" target="_blank">compiled file</a>
 <br />
 Next run: <code>java -jar sitemonitoring.jar</code></p>
 </p>
@@ -19,4 +19,8 @@ Next run: <code>java -jar target/sitemonitoring.war</code></p>
 
 <p>To deploy on Heroku change in pom.xml: <code>&lt;argument&gt;sitemonitoring&lt;/argument&gt;</code> change "sitemonitoring" to your application name in Heroku and run: <code>mvn clean install -P heroku</code>
 
-<p>How to create Heroku application and install Heroku toolbelt is in this <a href="http://www.javavids.com/video/spring-web-app-tutorial-50-heroku.html">video</a></p>
+<p>How to create Heroku application and install Heroku toolbelt is in this <a href="http://www.javavids.com/video/spring-web-app-tutorial-50-heroku.html" target="_blank">video</a></p>
+
+<p>
+<a href="http://sitemonitoring.sourceforge.net/" target="_blank">website monitoring homepage</a> SOON THERE WILL BE TUTORIALS HOW TO USE THE APPLICATION.
+</p>
