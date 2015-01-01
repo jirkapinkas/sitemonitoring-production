@@ -21,6 +21,8 @@ Next run: <code>java -jar target/sitemonitoring.war</code></p>
 
 <p>How to create Heroku application and install Heroku toolbelt is in this <a href="http://www.javavids.com/video/spring-web-app-tutorial-50-heroku.html" target="_blank">video</a></p>
 
+<p>default username / password: admin / admin</p>
+
 <p>
 <a href="http://sitemonitoring.sourceforge.net/" target="_blank">website monitoring homepage</a> SOON THERE WILL BE TUTORIALS HOW TO USE THE APPLICATION.
 </p>
