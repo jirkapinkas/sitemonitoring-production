@@ -1,0 +1,268 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:components="http://xmlns.jcp.org/jsf/composite/components">
+<ui:composition template="/template.xhtml">
+
+	<ui:param name="title" value="checks" />
+
+	<ui:define name="content">
+
+		<f:metadata>
+			<f:viewAction action="#{checkController.loadChecks()}" />
+			<f:viewAction action="#{checkResultsController.loadChecks()}" />
+		</f:metadata>
+
+		<h1>checks:</h1>
+
+		<p:socket channel="/running" onMessage="handleCheckMessage" />
+
+		<script type="text/javascript">
+		    function handleCheckMessage(data) {
+		        updateWidgets();
+		    }
+		</script>
+
+		<h:form>
+			<p:remoteCommand name="updateWidgets"
+	                 actionListener="#{checkController.updateResults()}"
+	                 update=":checksTable" oncomplete="linkifyContent()" />
+        </h:form>
+        
+        <h:form>
+        	<p:menuButton value="add">
+        		<p:menuitem value="single check" icon="addButton"
+							action="#{checkController.prepareSingleCheck()}"
+							oncomplete="PF('checkDialogSingle').show()"
+							update=":checkFormSingle"
+							resetValues="true" />
+				<p:menuitem value="sitemap check" icon="addButton"
+							action="#{checkController.prepareSitemapCheck()}"
+							oncomplete="PF('checkDialogSitemap').show()"
+							update=":checkFormSitemap"
+							resetValues="true" />
+        	</p:menuButton>
+        </h:form>
+                 
+		<br />
+		
+		<p:messages autoUpdate="true" severity="info" />
+		
+		<p:dataTable value="#{checkController.checks}" var="check"
+			id="checksTable" styleClass="resultsTable">
+			
+			<p:column headerText="checks" style="width:250px;vertical-align:top">
+
+				<h:panelGroup style="float:left;padding-top:5px">
+					<h:panelGroup rendered="#{check.active}">
+						<strong>#{check.name}</strong><br />
+					</h:panelGroup>
+					<h:panelGroup rendered="#{! check.active}">
+						<strong style="text-decoration: line-through;">#{check.name}</strong><br />
+					</h:panelGroup>
+				</h:panelGroup>
+
+				<br style="clear:both" />
+
+				<h:panelGroup style="float:left;padding-left:0">
+				<h:form>
+					<div class="menuButton">
+						<p:commandButton icon="topButton" title="last check result" action="#{checkResultsController.showLast(check.id)}" update=":checksTable" oncomplete="linkifyContent()" rendered="#{check.active eq true}" />
+					</div>
+					<div class="menuButton">
+						<p:commandButton icon="chartButton" title="chart" action="#{checkResultsController.showChart(check.id)}" update=":checksTable" oncomplete="linkifyContent()" rendered="#{check.active eq true}" />
+					</div>
+					<div class="menuButton">
+						<p:commandButton icon="listButton" title="list errors" action="#{checkResultsController.showTable(check.id)}" update=":checksTable" oncomplete="linkifyContent()" rendered="#{check.active eq true}" />
+					</div>
+					<div class="menuButton">
+						<p:commandButton icon="editButton" title="edit"
+							action="#{checkController.setCheck(check)}"
+							update=":checkFormSingle"
+							oncomplete="PF('checkDialogSingle').show()" resetValues="true"
+							rendered="#{check.type eq 'SINGLE_PAGE'}" />
+						<p:commandButton icon="editButton" title="edit"
+							action="#{checkController.setCheck(check)}"
+							update=":checkFormSitemap"
+							oncomplete="PF('checkDialogSitemap').show()" resetValues="true"
+							rendered="#{check.type eq 'SITEMAP'}" />
+					</div>
+					<div class="menuButton">
+						<p:commandButton icon="stopButton" title="stop" action="#{checkController.abort(check.id)}" rendered="#{check.checkState eq 'RUNNING' and check.active eq true}" />
+						<p:commandButton icon="playButton" title="start now!" action="#{checkController.startNow(check.id)}" rendered="#{check.checkState ne 'RUNNING' and check.active eq true}" />
+					</div>
+					<div class="menuButton">
+						<p:commandButton icon="deleteButton" title="remove"
+							action="#{checkController.delete(check.id)}"
+							update=":checksTable"
+							oncomplete="linkifyContent()">
+							<p:confirm header="Confirmation" message="Really remove?" icon="ui-icon-alert" />
+						</p:commandButton>
+					</div>
+				</h:form>
+				</h:panelGroup>
+
+				<div style="clear:both;padding-bottom:10px"></div>
+				
+				<h:panelGroup rendered="#{check.active eq true}">
+
+					<h:panelGroup rendered="#{checkResultsController.getShowType(check.id) eq 'TABLE'}">
+					
+						<strong>errors:</strong>
+					
+						<p:dataTable value="#{checkResultsController.tableResults[check.id].list}" var="checkResultDto"
+										rows="10"
+										paginator="true"
+										paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										rowsPerPageTemplate="10,50,100">
+							<p:column headerText="start date" style="width:200px">
+								#{checkResultDto.startDate}
+							</p:column>
+							<p:column headerText="response time" style="width:80px">
+								#{checkResultDto.responseTime} ms
+							</p:column>
+							<p:column headerText="result">
+								<h:graphicImage value="/resources/images/yes.png" rendered="#{checkResultDto.success eq true}" />
+								<h:graphicImage value="/resources/images/no.png" rendered="#{checkResultDto.success eq false}" />
+								#{checkResultDto.result}
+							</p:column>
+						</p:dataTable>
+					</h:panelGroup>
+
+					<h:panelGroup rendered="#{checkResultsController.getShowType(check.id) eq 'CHART'}">
+					
+						<h:form id="chartPeriodForm">
+							period: #{check.chartPeriodValue} #{check.chartPeriodType}
+							<!-- TODO CHANGE, POSSIBLY VERY INEFFECTIVE -->
+							(#{checkResultsController.getChartDatePeriod(check.id).dateFrom} - #{checkResultsController.getChartDatePeriod(check.id).dateTo})
+							<br />
+							<p:commandButton value="change period" 
+											 action="#{checkResultsController.setCurrentCheck(check.id)}"
+											 update=":chartPeriodForm" 
+											 oncomplete="PF('chartPeriodDialog').show()" />
+							<p:commandButton value="&lt;" 
+											 style="margin-left:10px"
+											 action="#{checkResultsController.incOffset(check.id, -1)}"
+											 update=":checksTable" />
+							<p:commandButton value="&gt;" 
+											 action="#{checkResultsController.incOffset(check.id, 1)}"
+											 update=":checksTable" />
+							<p:commandButton value="now" 
+											 action="#{checkResultsController.resetOffset(check.id)}"
+											 update=":checksTable" />
+						</h:form>
+					
+						<p:chart type="line" style="height:300px" model="#{checkResultsController.chartResults[check.id]}"  />
+
+					</h:panelGroup>
+
+					<h:panelGroup rendered="#{checkResultsController.getShowType(check.id) eq 'LAST'}">
+						last check:
+						<h:graphicImage value="/resources/images/yes.png" rendered="#{checkResultsController.lastResults[check.id].success eq true}" />
+						<h:graphicImage value="/resources/images/no.png" rendered="#{checkResultsController.lastResults[check.id].success eq false}" />
+						<h:graphicImage value="/resources/images/unknown.png" rendered="#{checkResultsController.lastResults[check.id].success eq null}" />
+						<br />
+						started:
+						<h:outputText value="#{checkResultsController.lastResults[check.id].startDate}" style="padding-left:5px" />
+	 					<br />
+	 					finished:
+						<h:outputText value="#{checkResultsController.lastResults[check.id].finishDate}" style="padding-left:5px" />
+						<div class="content">
+							<h:outputText value="#{checkResultsController.lastResults[check.id].result}" escape="false" />
+						</div>
+	 				</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup rendered="#{check.active eq false}">
+					<h:graphicImage value="/resources/images/unknown.png" rendered="#{checkResultsController.lastResults[check.id].success eq null}" />
+					<h:outputText value="--- check is not active ---" />
+				</h:panelGroup>
+				<br />
+			</p:column>
+			
+		</p:dataTable>
+
+
+		<p:dialog widgetVar="checkDialogSingle" closeOnEscape="true" modal="true" header="single check">
+
+			<h:form id="checkFormSingle">
+				<p:messages />
+
+				<components:check-dialog-commons />
+
+				<br />
+
+				<p:commandButton value="save" action="#{checkController.save()}"
+					update="checkFormSingle, :checksTable" oncomplete="handleDialogSubmit(args, 'checkDialogSingle')" />
+	
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog widgetVar="checkDialogSitemap" closeOnEscape="true" modal="true" header="sitemap check">
+
+			<h:form id="checkFormSitemap">
+				<p:messages />
+
+				<components:check-dialog-commons />
+				
+				<p:panelGrid columns="2" style="width:100%" columnClasses="panelColumnSmall">
+					<h:outputText value="excluded URLs &lt;br /&gt; asterisk = anything &lt;br /&gt;(for example *.pdf):" escape="false" />
+					<p:inputTextarea value="#{checkController.check.excludedUrls}" style="width:100%" />
+				</p:panelGrid>
+				
+				<br />
+	
+				<p:commandButton value="save" action="#{checkController.save()}"
+					update="checkFormSitemap, :checksTable" oncomplete="handleDialogSubmit(args, 'checkDialogSitemap')" />
+	
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog widgetVar="chartPeriodDialog" closeOnEscape="true" modal="true" >
+			<h:form id="chartPeriodForm">
+				<table>
+					<tr>
+						<td>chart period:</td>
+						<td>
+							<p:inputText binding="#{chartPeriodValue}" value="#{checkResultsController.currentCheck.chartPeriodValue}" style="width:30px;float:left" />
+						</td>
+						<td>
+							<p:selectOneMenu binding="#{chartPeriodType}" value="#{checkResultsController.currentCheck.chartPeriodType}" required="true" style="float:left">
+								<f:selectItem itemLabel="hours" itemValue="HOUR" />
+								<f:selectItem itemLabel="days" itemValue="DAY" />
+								<f:selectItem itemLabel="months" itemValue="MONTH" />
+							</p:selectOneMenu>
+						</td>
+						<td>
+							<p:commandButton value="change" 
+											 action="#{checkResultsController.updateCheckPeriod(chartPeriodType.value, chartPeriodValue.value)}"
+											 update=":checksTable, :chartPeriodForm" oncomplete="handleDialogSubmit(args, 'chartPeriodDialog')" style="float:left" />
+						</td>
+					</tr>
+				</table>
+			</h:form>
+		</p:dialog>
+
+		<script type="text/javascript">
+			function ext() {
+				// http://www.jqplot.com/docs/files/jqPlotOptions-txt.html
+// 	    	    this.cfg.axes.yaxis.min = 0;
+// 	    	    this.cfg.axes.yaxis.tickOptions.showGridline = false;
+// 	        	this.cfg.axes.xaxis.tickOptions.showGridline = false; 
+// 	        	this.cfg.axes.xaxis.tickOptions.show = false; 
+	        	// http://www.jqplot.com/docs/files/plugins/jqplot-dateAxisRenderer-js.html
+	        	this.cfg.axes.xaxis.tickOptions.formatString = "%H:%M:%S %d.%m.%Y"; 
+	        	this.cfg.axes.xaxis.numberTicks = 10; 
+	        	this.cfg.axes.xaxis.tickOptions.angle = -30; 
+	        	this.cfg.axes.yaxis.tickOptions.formatString = "%'.1d ms"; 
+	        	this.cfg.highlighter.tooltipSeparator = ", response time: "; 
+	        	this.cfg.seriesColors = ['green', 'red'];
+	        	this.cfg.series[1].showLine = false;
+// 	        	this.cfg.series[0].markerOptions.show = false;
+			}
+		</script>
+		
+	</ui:define>
+</ui:composition>
+</html>

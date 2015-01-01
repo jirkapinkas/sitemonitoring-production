@@ -1,0 +1,64 @@
+.customMenuItem {
+	padding-top: 12px !important;
+	padding-bottom: 12px !important;
+}
+
+.addButton {
+	background-image: url("#{resource['images/plus.png']}") !important;
+}
+
+.deleteButton {
+	background-image: url("#{resource['images/minus.png']}") !important;
+}
+
+.editButton {
+	background-image: url("#{resource['images/edit.png']}") !important;
+}
+
+.playButton {
+	background-image: url("#{resource['images/play.png']}") !important;
+}
+
+.stopButton {
+	background-image: url("#{resource['images/stop.png']}") !important;
+}
+
+.topButton {
+	background-image: url("#{resource['images/top.png']}") !important;
+}
+
+.chartButton {
+	background-image: url("#{resource['images/chart.png']}") !important;
+}
+
+.listButton {
+	background-image: url("#{resource['images/list.png']}") !important;
+}
+
+.menuButton {
+	float: left;
+	padding-right: 2px;
+}
+
+.panelColumnSmall {
+	width: 150px;
+}
+
+.statusBtn {
+	background: none !important;
+	border: none !important;
+	-webkit-box-shadow: none !important;
+	box-shadow: none !important;
+}
+
+.container {
+	padding-top: 10px;
+}
+
+.configurationGridCol1 {
+	width: 290px;
+}
+
+.configurationGridCol2 {
+	width: 210px;
+}
