@@ -6,7 +6,7 @@
 
 <p>To login use <code>username / password: admin / admin</code></p>
 
-<h2>Standalone application (with HSQL or your custom database)</h2>
+<h2>Standalone application (with HSQL database)</h2>
 
 <p>Just download <a href="https://sourceforge.net/projects/sitemonitoring/files/latest/download?source=files" target="_blank">compiled file</a>
 <br />
