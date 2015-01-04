@@ -236,7 +236,7 @@
 					<version>2.3.2</version>
 				</dependency>
 				<!-- just to resolve compilation problems (because of Main class, which 
-					uses these libraries in demo profile -->
+					uses these libraries in standalone profile -->
 				<dependency>
 					<groupId>org.eclipse.jetty</groupId>
 					<artifactId>jetty-webapp</artifactId>
@@ -279,7 +279,7 @@
 					<version>9.1-901-1.jdbc4</version>
 				</dependency>
 				<!-- just to resolve compilation problems (because of Main class, which 
-					uses these libraries in demo profile -->
+					uses these libraries in standalone profile -->
 				<dependency>
 					<groupId>org.eclipse.jetty</groupId>
 					<artifactId>jetty-webapp</artifactId>
@@ -325,9 +325,9 @@
 
 		<!-- basic inspiration: http://uguptablog.blogspot.cz/2012/09/embedded-jetty-executable-war-with.html -->
 		<profile>
-			<id>demo</id>
+			<id>standalone</id>
 			<properties>
-				<filter.name>demo</filter.name>
+				<filter.name>standalone</filter.name>
 			</properties>
 			<dependencies>
 				<dependency>

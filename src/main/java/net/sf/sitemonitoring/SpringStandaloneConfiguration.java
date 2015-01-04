@@ -5,7 +5,7 @@ import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import net.sf.sitemonitoring.annotation.DemoProfile;
+import net.sf.sitemonitoring.annotation.StandaloneProfile;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.jpa.HibernatePersistenceProvider;
@@ -14,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
-@DemoProfile
+@StandaloneProfile
 @Configuration
-public class SpringDemoConfiguration {
+public class SpringStandaloneConfiguration {
 
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {

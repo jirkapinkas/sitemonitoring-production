@@ -7,7 +7,7 @@
 Next run: <code>java -jar sitemonitoring.jar</code></p>
 </p>
 
-<p>OR run: <code>mvn clean package -P demo</code>
+<p>OR run: <code>mvn clean package -P standalone</code>
 <br />
 Next run: <code>java -jar target/sitemonitoring.war</code></p>
 

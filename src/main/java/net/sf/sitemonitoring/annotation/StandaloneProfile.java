@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = { ElementType.TYPE, ElementType.METHOD })
-@Profile("demo")
-public @interface DemoProfile {
+@Profile("standalone")
+public @interface StandaloneProfile {
 
 }
