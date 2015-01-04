@@ -6,10 +6,6 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<properties>
-		<filter.name>dev</filter.name>
-	</properties>
-
 	<dependencies>
 
 		<dependency>
@@ -225,10 +221,35 @@
 
 	<profiles>
 		<profile>
+			<id>war</id>
+			<properties>
+				<filter.name>war</filter.name>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.hsqldb</groupId>
+					<artifactId>hsqldb</artifactId>
+					<version>2.3.2</version>
+				</dependency>
+				<!-- just to resolve compilation problems (because of Main class, which 
+					uses these libraries in standalone profile -->
+				<dependency>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-webapp</artifactId>
+					<version>9.2.3.v20140905</version>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+
+		<profile>
 			<id>dev</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
+			<properties>
+				<filter.name>dev</filter.name>
+			</properties>
 			<dependencies>
 				<dependency>
 					<groupId>org.hsqldb</groupId>
