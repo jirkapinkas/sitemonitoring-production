@@ -4,7 +4,7 @@
 <a href="http://sitemonitoring.sourceforge.net/" target="_blank">website monitoring homepage</a> SOON WITH TUTORIALS HOW TO USE THE APPLICATION.
 </p>
 
-<p>To login use <code>username / password: admin / admin</code></p>
+<p>To login use these credentials: <code>username = admin, password = admin</code></p>
 
 <h2>Standalone application (with HSQL database)</h2>
 
