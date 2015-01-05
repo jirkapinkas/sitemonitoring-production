@@ -93,27 +93,6 @@ public class InitDbService {
 			checkRepository.save(check);
 		}
 
-		{
-			Check check = new Check();
-			check.setName("check java skoleni sitemap");
-			check.setUrl("http://localhost:8080/sitemap.xml");
-			check.setConditionType(CheckCondition.CONTAINS);
-			check.setCondition("</html>");
-			check.setType(CheckType.SITEMAP);
-			check.setExcludedUrls("*.pdf");
-			check.setCheckBrokenLinks(true);
-			check.setSocketTimeout(20000);
-			check.setConnectionTimeout(20000);
-			check.setScheduledInterval(10);
-			check.setChartPeriodType(IntervalType.HOUR);
-			check.setChartPeriodValue(1);
-			Calendar calendar = new GregorianCalendar();
-			calendar.set(Calendar.SECOND, 0);
-			calendar.set(Calendar.MILLISECOND, 0);
-			check.setScheduledStartDate(calendar.getTime());
-			check.setScheduledIntervalType(IntervalType.MINUTE);
-			checkRepository.save(check);
-		}
 		System.out.println("*** TEST DATABASE INIT FINISHED ***");
 	}
 
