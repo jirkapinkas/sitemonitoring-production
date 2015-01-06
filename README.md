@@ -1,7 +1,7 @@
 <h1>Website monitoring</h1>
 
 <p>
-<a href="http://sitemonitoring.sourceforge.net/" target="_blank">website monitoring homepage</a> SOON WITH TUTORIALS HOW TO USE THE APPLICATION.
+<a href="http://sitemonitoring.sourceforge.net/" target="_blank">website monitoring homepage with video tutorials!</a>
 </p>
 
 <p>To login use these credentials: <code>username = admin, password = admin</code></p>
