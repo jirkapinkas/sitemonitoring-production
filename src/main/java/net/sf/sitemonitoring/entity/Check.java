@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
@@ -36,7 +37,7 @@ public class Check implements Serializable {
 	private int id;
 
 	public enum CheckType {
-		SITEMAP, SINGLE_PAGE
+		SITEMAP, SINGLE_PAGE, SPIDER
 	}
 
 	public enum CheckCondition {
@@ -78,7 +79,7 @@ public class Check implements Serializable {
 	@Column(nullable = false)
 	private boolean active;
 
-	@Column(length = 500)
+	@Column(name = "condition_value", length = 500)
 	private String condition;
 
 	@Column(name = "excluded_urls", length = 1000)
@@ -168,7 +169,17 @@ public class Check implements Serializable {
 		case SITEMAP:
 			type = CheckType.SITEMAP;
 			break;
+
+		case SPIDER:
+			type = CheckType.SPIDER;
+			break;
 		}
 	}
+
+	/**
+	 * Single Check web page contents - used only in spider
+	 */
+	@Transient
+	private String webPage;
 
 }

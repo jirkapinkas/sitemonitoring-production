@@ -73,4 +73,7 @@ public class Configuration implements Serializable {
 	@Column(name = "email_body")
 	private String emailBody;
 
+	@Column(name = "monitoring_version")
+	private String monitoringVersion;
+
 }
