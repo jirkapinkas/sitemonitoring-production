@@ -20,7 +20,7 @@ Next run: <code>java -jar target/sitemonitoring.war</code></p>
 <h2>Standard WAR file (with your custom database)</h2>
 
 <p>
-Set database properties in <code>src/main/resources/db.properties</code>, add to classpath JDBC driver and finally run:<code>mvn clean package -P war</code>. Out of the box will be used HSQL embedded database (to validate functionality).
+Set database properties in <code>src/main/resources/db.properties</code>, add to classpath JDBC driver and finally run:<code>mvn clean package -P war</code>. Out of the box will be used HSQL embedded database (to validate functionality). Supported databases are PostgreSQL and Oracle. See video tutorial how to use it.
 </p>
 
 <h2>Development (with embedded HSQL database)</h2>
