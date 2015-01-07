@@ -17,7 +17,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth, DataSource dataSource) throws Exception {
 		// auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
-		auth.jdbcAuthentication().dataSource(dataSource).usersByUsernameQuery("select admin_username, admin_password, true from monit_configuration where admin_username = ?")
+		auth.jdbcAuthentication().dataSource(dataSource).usersByUsernameQuery("select admin_username, admin_password, 1 from monit_configuration where admin_username = ?")
 				.authoritiesByUsernameQuery("select admin_username, 'ROLE_ADMIN' from monit_configuration where admin_username = ?").passwordEncoder(new BCryptPasswordEncoder());
 	}
 
