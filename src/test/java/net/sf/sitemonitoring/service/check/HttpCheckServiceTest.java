@@ -18,6 +18,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -64,7 +65,14 @@ public class HttpCheckServiceTest {
 		singlePageCheckService = new SinglePageCheckService();
 		singlePageCheckService.setEventBus(new EventBus());
 		sitemapCheckThread = new SitemapCheckThread(JAXBContext.newInstance(Urlset.class, Url.class), singlePageCheckService, null);
+		// created in AbstractCheckThread.run(), that's why I have to create it here.
+		sitemapCheckThread.httpClient = HttpClients.createDefault();
 		visitedPages = new HashMap<URI, Object>();
+	}
+	
+	@After
+	public void after() throws IOException {
+		sitemapCheckThread.httpClient.close();
 	}
 
 	@AfterClass

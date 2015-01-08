@@ -31,6 +31,7 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 		log.debug("start perform check");
 		CloseableHttpResponse httpResponse = null;
 		try {
+			// TODO vyhodit volani doHead, mozna celkove doHead metodu smazat!
 			if (check.getCondition() == null || check.getCondition().isEmpty()) {
 				httpResponse = doHead(check.getUrl());
 				if (httpResponse == null) {

@@ -13,7 +13,6 @@ import net.sf.sitemonitoring.service.check.MonitoringService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.eventbus.EventBus;
 
@@ -39,7 +38,6 @@ public class SchedulingService {
 	/**
 	 * Schedule monitoring
 	 */
-	@Transactional
 	@Scheduled(fixedDelay = 1000)
 	public void runMonitoring() {
 		log.debug("start run monitoring");

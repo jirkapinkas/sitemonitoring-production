@@ -19,7 +19,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 @Slf4j
@@ -112,7 +111,6 @@ public class SitemapCheckThread extends AbstractCheckThread {
 	public void performCheck() {
 		Map<URI, Object> visitedPages = new HashMap<URI, Object>();
 		log.debug("sitemap performCheck() start");
-		httpClient = HttpClients.createDefault();
 		try {
 			String sitemapXml = downloadSitemap(httpClient, check.getUrl());
 			Urlset urlset = readSitemap(sitemapXml);
@@ -124,13 +122,7 @@ public class SitemapCheckThread extends AbstractCheckThread {
 		} catch (IOException e) {
 			log.error("Error executing sitemap", e);
 			output = e.getMessage();
-		} finally {
-			try {
-				httpClient.close();
-			} catch (IOException e) {
-				log.error("Error closing HTTP client", e);
-			}
-		}
+		} 
 		log.debug("sitemap performCheck() finish");
 	}
 

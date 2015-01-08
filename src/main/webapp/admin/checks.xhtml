@@ -43,6 +43,11 @@
 							oncomplete="PF('checkDialogSitemap').show()"
 							update=":checkFormSitemap"
 							resetValues="true" />
+<!-- 				<p:menuitem value="spider check" icon="addButton" -->
+<!-- 							action="#{checkController.prepareSpiderCheck()}" -->
+<!-- 							oncomplete="PF('checkDialogSpider').show()" -->
+<!-- 							update=":checkFormSpider" -->
+<!-- 							resetValues="true" /> -->
         	</p:menuButton>
         </h:form>
                  
@@ -215,6 +220,26 @@
 	
 				<p:commandButton value="save" action="#{checkController.save()}"
 					update="checkFormSitemap, :checksTable" oncomplete="handleDialogSubmit(args, 'checkDialogSitemap')" />
+	
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog widgetVar="checkDialogSpider" closeOnEscape="true" modal="true" header="spider check">
+
+			<h:form id="checkFormSpider">
+				<p:messages />
+
+				<components:check-dialog-commons />
+				
+				<p:panelGrid columns="2" style="width:100%" columnClasses="panelColumnSmall">
+					<h:outputText value="excluded URLs &lt;br /&gt; asterisk = anything &lt;br /&gt;(for example *.pdf):" escape="false" />
+					<p:inputTextarea value="#{checkController.check.excludedUrls}" style="width:100%" />
+				</p:panelGrid>
+				
+				<br />
+	
+				<p:commandButton value="save" action="#{checkController.save()}"
+					update="checkFormSpider, :checksTable" oncomplete="handleDialogSubmit(args, 'checkDialogSpider')" />
 	
 			</h:form>
 		</p:dialog>

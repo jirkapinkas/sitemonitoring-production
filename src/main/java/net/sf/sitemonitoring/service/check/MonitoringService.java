@@ -17,8 +17,6 @@ import org.primefaces.push.EventBusFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -31,6 +29,9 @@ public class MonitoringService {
 	private SitemapCheckService sitemapCheckService;
 
 	@Autowired
+	private SpiderCheckService spiderCheckService;
+
+	@Autowired
 	private CheckResultRepository checkResultRepository;
 
 	@Autowired
@@ -38,11 +39,10 @@ public class MonitoringService {
 
 	@Autowired
 	private CheckService checkService;
-	
+
 	@Autowired
 	private SendEmailService sendEmailService;
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	@Async
 	public void startCheck(Check check, Date scheduledNextDate) {
 		log.debug("check monitoring started: " + check.getName());
@@ -59,9 +59,11 @@ public class MonitoringService {
 		case SINGLE_PAGE:
 			checkResultText = singleCheckService.performCheck(check, new HashMap<URI, Object>());
 			break;
-
 		case SITEMAP:
 			checkResultText = sitemapCheckService.performCheck(check);
+			break;
+		case SPIDER:
+			checkResultText = spiderCheckService.performCheck(check);
 			break;
 		default:
 			throw new UnsupportedOperationException("this check type is not supported!");
@@ -73,7 +75,7 @@ public class MonitoringService {
 		if (checkResultText != null) {
 			checkResult.setDescription(checkResultText);
 			checkResult.setSuccess(false);
-			if(check.isSendEmails()) {
+			if (check.isSendEmails()) {
 				sendEmailService.sendEmail(check, checkResultText);
 			}
 		} else {

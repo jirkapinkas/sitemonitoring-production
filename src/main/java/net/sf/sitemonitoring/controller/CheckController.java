@@ -104,6 +104,13 @@ public class CheckController implements Serializable {
 		prepareCheck();
 	}
 
+	public void prepareSpiderCheck() {
+		log.debug("create spider check");
+		check = new Check(CheckType.SPIDER);
+		check.setScheduledInterval(configurationService.find().getDefaultSitemapCheckInterval());
+		prepareCheck();
+	}
+
 	private void prepareCheck() {
 		check.setUrl("http://");
 		Configuration configuration = configurationService.find();
