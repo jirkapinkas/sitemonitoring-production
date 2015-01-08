@@ -70,7 +70,7 @@
 		function linkifyContent() {
 			var textDiv = $(".content");
 			$.each(textDiv, function(index, value) {
-				value.innerHTML = linkify(value.innerHTML);
+				value.innerHTML = linkify(value.innerHTML, "#{request.contextPath}");
 			});
 		}
 	</script>

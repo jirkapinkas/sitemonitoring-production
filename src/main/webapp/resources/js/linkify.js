@@ -1,5 +1,5 @@
-function linkify(inputText) {
-	var arrowOut = "&nbsp;<img src='/resources/images/arrow-out.png' align='top' />";
+function linkify(inputText, baseUrl) {
+	var arrowOut = "&nbsp;<img src='" + baseUrl + "/resources/images/arrow-out.png' align='top' />";
 	var replaceText, replacePattern1, replacePattern2, replacePattern3;
 	replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&amp;@#\/%?=~_|!:,.;]*[-A-Z0-9+&amp;@#\/%=~_|])/gim;
 	replacedText = inputText.replace(replacePattern1,

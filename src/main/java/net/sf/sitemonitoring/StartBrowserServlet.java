@@ -16,12 +16,12 @@ public class StartBrowserServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		System.out.println("*** START DEFAULT BROWSER ***");
 		if (!"standalone".equals(getServletContext().getInitParameter("spring.profiles.default"))) {
 			return;
 		}
 		try {
 			if (Desktop.isDesktopSupported()) {
+				System.out.println("*** START DEFAULT BROWSER ***");
 				Desktop.getDesktop().browse(new URI("http://localhost:8080/"));
 			}
 		} catch (Throwable ex) {
