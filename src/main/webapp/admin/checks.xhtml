@@ -93,6 +93,11 @@
 							update=":checkFormSitemap"
 							oncomplete="PF('checkDialogSitemap').show()" resetValues="true"
 							rendered="#{check.type eq 'SITEMAP'}" />
+						<p:commandButton icon="editButton" title="edit"
+							action="#{checkController.setCheck(check)}"
+							update=":checkFormSpider"
+							oncomplete="PF('checkDialogSpider').show()" resetValues="true"
+							rendered="#{check.type eq 'SPIDER'}" />
 					</div>
 					<div class="menuButton">
 						<p:commandButton icon="stopButton" title="stop" action="#{checkController.abort(check.id)}" rendered="#{check.checkState eq 'RUNNING' and check.active eq true}" />

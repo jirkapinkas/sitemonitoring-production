@@ -13,8 +13,21 @@ public class Main {
 		hsql.setSilent(true);
 		hsql.start();
 
+		int port = 8081;
+		if (args.length != 0) {
+			if (args[0].startsWith("--port=")) {
+				String portString = args[0].replace("--port=", "");
+				try {
+					port = Integer.parseInt(portString);
+				} catch (NumberFormatException ex) {
+					System.out.println("invalid port specified: " + portString);
+				}
+			}
+		}
+
 		System.out.println("*** START JETTY SERVER ***");
-		org.eclipse.jetty.server.Server jetty = new org.eclipse.jetty.server.Server(8080);
+		System.out.println("*** USING PORT " + port + " ***");
+		org.eclipse.jetty.server.Server jetty = new org.eclipse.jetty.server.Server(port);
 
 		// enables annotations
 		org.eclipse.jetty.webapp.Configuration.ClassList classlist = org.eclipse.jetty.webapp.Configuration.ClassList.setServerDefault(jetty);
@@ -27,6 +40,8 @@ public class Main {
 		webapp.setContextPath("/");
 		webapp.setWar(location.toExternalForm());
 		jetty.setHandler(webapp);
+		
+		webapp.setInitParameter("port", String.valueOf(port));
 
 		jetty.start();
 		jetty.join();

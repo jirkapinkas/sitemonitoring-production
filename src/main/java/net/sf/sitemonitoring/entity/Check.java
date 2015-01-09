@@ -177,9 +177,12 @@ public class Check implements Serializable {
 	}
 
 	/**
-	 * Single Check web page contents - used only in spider
+	 * Used only in spider
 	 */
 	@Transient
 	private String webPage;
-
+	
+	@Transient
+	private boolean storeWebpage;
+	
 }

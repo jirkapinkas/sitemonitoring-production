@@ -12,9 +12,8 @@ public class SpiderCheckService extends AbstractCheckService {
 	private SinglePageCheckService singlePageCheckService;
 
 	public String performCheck(Check spiderCheck) {
-		throw new UnsupportedOperationException();
-//		SpiderCheckThread thread = new SpiderCheckThread(singlePageCheckService, spiderCheck);
-//		return startAndJoinThread(thread);
+		SpiderCheckThread thread = new SpiderCheckThread(singlePageCheckService, spiderCheck);
+		return startAndJoinThread(thread);
 	}
 
 }
