@@ -20,10 +20,11 @@ import org.jsoup.select.Elements;
 @Slf4j
 public class SinglePageCheckThread extends AbstractSingleCheckThread {
 
-	public SinglePageCheckThread(Check check, Map<URI, Object> visitedPages) {
-		super(check.getConnectionTimeout(), check.getSocketTimeout(), check.getReturnHttpCode(), visitedPages);
+	public SinglePageCheckThread(Check check, Map<URI, Object> visitedPagesGet, Map<URI, Object> visitedPagesHead) {
+		super(check.getConnectionTimeout(), check.getSocketTimeout(), check.getReturnHttpCode(), visitedPagesGet, visitedPagesHead);
 		this.check = check;
-		this.visitedPages = visitedPages;
+		this.visitedPagesGet = visitedPagesGet;
+		this.visitedPagesHead = visitedPagesHead;
 	}
 
 	@Override
@@ -46,10 +47,10 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 				HttpEntity entity = httpResponse.getEntity();
 				if (entity != null) {
 					String webPage = EntityUtils.toString(entity);
-					if(check.isStoreWebpage()) {
+					if (check.isStoreWebpage()) {
 						check.setWebPage(webPage);
 					}
-					if (checkStatusCode(httpResponse, check.getUrl())) {
+					if (checkStatusCode(httpResponse, check.getUrl()) && check.getCondition() != null && !check.getCondition().isEmpty()) {
 						switch (check.getConditionType()) {
 						case CONTAINS:
 							if (!webPage.contains(check.getCondition())) {
@@ -85,7 +86,7 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 								subCheck.setConnectionTimeout(check.getConnectionTimeout());
 								subCheck.setSocketTimeout(check.getSocketTimeout());
 								subCheck.setCheckBrokenLinks(check.isCheckBrokenLinks());
-								SinglePageCheckThread checkThread = new SinglePageCheckThread(subCheck, visitedPages);
+								SinglePageCheckThread checkThread = new SinglePageCheckThread(subCheck, visitedPagesGet, visitedPagesHead);
 								log.debug("check sub-link: " + subCheck.getUrl());
 								checkThread.start();
 								checkThread.join();

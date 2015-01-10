@@ -16,6 +16,7 @@ import javax.faces.context.FacesContext;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.entity.Check;
+import net.sf.sitemonitoring.entity.Check.CheckCondition;
 import net.sf.sitemonitoring.entity.Check.CheckType;
 import net.sf.sitemonitoring.entity.Check.IntervalType;
 import net.sf.sitemonitoring.entity.Configuration;
@@ -101,6 +102,7 @@ public class CheckController implements Serializable {
 		log.debug("create sitemap check");
 		check = new Check(CheckType.SITEMAP);
 		check.setScheduledInterval(configurationService.find().getDefaultSitemapCheckInterval());
+		check.setConditionType(CheckCondition.CONTAINS);
 		prepareCheck();
 	}
 
@@ -108,6 +110,7 @@ public class CheckController implements Serializable {
 		log.debug("create spider check");
 		check = new Check(CheckType.SPIDER);
 		check.setScheduledInterval(configurationService.find().getDefaultSitemapCheckInterval());
+		check.setConditionType(CheckCondition.CONTAINS);
 		prepareCheck();
 	}
 

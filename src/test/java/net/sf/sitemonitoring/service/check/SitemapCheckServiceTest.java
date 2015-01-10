@@ -28,17 +28,19 @@ import com.google.common.eventbus.EventBus;
 public class SitemapCheckServiceTest {
 
 	private SitemapCheckThread sitemapCheckThread;
-	
+
 	@Mock
 	private SinglePageCheckService singlePageCheckServiceMock;
 
-	private Map<URI, Object> visitedPages;
+	private Map<URI, Object> visitedPagesGet;
+	private Map<URI, Object> visitedPagesHead;
 
 	private static final int timeout = 1000;
 
 	@Before
 	public void before() throws JAXBException {
-		visitedPages = new HashMap<URI, Object>();
+		visitedPagesGet = new HashMap<URI, Object>();
+		visitedPagesHead = new HashMap<URI, Object>();
 		SinglePageCheckService singlePageCheckService = new SinglePageCheckService();
 		singlePageCheckService.setEventBus(new EventBus());
 		sitemapCheckThread = new SitemapCheckThread(JAXBContext.newInstance(Urlset.class, Url.class), singlePageCheckService, null);
@@ -63,7 +65,7 @@ public class SitemapCheckServiceTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testCheckSitemapErrors() throws Exception {
-		Mockito.when(singlePageCheckServiceMock.performCheck(Mockito.any(Check.class), Mockito.any(Map.class))).thenReturn("Error!");
+		Mockito.when(singlePageCheckServiceMock.performCheck(Mockito.any(Check.class), Mockito.any(Map.class), Mockito.any(Map.class))).thenReturn("Error!");
 		sitemapCheckThread.setSinglePageCheckService(singlePageCheckServiceMock);
 
 		String sitemapXml = FileUtils.readFileToString(new File("src/test/resources/sitemap.xml"));
@@ -74,14 +76,14 @@ public class SitemapCheckServiceTest {
 		sitemapCheck.setCheckBrokenLinks(false);
 		sitemapCheck.setSocketTimeout(timeout);
 		sitemapCheck.setConnectionTimeout(timeout);
-		String checkResult = sitemapCheckThread.check(urlset, sitemapCheck, null);
+		String checkResult = sitemapCheckThread.check(urlset, sitemapCheck, null, null);
 		Assert.assertEquals("Error!<br />Error!<br />", checkResult);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testCheckSitemapNoErrors() throws Exception {
-		Mockito.when(singlePageCheckServiceMock.performCheck(Mockito.any(Check.class), Mockito.any(Map.class))).thenReturn(null);
+		Mockito.when(singlePageCheckServiceMock.performCheck(Mockito.any(Check.class), Mockito.any(Map.class), Mockito.any(Map.class))).thenReturn(null);
 		sitemapCheckThread.setSinglePageCheckService(singlePageCheckServiceMock);
 
 		String sitemapXml = FileUtils.readFileToString(new File("src/test/resources/sitemap.xml"));
@@ -92,7 +94,7 @@ public class SitemapCheckServiceTest {
 		sitemapCheck.setCheckBrokenLinks(false);
 		sitemapCheck.setSocketTimeout(timeout);
 		sitemapCheck.setConnectionTimeout(timeout);
-		String checkResult = sitemapCheckThread.check(urlset, sitemapCheck, visitedPages);
+		String checkResult = sitemapCheckThread.check(urlset, sitemapCheck, visitedPagesGet, visitedPagesHead);
 		Assert.assertEquals(null, checkResult);
 	}
 

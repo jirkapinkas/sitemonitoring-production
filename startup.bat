@@ -1,1 +1,1 @@
-java -jar sitemonitoring.jar -port 8081
+java -jar sitemonitoring.jar --port=8081

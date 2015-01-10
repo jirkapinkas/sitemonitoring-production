@@ -1,8 +1,6 @@
 package net.sf.sitemonitoring.service.check;
 
-import java.net.URI;
 import java.util.Date;
-import java.util.HashMap;
 
 import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.entity.Check;
@@ -57,7 +55,7 @@ public class MonitoringService {
 
 		switch (check.getType()) {
 		case SINGLE_PAGE:
-			checkResultText = singleCheckService.performCheck(check, new HashMap<URI, Object>());
+			checkResultText = singleCheckService.performCheck(check);
 			break;
 		case SITEMAP:
 			checkResultText = sitemapCheckService.performCheck(check);

@@ -22,21 +22,32 @@ public abstract class AbstractSingleCheckThread extends AbstractCheckThread {
 	protected int socketTimeoutMillis;
 	private int requiredStatusCode;
 	
-	protected Map<URI, Object> visitedPages;
+	protected Map<URI, Object> visitedPagesGet;
 
-	public AbstractSingleCheckThread(int connectionTimeoutMillis, int socketTimeoutMillis, int requiredStatusCode, Map<URI, Object> visitedPages) {
+	protected Map<URI, Object> visitedPagesHead;
+
+	public AbstractSingleCheckThread(int connectionTimeoutMillis, int socketTimeoutMillis, int requiredStatusCode, Map<URI, Object> visitedPagesGet, Map<URI, Object> visitedPagesHead) {
 		this.connectionTimeoutMillis = connectionTimeoutMillis;
 		this.socketTimeoutMillis = socketTimeoutMillis;
 		this.requiredStatusCode = requiredStatusCode;
-		this.visitedPages = visitedPages;
+		this.visitedPagesGet = visitedPagesGet;
+		this.visitedPagesHead = visitedPagesHead;
 	}
 
-	private void addVisitedPage(URI page) {
-		visitedPages.put(page, null);
+	private void addVisitedPageGet(URI page) {
+		visitedPagesGet.put(page, null);
 	}
 
-	private boolean isVisitedPage(URI page) {
-		return visitedPages.containsKey(page);
+	private boolean isVisitedPageGet(URI page) {
+		return visitedPagesGet.containsKey(page);
+	}
+
+	private void addVisitedPageHead(URI page) {
+		visitedPagesHead.put(page, null);
+	}
+
+	private boolean isVisitedPageHead(URI page) {
+		return visitedPagesHead.containsKey(page);
 	}
 
 	protected boolean checkStatusCode(HttpResponse httpResponse, String url) {
@@ -49,21 +60,30 @@ public abstract class AbstractSingleCheckThread extends AbstractCheckThread {
 	}
 
 	protected CloseableHttpResponse doGet(final String url) throws IOException {
-		return doRequest(new HttpGet(url));
+		HttpGet request = new HttpGet(url);
+		// optimization
+		if (isVisitedPageGet(request.getURI())) {
+			log.debug("page already visited, won't visit again");
+			return null;
+		} else {
+			addVisitedPageGet(request.getURI());
+		}
+		return doRequest(request);
 	}
 
 	protected CloseableHttpResponse doHead(final String url) throws IOException {
-		return doRequest(new HttpHead(url));
+		HttpHead request = new HttpHead(url);
+		// optimization
+		if (isVisitedPageHead(request.getURI())) {
+			log.debug("page already visited, won't visit again");
+			return null;
+		} else {
+			addVisitedPageHead(request.getURI());
+		}
+		return doRequest(request);
 	}
 
 	private CloseableHttpResponse doRequest(final HttpRequestBase request) throws IOException {
-		// optimization
-		if (isVisitedPage(request.getURI())) {
-			return null;
-		} else {
-			addVisitedPage(request.getURI());
-		}
-
 		if (log.isDebugEnabled()) {
 			log.debug(request.getMethod() + " " + request.getURI());
 		}

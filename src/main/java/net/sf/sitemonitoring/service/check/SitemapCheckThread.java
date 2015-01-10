@@ -75,7 +75,7 @@ public class SitemapCheckThread extends AbstractCheckThread {
 		}
 	}
 
-	protected String check(Urlset urlset, Check sitemapCheck, Map<URI, Object> visitedPages) {
+	protected String check(Urlset urlset, Check sitemapCheck, Map<URI, Object> visitedPagesGet, Map<URI, Object> visitedPagesHead) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (Url url : urlset.getUrls()) {
 			if (abort) {
@@ -95,7 +95,7 @@ public class SitemapCheckThread extends AbstractCheckThread {
 			singleCheck.setCheckBrokenLinks(sitemapCheck.isCheckBrokenLinks());
 			singleCheck.setConnectionTimeout(sitemapCheck.getConnectionTimeout());
 			singleCheck.setSocketTimeout(sitemapCheck.getSocketTimeout());
-			String checkResultTxt = singlePageCheckService.performCheck(singleCheck, visitedPages);
+			String checkResultTxt = singlePageCheckService.performCheck(singleCheck, visitedPagesGet, visitedPagesHead);
 			if (checkResultTxt != null) {
 				stringBuilder.append(checkResultTxt);
 				stringBuilder.append("<br />");
@@ -109,13 +109,14 @@ public class SitemapCheckThread extends AbstractCheckThread {
 
 	@Override
 	public void performCheck() {
-		Map<URI, Object> visitedPages = new HashMap<URI, Object>();
+		Map<URI, Object> visitedPagesGet = new HashMap<URI, Object>();
+		Map<URI, Object> visitedPagesHead = new HashMap<URI, Object>();
 		log.debug("sitemap performCheck() start");
 		try {
 			String sitemapXml = downloadSitemap(httpClient, check.getUrl());
 			Urlset urlset = readSitemap(sitemapXml);
 			log.debug("sitemap contains " + urlset.getUrls().size() + " urls");
-			output = check(urlset, check, visitedPages);
+			output = check(urlset, check, visitedPagesGet, visitedPagesHead);
 		} catch (JAXBException e) {
 			log.error("JAXB exception", e);
 			output = "Invalid sitemap: " + check.getUrl();

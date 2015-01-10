@@ -1,6 +1,7 @@
 package net.sf.sitemonitoring.service.check;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +12,14 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class SinglePageCheckService extends AbstractCheckService {
-	
-	public String performCheck(Check check, Map<URI, Object> visitedPages) {
-		AbstractSingleCheckThread thread = new SinglePageCheckThread(check, visitedPages);
+
+	public String performCheck(Check check, Map<URI, Object> visitedPagesGet, Map<URI, Object> visitedPagesHead) {
+		AbstractSingleCheckThread thread = new SinglePageCheckThread(check, visitedPagesGet, visitedPagesHead);
+		return startAndJoinThread(thread);
+	}
+
+	public String performCheck(Check check) {
+		AbstractSingleCheckThread thread = new SinglePageCheckThread(check, new HashMap<URI, Object>(), new HashMap<URI, Object>());
 		return startAndJoinThread(thread);
 	}
 
@@ -39,5 +45,5 @@ public class SinglePageCheckService extends AbstractCheckService {
 		}
 		return false;
 	}
-	
+
 }

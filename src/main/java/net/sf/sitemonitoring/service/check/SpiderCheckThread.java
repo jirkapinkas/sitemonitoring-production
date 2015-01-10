@@ -49,7 +49,7 @@ public class SpiderCheckThread extends AbstractCheckThread {
 		}
 	}
 
-	private String checkHomepage(Map<URI, Object> visitedPages, Map<String, String> allPages, Map<String, String> pagesVisitedBySpider) {
+	private String checkHomepage(Map<URI, Object> visitedPagesGet, Map<URI, Object> visitedPagesHead, Map<String, String> allPages, Map<String, String> pagesVisitedBySpider) {
 		Check singleCheck = new Check();
 		singleCheck.setId(check.getId());
 		singleCheck.setCondition(check.getCondition());
@@ -61,7 +61,7 @@ public class SpiderCheckThread extends AbstractCheckThread {
 		singleCheck.setConnectionTimeout(check.getConnectionTimeout());
 		singleCheck.setSocketTimeout(check.getSocketTimeout());
 		singleCheck.setStoreWebpage(true);
-		String result = singlePageCheckService.performCheck(singleCheck, visitedPages);
+		String result = singlePageCheckService.performCheck(singleCheck, visitedPagesGet, visitedPagesHead);
 		findUrls(singleCheck.getUrl(), singleCheck.getWebPage(), allPages);
 		allPages.put(check.getUrl(), check.getUrl());
 		pagesVisitedBySpider.put(check.getUrl(), null);
@@ -70,14 +70,15 @@ public class SpiderCheckThread extends AbstractCheckThread {
 
 	@Override
 	public void performCheck() {
-		Map<URI, Object> visitedPages = new HashMap<URI, Object>();
+		Map<URI, Object> visitedPagesGet = new HashMap<URI, Object>();
+		Map<URI, Object> visitedPagesHead = new HashMap<URI, Object>();
 		// key = page URL, value = referer (page, which contains key)
 		Map<String, String> allPages = new HashMap<String, String>();
 		Map<String, String> pagesVisitedBySpider = new HashMap<String, String>();
 
 		log.debug("spider performCheck() start");
 
-		String homepageResult = checkHomepage(visitedPages, allPages, pagesVisitedBySpider);
+		String homepageResult = checkHomepage(visitedPagesGet, visitedPagesHead, allPages, pagesVisitedBySpider);
 		if (homepageResult != null && !homepageResult.isEmpty()) {
 			output = homepageResult;
 			return;
@@ -112,8 +113,7 @@ public class SpiderCheckThread extends AbstractCheckThread {
 				singleCheck.setConnectionTimeout(check.getConnectionTimeout());
 				singleCheck.setSocketTimeout(check.getSocketTimeout());
 				singleCheck.setStoreWebpage(true);
-				String checkResultTxt = singlePageCheckService.performCheck(singleCheck, visitedPages);
-				System.out.println("check result txt: " + checkResultTxt + ", single check url: " + singleCheck.getUrl() + ", " + " store webpage: " + singleCheck.isStoreWebpage() + ", webpage: " + singleCheck.getWebPage());
+				String checkResultTxt = singlePageCheckService.performCheck(singleCheck, visitedPagesGet, visitedPagesHead);
 				findUrls(url, singleCheck.getWebPage(), allPages);
 				pagesVisitedBySpider.put(singleCheck.getUrl(), null);
 				if (checkResultTxt != null) {

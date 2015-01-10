@@ -1,9 +1,6 @@
 package net.sf.sitemonitoring.service.check;
 
 import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -45,8 +42,6 @@ public class HttpCheckServiceTest {
 
 	private static final int timeout = 1000;
 
-	private Map<URI, Object> visitedPages;
-
 	@BeforeClass
 	public static void setUp() throws Exception {
 		System.out.println("*** STARTED TEST JETTY SERVER ***");
@@ -67,7 +62,6 @@ public class HttpCheckServiceTest {
 		sitemapCheckThread = new SitemapCheckThread(JAXBContext.newInstance(Urlset.class, Url.class), singlePageCheckService, null);
 		// created in AbstractCheckThread.run(), that's why I have to create it here.
 		sitemapCheckThread.httpClient = HttpClients.createDefault();
-		visitedPages = new HashMap<URI, Object>();
 	}
 	
 	@After
@@ -93,7 +87,7 @@ public class HttpCheckServiceTest {
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
 
-		Assert.assertNull(singlePageCheckService.performCheck(check, visitedPages));
+		Assert.assertNull(singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -109,7 +103,7 @@ public class HttpCheckServiceTest {
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
 
-		Assert.assertNull(singlePageCheckService.performCheck(check, visitedPages));
+		Assert.assertNull(singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -143,7 +137,7 @@ public class HttpCheckServiceTest {
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
 
-		Assert.assertNull(singlePageCheckService.performCheck(check, visitedPages));
+		Assert.assertNull(singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -156,7 +150,7 @@ public class HttpCheckServiceTest {
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
 
-		Assert.assertEquals("Invalid status: http://localhost:8081/not-exists.html required: 200, received: 404", singlePageCheckService.performCheck(check, visitedPages));
+		Assert.assertEquals("Invalid status: http://localhost:8081/not-exists.html required: 200, received: 404", singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -169,7 +163,7 @@ public class HttpCheckServiceTest {
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
 
-		Assert.assertNull(singlePageCheckService.performCheck(check, visitedPages));
+		Assert.assertNull(singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -182,7 +176,7 @@ public class HttpCheckServiceTest {
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
 
-		Assert.assertEquals("Incorrect URL: http://", singlePageCheckService.performCheck(check, visitedPages));
+		Assert.assertEquals("Incorrect URL: http://", singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -195,7 +189,7 @@ public class HttpCheckServiceTest {
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
 
-		Assert.assertNull(singlePageCheckService.performCheck(check, visitedPages));
+		Assert.assertNull(singlePageCheckService.performCheck(check));
 	}
 
 	@Test

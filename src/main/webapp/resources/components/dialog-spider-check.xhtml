@@ -1,0 +1,101 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+
+<composite:interface>
+</composite:interface>
+
+<composite:implementation>
+
+			<p:messages />
+
+			<p:panelGrid columns="2" columnClasses="panelColumnSmall" id="panelGrid">
+		
+				name:
+				<p:inputText value="#{checkController.check.name}" style="width:100%"/>
+				
+				url:
+				<p:inputText value="#{checkController.check.url}" style="width:100%" />
+				
+				<h:outputText value="excluded URLs &lt;br /&gt; asterisk = anything &lt;br /&gt;(for example *.pdf):" escape="false" />
+				<p:inputTextarea value="#{checkController.check.excludedUrls}" style="width:100%" />
+
+				active:
+				<p:selectBooleanCheckbox value="#{checkController.check.active}" />
+				
+				send emails:
+				<h:panelGroup id="sendEmailsPanel">
+					<p:selectBooleanCheckbox value="#{checkController.check.sendEmails}">
+						<p:ajax event="change" update="sendEmailsPanel" />
+					</p:selectBooleanCheckbox>
+		
+					<h:panelGroup rendered="#{checkController.check.sendEmails}">
+						after
+						<p:inputText value="#{checkController.check.maxErrorCount}" style="width:60px" />
+						consecutive errors
+					</h:panelGroup>
+				</h:panelGroup>
+				
+				<h:outputText value="check broken links on your pages:" escape="false" />
+				<p:selectBooleanCheckbox value="#{checkController.check.checkBrokenLinks}">
+					<p:ajax event="change" update="checkBrokenText, checkBrokenValue" />
+				</p:selectBooleanCheckbox>
+		
+				<h:panelGroup id="checkBrokenText">
+					<h:outputText value="do not follow urls &lt;br /&gt; asterisk = anything &lt;br /&gt;(for example *.pdf):" escape="false" rendered="#{checkController.check.checkBrokenLinks eq true}" />
+				</h:panelGroup>
+				<h:panelGroup id="checkBrokenValue">
+					<p:inputTextarea value="#{checkController.check.doNotFollowUrls}" style="width:100%" rendered="#{checkController.check.checkBrokenLinks eq true}" />
+				</h:panelGroup>
+				
+				timeouts (in milliseconds):
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="3">
+						connection timeout
+						<p:inputText value="#{checkController.check.connectionTimeout}" style="width:80px" />
+						ms,
+					</h:panelGrid>
+					<h:panelGrid columns="3" style="padding-right:20px">
+						socket timeout
+						<p:inputText value="#{checkController.check.socketTimeout}" style="width:80px" />
+						ms
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				schedule:
+				<h:panelGrid columns="5">
+					start
+					<p:calendar value="#{checkController.check.scheduledStartDate}" pattern="dd.MM.yyyy HH:mm" />
+					with interval
+					<p:inputText value="#{checkController.check.scheduledInterval}" style="width:60px" />
+					<p:selectOneMenu value="#{checkController.check.scheduledIntervalType}"
+							required="true">
+							<f:selectItem itemLabel="minutes" itemValue="MINUTE" />
+							<f:selectItem itemLabel="hours" itemValue="HOUR" />
+							<f:selectItem itemLabel="days" itemValue="DAY" />
+							<f:selectItem itemLabel="months" itemValue="MONTH" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+		
+				keep results for:
+				<h:panelGrid columns="2">
+					<p:inputText value="#{checkController.check.keepResultsValue}" style="width:60px" />
+					<p:selectOneMenu value="#{checkController.check.keepResultType}"
+							required="true">
+							<f:selectItem itemLabel="minutes" itemValue="MINUTE" />
+							<f:selectItem itemLabel="hours" itemValue="HOUR" />
+							<f:selectItem itemLabel="days" itemValue="DAY" />
+							<f:selectItem itemLabel="months" itemValue="MONTH" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+
+			</p:panelGrid>
+
+			<br />
+
+</composite:implementation>
+
+</html>
