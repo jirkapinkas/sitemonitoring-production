@@ -6,6 +6,7 @@
 9.1.2015: version 2.1
 
 + configurable port in standalone application
++ in standalone application changed default port from 8080 to 8081
 + startup.bat, zipped all files together
 
 5.1.2015: version 2.0
