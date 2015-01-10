@@ -1,0 +1,11 @@
+10.1.2015: version 2.1.1
+
++ spider check
++ rearranged input fields in check forms
+
+9.1.2015: version 2.1
+
++ configurable port in standalone application
++ startup.bat, zipped all files together
+
+5.1.2015: version 2.0
