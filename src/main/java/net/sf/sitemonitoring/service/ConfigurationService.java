@@ -56,4 +56,5 @@ public class ConfigurationService {
 		}
 		return configurations.get(0);
 	}
+	
 }

@@ -24,7 +24,7 @@
 		        updateWidgets();
 		    }
 		</script>
-
+		
 		<h:form>
 			<p:remoteCommand name="updateWidgets"
 	                 actionListener="#{checkController.updateResults()}"
@@ -50,6 +50,18 @@
 							resetValues="true" />
         	</p:menuButton>
         </h:form>
+        
+        <h:panelGroup id="infoMessagePanel">
+        <br />
+        <p:panel rendered="#{checkController.configuration.hideInfoMessage ne true}">
+        	#{checkController.configuration.infoMessage}
+        	<br />
+        	<br />
+        	<h:form>
+        		<p:commandButton value="I understand" action="#{checkController.hideInfoMessage()}" update=":infoMessagePanel" />
+        	</h:form>
+        </p:panel>
+        </h:panelGroup>
                  
 		<br />
 		

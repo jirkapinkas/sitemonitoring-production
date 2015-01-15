@@ -81,5 +81,10 @@ public class Configuration implements Serializable {
 
 	@Column(name = "email_body")
 	private String emailBody;
+	
+	@Column(name="info_message")
+	private String infoMessage;
+	
+	private Boolean hideInfoMessage;
 
 }

@@ -28,15 +28,16 @@ public class UpgradeService {
 	 * @throws SQLException
 	 */
 	public void upgradeDatabase(Configuration configuration) {
-		// don't change admin password
 		if (configuration.getMonitoringVersion() == null || configuration.getMonitoringVersion().isEmpty()) {
 			configuration.setMonitoringVersion("2.1");
+			configuration.setInfoMessage("Please don't monitor my websites (like javavids.com and sitemonitoring.souceforge.net). Lot's of people started doing it and effectively DDOSed them. If you monitor them anyway, your IP address will be blocked!");
 			configurationService.saveExcludingPassword(configuration);
 			update("update monit_check set condition_value = condition");
 		}
 		if (configuration.getMonitoringVersion().equals("2.1")) {
 			configuration.setDefaultSpiderCheckInterval(60);
 			configuration.setDefaultSendEmails(false);
+			configuration.setInfoMessage("Please don't monitor my websites (like javavids.com and sitemonitoring.souceforge.net). Lot's of people started doing it and effectively DDOSed them. If you monitor them anyway, your IP address will be blocked!");
 			configuration.setMonitoringVersion("2.1.2");
 			configurationService.saveExcludingPassword(configuration);
 		}

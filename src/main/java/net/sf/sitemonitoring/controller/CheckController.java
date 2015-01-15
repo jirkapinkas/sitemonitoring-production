@@ -60,6 +60,16 @@ public class CheckController implements Serializable {
 		 */
 		checkResultsController.setCheckController(this);
 	}
+	
+	public Configuration getConfiguration() {
+		return configurationService.find();
+	}
+	
+	public void hideInfoMessage() {
+		Configuration configuration = configurationService.find();
+		configuration.setHideInfoMessage(true);
+		configurationService.saveExcludingPassword(configuration);
+	}
 
 	public void abort(int checkId) {
 		checkService.abort(checkId, "manual abort");
