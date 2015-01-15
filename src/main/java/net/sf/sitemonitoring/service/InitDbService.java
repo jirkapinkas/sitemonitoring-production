@@ -28,20 +28,27 @@ public class InitDbService {
 
 	@Autowired
 	private CheckResultRepository checkResultRepository;
+	
+	@Autowired
+	private UpgradeService upgradeService;
 
 	@PostConstruct
 	public void init() throws Exception {
-		if (configurationService.find() != null) {
+		Configuration configuration = configurationService.find();
+		if (configuration != null) {
 			// configuration already exists -> we're using production database
+			upgradeService.upgradeDatabase(configuration);
 			return;
 		}
 		System.out.println("*** TEST DATABASE INIT STARTED ***");
-		Configuration configuration = new Configuration();
-		configuration.setMonitoringVersion("2.1");
+		configuration = new Configuration();
+		configuration.setMonitoringVersion("2.1.2");
 		configuration.setEmailSubject("sitemonitoring error");
 		configuration.setEmailBody("check name:{CHECK-NAME}\n\ncheck url: {CHECK-URL}\n\nerror:\n{ERROR}");
-		configuration.setDefaultSingleCheckInterval(1);
-		configuration.setDefaultSitemapCheckInterval(10);
+		configuration.setDefaultSingleCheckInterval(5);
+		configuration.setDefaultSitemapCheckInterval(30);
+		configuration.setDefaultSpiderCheckInterval(60);
+		configuration.setDefaultSendEmails(false);
 		configuration.setSocketTimeout(20000);
 		configuration.setConnectionTimeout(20000);
 		configuration.setTooLongRunningCheckMinutes(30);
@@ -54,8 +61,8 @@ public class InitDbService {
 
 		{
 			Check check = new Check();
-			check.setName("check javavids homepage");
-			check.setUrl("http://www.javavids.com/");
+			check.setName("check example homepage");
+			check.setUrl("http://www.example.com/");
 			check.setConditionType(CheckCondition.CONTAINS);
 			check.setCondition("</html>");
 			check.setType(CheckType.SINGLE_PAGE);
@@ -63,27 +70,6 @@ public class InitDbService {
 			check.setSocketTimeout(20000);
 			check.setConnectionTimeout(20000);
 			check.setScheduledInterval(1);
-			check.setChartPeriodType(IntervalType.HOUR);
-			check.setChartPeriodValue(1);
-			Calendar calendar = new GregorianCalendar();
-			calendar.set(Calendar.SECOND, 0);
-			calendar.set(Calendar.MILLISECOND, 0);
-			check.setScheduledStartDate(calendar.getTime());
-			check.setScheduledIntervalType(IntervalType.MINUTE);
-			checkRepository.save(check);
-		}
-
-		{
-			Check check = new Check();
-			check.setName("check sqlvids sitemap");
-			check.setUrl("http://www.sqlvids.com/sitemap.xml");
-			check.setConditionType(CheckCondition.CONTAINS);
-			check.setCondition("</html>");
-			check.setType(CheckType.SITEMAP);
-			check.setCheckBrokenLinks(true);
-			check.setSocketTimeout(20000);
-			check.setConnectionTimeout(20000);
-			check.setScheduledInterval(10);
 			check.setChartPeriodType(IntervalType.HOUR);
 			check.setChartPeriodValue(1);
 			Calendar calendar = new GregorianCalendar();

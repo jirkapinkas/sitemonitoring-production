@@ -21,7 +21,7 @@ public abstract class AbstractSingleCheckThread extends AbstractCheckThread {
 	protected int connectionTimeoutMillis;
 	protected int socketTimeoutMillis;
 	private int requiredStatusCode;
-	
+
 	protected Map<URI, Object> visitedPagesGet;
 
 	protected Map<URI, Object> visitedPagesHead;
@@ -91,6 +91,8 @@ public abstract class AbstractSingleCheckThread extends AbstractCheckThread {
 		request.setConfig(requestConfig);
 		CloseableHttpResponse response = null;
 		try {
+			// TODO add correct header
+			// request.setHeader(arg0, arg1);
 			response = httpClient.execute(request);
 		} catch (SSLHandshakeException ex) {
 			// ignore ValidatorException -> thrown when Java cannot validate

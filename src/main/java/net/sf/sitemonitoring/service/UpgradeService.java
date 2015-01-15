@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import lombok.extern.slf4j.Slf4j;
@@ -19,24 +18,30 @@ public class UpgradeService {
 
 	@Autowired
 	private DataSource dataSource;
-	
+
 	@Autowired
 	private ConfigurationService configurationService;
 
 	/**
-	 * In this method will be low-level upgrades to database
-	 * @throws SQLException 
+	 * In this method will be upgrades to existing database
+	 * 
+	 * @throws SQLException
 	 */
-	@PostConstruct
-	public void init() {
-		Configuration configuration = configurationService.find();
-		if(configuration.getMonitoringVersion() == null || configuration.getMonitoringVersion().isEmpty()) {
+	public void upgradeDatabase(Configuration configuration) {
+		// don't change admin password
+		if (configuration.getMonitoringVersion() == null || configuration.getMonitoringVersion().isEmpty()) {
 			configuration.setMonitoringVersion("2.1");
-			configurationService.save(configuration);
+			configurationService.saveExcludingPassword(configuration);
 			update("update monit_check set condition_value = condition");
 		}
+		if (configuration.getMonitoringVersion().equals("2.1")) {
+			configuration.setDefaultSpiderCheckInterval(60);
+			configuration.setDefaultSendEmails(false);
+			configuration.setMonitoringVersion("2.1.2");
+			configurationService.saveExcludingPassword(configuration);
+		}
 	}
-	
+
 	private void update(String sql) {
 		Connection connection = null;
 		try {
@@ -44,11 +49,10 @@ public class UpgradeService {
 			Statement statement = connection.createStatement();
 			statement.executeUpdate(sql);
 			statement.close();
-		}  
-		catch(SQLException ex) {
+		} catch (SQLException ex) {
 			log.error("error upgrading to new version", ex);
 		} finally {
-			if(connection != null) {
+			if (connection != null) {
 				try {
 					connection.close();
 				} catch (SQLException ex) {

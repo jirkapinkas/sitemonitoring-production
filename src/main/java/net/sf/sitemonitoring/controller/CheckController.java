@@ -109,7 +109,7 @@ public class CheckController implements Serializable {
 	public void prepareSpiderCheck() {
 		log.debug("create spider check");
 		check = new Check(CheckType.SPIDER);
-		check.setScheduledInterval(configurationService.find().getDefaultSitemapCheckInterval());
+		check.setScheduledInterval(configurationService.find().getDefaultSpiderCheckInterval());
 		check.setConditionType(CheckCondition.CONTAINS);
 		prepareCheck();
 	}
@@ -121,6 +121,7 @@ public class CheckController implements Serializable {
 		check.setSocketTimeout(configuration.getSocketTimeout());
 		check.setConnectionTimeout(configuration.getConnectionTimeout());
 		check.setScheduledIntervalType(IntervalType.MINUTE);
+		check.setSendEmails(configuration.getDefaultSendEmails());
 		Calendar calendar = new GregorianCalendar();
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);

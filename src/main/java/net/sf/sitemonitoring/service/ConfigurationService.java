@@ -40,6 +40,12 @@ public class ConfigurationService {
 		}
 	}
 
+	@CacheEvict(value = "configuration", allEntries = true)
+	public void saveExcludingPassword(Configuration newConfiguration) {
+		newConfiguration.setAdminPassword(null);
+		save(newConfiguration);
+	}
+
 	@Cacheable("configuration")
 	public Configuration find() {
 		List<Configuration> configurations = configurationRepository.findAll();

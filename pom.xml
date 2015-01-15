@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.sitemonitoring</groupId>
 	<artifactId>sitemonitoring</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>2.1.2</version>
 	<packaging>war</packaging>
 
 	<dependencies>
@@ -461,6 +461,26 @@
 										${project.build.directory}/${project.artifactId}
 									</outputDirectory>
 								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- assembly ZIP file for sourceforge deployment -->
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.4</version>
+						<configuration>
+							<appendAssemblyId>false</appendAssemblyId>
+							<finalName>${project.artifactId}-${project.version}</finalName>
+							<descriptors>
+								<descriptor>src/main/resources/assembly-sourceforge.xml</descriptor>
+							</descriptors>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>install</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
 							</execution>
 						</executions>
 					</plugin>

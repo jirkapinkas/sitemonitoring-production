@@ -179,9 +179,11 @@
 	 					<br />
 	 					finished:
 						<h:outputText value="#{checkResultsController.lastResults[check.id].finishDate}" style="padding-left:5px" />
-						<div class="content">
+						<br />
+						<h:panelGroup styleClass="content" rendered="#{checkResultsController.lastResults[check.id].success eq false}">
+							error message: 
 							<h:outputText value="#{checkResultsController.lastResults[check.id].result}" escape="false" />
-						</div>
+						</h:panelGroup>
 	 				</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup rendered="#{check.active eq false}">

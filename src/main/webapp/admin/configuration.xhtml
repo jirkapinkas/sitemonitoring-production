@@ -65,6 +65,10 @@
 				<p:selectBooleanCheckbox value="#{configurationController.configuration.checkBrokenLinks}" />
 				<h:outputText value="Monitoring will be much slower, but you will know if you have broken links on your pages" />
 
+				default send emails:
+				<p:selectBooleanCheckbox value="#{configurationController.configuration.defaultSendEmails}" />
+				<h:outputText value="When creating a new check, will the send emails checkbox checked?" />
+
 				default single check interval (minutes):
 				<p:inputText value="#{configurationController.configuration.defaultSingleCheckInterval}" />
 				<h:outputText value="Default check interval for single checks" />
@@ -72,6 +76,10 @@
 				default sitemap check interval (minutes):
 				<p:inputText value="#{configurationController.configuration.defaultSitemapCheckInterval}" />
 				<h:outputText value="Default check interval for sitemap checks" />
+
+				default spider check interval (minutes):
+				<p:inputText value="#{configurationController.configuration.defaultSpiderCheckInterval}" />
+				<h:outputText value="Default check interval for spider checks" />
 
 				how long can check run (minutes):
 				<p:inputText value="#{configurationController.configuration.tooLongRunningCheckMinutes}" />

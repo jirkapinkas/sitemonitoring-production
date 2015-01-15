@@ -42,12 +42,21 @@ public class Configuration implements Serializable {
 	@Column(name = "default_sitemap_check_int", nullable = false)
 	private int defaultSitemapCheckInterval;
 
+	@Column(name = "default_spider_check_int")
+	private Integer defaultSpiderCheckInterval;
+
 	@Column(name = "too_long_running_check_min", nullable = false)
 	private int tooLongRunningCheckMinutes;
 
+	@Column(name = "monitoring_version")
+	private String monitoringVersion;
+	
 	/*
 	 * send email functionality
 	 */
+
+	@Column(name = "default_send_emails")
+	private Boolean defaultSendEmails;
 
 	@Column(name = "send_emails", nullable = false)
 	private boolean sendEmails;
@@ -72,8 +81,5 @@ public class Configuration implements Serializable {
 
 	@Column(name = "email_body")
 	private String emailBody;
-
-	@Column(name = "monitoring_version")
-	private String monitoringVersion;
 
 }

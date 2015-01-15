@@ -1,3 +1,6 @@
+TODO_DATE: version 2.1.2
++ more configuration options (default send emails, default spider check interval)
+
 10.1.2015: version 2.1.1
 
 + spider check
