@@ -11,81 +11,100 @@
 
 		<h:form id="formConfiguration">
 			<p:messages />
-			<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2">
-
-				admin email:
-				<p:inputText value="#{configurationController.configuration.adminEmail}" />
-				<h:outputText value="" />
-
-				send emails:
-				<p:selectBooleanCheckbox value="#{configurationController.configuration.sendEmails}" />
-				<h:outputText value="You can disable globally sending emails (useful for testing purposes)" />
-
-				email server host:
-				<p:inputText value="#{configurationController.configuration.emailServerHost}" />
-				<h:outputText value="Email server host" />
-
-				email server port:
-				<p:inputText value="#{configurationController.configuration.emailServerPort}" />
-				<h:outputText value="Email server port" />
-
-				email server username:
-				<p:inputText value="#{configurationController.configuration.emailServerUsername}" />
-				<h:outputText value="Email server username" />
-
-				email server password:
-				<p:inputText value="#{configurationController.configuration.emailServerPassword}" />
-				<h:outputText value="Email server password" />
-
-				email subject template:
-				<p:inputText value="#{configurationController.configuration.emailSubject}" />
-				<h:outputText value="Email subject template, special values: {CHECK-NAME}, {CHECK-URL}, {ERROR}" />
-
-				email body template:
-				<p:inputTextarea value="#{configurationController.configuration.emailBody}" style="width:95%" />
-				<h:outputText value="Email body template, special values: {CHECK-NAME}, {CHECK-URL}, {ERROR}" />
-
-				admin username:
-				<p:inputText value="#{configurationController.configuration.adminUsername}" />
-				<h:outputText value="" />
 			
-				admin password:
-				<p:password value="#{configurationController.configuration.adminPassword}" />
-				<h:outputText value="" />
+			<p:fieldset legend="email" toggleable="true" collapsed="false">
+				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
+				
+					admin email:
+					<p:inputText value="#{configurationController.configuration.adminEmail}" />
+					<h:outputText value="" />
+	
+					send emails:
+					<p:selectBooleanCheckbox value="#{configurationController.configuration.sendEmails}" />
+					<h:outputText value="You can disable globally sending emails (useful for testing purposes)" />
+	
+					email server host:
+					<p:inputText value="#{configurationController.configuration.emailServerHost}" />
+					<h:outputText value="Email server host" />
+	
+					email server port:
+					<p:inputText value="#{configurationController.configuration.emailServerPort}" />
+					<h:outputText value="Email server port" />
+	
+					email server username:
+					<p:inputText value="#{configurationController.configuration.emailServerUsername}" />
+					<h:outputText value="Email server username" />
+	
+					email server password:
+					<p:inputText value="#{configurationController.configuration.emailServerPassword}" />
+					<h:outputText value="Email server password" />
+	
+					email subject template:
+					<p:inputText value="#{configurationController.configuration.emailSubject}" />
+					<h:outputText value="Email subject template, special values: {CHECK-NAME}, {CHECK-URL}, {ERROR}" />
+	
+					email body template:
+					<p:inputTextarea value="#{configurationController.configuration.emailBody}" style="width:95%" />
+					<h:outputText value="Email body template, special values: {CHECK-NAME}, {CHECK-URL}, {ERROR}" />
+
+				</p:panelGrid>
+			</p:fieldset>
 			
-				default connection timeout (milliseconds):
-				<p:inputText value="#{configurationController.configuration.connectionTimeout}" />
-				<h:outputText value="How long the application will wait to establish connection" />
+			<br />
 
-				default socket timeout (milliseconds):
-				<p:inputText value="#{configurationController.configuration.socketTimeout}" />
-				<h:outputText value="How long the application will wait for data" />
+			<p:fieldset legend="login" toggleable="true" collapsed="true">
+				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
 
-				default check broken links:
-				<p:selectBooleanCheckbox value="#{configurationController.configuration.checkBrokenLinks}" />
-				<h:outputText value="Monitoring will be much slower, but you will know if you have broken links on your pages" />
+					admin username:
+					<p:inputText value="#{configurationController.configuration.adminUsername}" />
+					<h:outputText value="" />
+				
+					admin password:
+					<p:password value="#{configurationController.configuration.adminPassword}" />
+					<h:outputText value="" />
 
-				default send emails:
-				<p:selectBooleanCheckbox value="#{configurationController.configuration.defaultSendEmails}" />
-				<h:outputText value="When creating a new check, will the send emails checkbox checked?" />
-
-				default single check interval (minutes):
-				<p:inputText value="#{configurationController.configuration.defaultSingleCheckInterval}" />
-				<h:outputText value="Default check interval for single checks" />
-
-				default sitemap check interval (minutes):
-				<p:inputText value="#{configurationController.configuration.defaultSitemapCheckInterval}" />
-				<h:outputText value="Default check interval for sitemap checks" />
-
-				default spider check interval (minutes):
-				<p:inputText value="#{configurationController.configuration.defaultSpiderCheckInterval}" />
-				<h:outputText value="Default check interval for spider checks" />
-
-				how long can check run (minutes):
-				<p:inputText value="#{configurationController.configuration.tooLongRunningCheckMinutes}" />
-				<h:outputText value="How long can check run before automatic abort" />
-
-			</p:panelGrid>
+				</p:panelGrid>
+			</p:fieldset>
+			
+			<br />
+			
+			<p:fieldset legend="timeouts, intervals, defaults" toggleable="true" collapsed="true" styleClass="tableNoBorder">
+				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2">
+			
+					default connection timeout (milliseconds):
+					<p:inputText value="#{configurationController.configuration.connectionTimeout}" />
+					<h:outputText value="How long the application will wait to establish connection" />
+	
+					default socket timeout (milliseconds):
+					<p:inputText value="#{configurationController.configuration.socketTimeout}" />
+					<h:outputText value="How long the application will wait for data" />
+	
+					default check broken links:
+					<p:selectBooleanCheckbox value="#{configurationController.configuration.checkBrokenLinks}" />
+					<h:outputText value="Monitoring will be much slower, but you will know if you have broken links on your pages" />
+	
+					default send emails:
+					<p:selectBooleanCheckbox value="#{configurationController.configuration.defaultSendEmails}" />
+					<h:outputText value="When creating a new check, will the send emails checkbox checked?" />
+	
+					default single check interval (minutes):
+					<p:inputText value="#{configurationController.configuration.defaultSingleCheckInterval}" />
+					<h:outputText value="Default check interval for single checks" />
+	
+					default sitemap check interval (minutes):
+					<p:inputText value="#{configurationController.configuration.defaultSitemapCheckInterval}" />
+					<h:outputText value="Default check interval for sitemap checks" />
+	
+					default spider check interval (minutes):
+					<p:inputText value="#{configurationController.configuration.defaultSpiderCheckInterval}" />
+					<h:outputText value="Default check interval for spider checks" />
+	
+					how long can check run (minutes):
+					<p:inputText value="#{configurationController.configuration.tooLongRunningCheckMinutes}" />
+					<h:outputText value="How long can check run before automatic abort" />
+	
+				</p:panelGrid>
+			</p:fieldset>
 			
 			<br />
 			<p:commandButton value="save" action="#{configurationController.save()}" update="formConfiguration" />

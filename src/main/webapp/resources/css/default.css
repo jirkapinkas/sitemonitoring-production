@@ -62,3 +62,11 @@
 .configurationGridCol2 {
 	width: 210px;
 }
+
+.tableNoBorder tr {
+	border: 0 !important;
+}
+
+.tableNoBorder tr td {
+	border: 0 !important;
+}
