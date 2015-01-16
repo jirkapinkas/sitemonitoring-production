@@ -10,9 +10,31 @@
 	<ui:define name="content">
 
 		<h:form id="formConfiguration">
+
+<!-- fix for chrome, because autocomplete="off" isn't working -->
+<!-- http://stackoverflow.com/questions/12374442/chrome-browser-ignoring-autocomplete-off -->
+<input style="display:none"/>
+<input type="password" style="display:none"/>
+
 			<p:messages />
 			
-			<p:fieldset legend="email" toggleable="true" collapsed="false">
+			<p:fieldset legend="login" toggleable="true" collapsed="false">
+				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
+
+					admin username:
+					<p:inputText value="#{configurationController.configuration.adminUsername}" styleClass="username" autocomplete="off" />
+					<h:outputText value="" />
+				
+					admin password:
+					<p:password value="#{configurationController.configuration.adminPassword}" styleClass="password" autocomplete="off" />
+					<h:outputText value="" />
+
+				</p:panelGrid>
+			</p:fieldset>
+			
+			<br />
+			
+			<p:fieldset legend="email" toggleable="true" collapsed="true">
 				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
 				
 					admin email:
@@ -52,22 +74,6 @@
 			
 			<br />
 
-			<p:fieldset legend="login" toggleable="true" collapsed="true">
-				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
-
-					admin username:
-					<p:inputText value="#{configurationController.configuration.adminUsername}" />
-					<h:outputText value="" />
-				
-					admin password:
-					<p:password value="#{configurationController.configuration.adminPassword}" />
-					<h:outputText value="" />
-
-				</p:panelGrid>
-			</p:fieldset>
-			
-			<br />
-			
 			<p:fieldset legend="timeouts, intervals, defaults" toggleable="true" collapsed="true" styleClass="tableNoBorder">
 				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2">
 			
