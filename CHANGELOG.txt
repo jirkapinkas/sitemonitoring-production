@@ -1,15 +1,17 @@
-TODO_DATE: version 2.1.2
+TODO_DATE: version 2.1.3
+
+
+16.1.2015: version 2.1.2
 + more configuration options (default send emails, default spider check interval)
 
 10.1.2015: version 2.1.1
-
 + spider check
 + rearranged input fields in check forms
 
 9.1.2015: version 2.1
-
 + configurable port in standalone application
 + in standalone application changed default port from 8080 to 8081
 + startup.bat, zipped all files together
 
 5.1.2015: version 2.0
++ complete rewrite of version 1.0

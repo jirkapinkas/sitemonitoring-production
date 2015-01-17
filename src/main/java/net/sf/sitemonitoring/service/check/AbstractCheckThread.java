@@ -21,6 +21,10 @@ public abstract class AbstractCheckThread extends Thread {
 	protected Check check;
 
 	protected CloseableHttpClient httpClient;
+	
+	public AbstractCheckThread(Check check) {
+		this.check = check;
+	}
 
 	@Subscribe
 	public void abort(AbortCheckEvent abortCheckEvent) throws IOException {

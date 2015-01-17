@@ -1,6 +1,7 @@
 package net.sf.sitemonitoring.service.check;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.util.Iterator;
 import java.util.Map;
@@ -11,20 +12,20 @@ import net.sf.sitemonitoring.entity.Check.CheckType;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.google.common.xml.XmlEscapers;
+
 @Slf4j
 public class SinglePageCheckThread extends AbstractSingleCheckThread {
 
 	public SinglePageCheckThread(Check check, Map<URI, Object> visitedPagesGet, Map<URI, Object> visitedPagesHead) {
-		super(check.getConnectionTimeout(), check.getSocketTimeout(), check.getReturnHttpCode(), visitedPagesGet, visitedPagesHead);
-		this.check = check;
-		this.visitedPagesGet = visitedPagesGet;
-		this.visitedPagesHead = visitedPagesHead;
+		super(check, visitedPagesGet, visitedPagesHead);
 	}
 
 	@Override
@@ -54,12 +55,12 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 						switch (check.getConditionType()) {
 						case CONTAINS:
 							if (!webPage.contains(check.getCondition())) {
-								appendMessage(check.getUrl() + " doesn't contain " + check.getCondition());
+								appendMessage(check.getUrl() + " doesn't contain " + XmlEscapers.xmlContentEscaper().escape(check.getCondition()));
 							}
 							break;
 						case DOESNT_CONTAIN:
 							if (webPage.contains(check.getCondition())) {
-								appendMessage(check.getUrl() + " contains " + check.getCondition());
+								appendMessage(check.getUrl() + " contains " + XmlEscapers.xmlContentEscaper().escape(check.getCondition()));
 							}
 							break;
 						}
@@ -101,6 +102,12 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 			log.debug("check successful");
 		} catch (IllegalArgumentException ex) {
 			output = "Incorrect URL: " + check.getUrl();
+			log.debug(output, ex);
+		} catch (ConnectTimeoutException ex) {
+			output = "Connect timeout: " + check.getUrl();
+			log.debug(output, ex);
+		} catch (SocketTimeoutException ex) {
+			output = "Socket timeout: " + check.getUrl();
 			log.debug(output, ex);
 		} catch (IOException ex) {
 			output = "Error downloading: " + check.getUrl();

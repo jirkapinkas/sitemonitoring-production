@@ -20,7 +20,7 @@ public class SpiderCheckThread extends AbstractCheckThread {
 	private SinglePageCheckService singlePageCheckService;
 
 	public SpiderCheckThread(SinglePageCheckService singlePageCheckService, Check spiderCheck) {
-		this.check = spiderCheck;
+		super(spiderCheck);
 		this.singlePageCheckService = singlePageCheckService;
 	}
 

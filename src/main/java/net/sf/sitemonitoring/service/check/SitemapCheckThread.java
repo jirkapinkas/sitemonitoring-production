@@ -28,9 +28,9 @@ public class SitemapCheckThread extends AbstractCheckThread {
 	private SinglePageCheckService singlePageCheckService;
 
 	public SitemapCheckThread(JAXBContext jaxbContext, SinglePageCheckService singlePageCheckService, Check check) {
+		super(check);
 		this.jaxbContext = jaxbContext;
 		this.singlePageCheckService = singlePageCheckService;
-		this.check = check;
 	}
 
 	protected String downloadSitemap(CloseableHttpClient httpClient, String url) throws IOException {

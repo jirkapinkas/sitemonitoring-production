@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.net.ssl.SSLHandshakeException;
 
 import lombok.extern.slf4j.Slf4j;
+import net.sf.sitemonitoring.entity.Check;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -18,18 +19,12 @@ import org.apache.http.client.methods.HttpRequestBase;
 @Slf4j
 public abstract class AbstractSingleCheckThread extends AbstractCheckThread {
 
-	protected int connectionTimeoutMillis;
-	protected int socketTimeoutMillis;
-	private int requiredStatusCode;
-
 	protected Map<URI, Object> visitedPagesGet;
 
 	protected Map<URI, Object> visitedPagesHead;
 
-	public AbstractSingleCheckThread(int connectionTimeoutMillis, int socketTimeoutMillis, int requiredStatusCode, Map<URI, Object> visitedPagesGet, Map<URI, Object> visitedPagesHead) {
-		this.connectionTimeoutMillis = connectionTimeoutMillis;
-		this.socketTimeoutMillis = socketTimeoutMillis;
-		this.requiredStatusCode = requiredStatusCode;
+	public AbstractSingleCheckThread(Check check, Map<URI, Object> visitedPagesGet, Map<URI, Object> visitedPagesHead) {
+		super(check);
 		this.visitedPagesGet = visitedPagesGet;
 		this.visitedPagesHead = visitedPagesHead;
 	}
@@ -52,8 +47,8 @@ public abstract class AbstractSingleCheckThread extends AbstractCheckThread {
 
 	protected boolean checkStatusCode(HttpResponse httpResponse, String url) {
 		int statusCode = httpResponse.getStatusLine().getStatusCode();
-		if (statusCode != requiredStatusCode) {
-			output = "Invalid status: " + url + " required: " + requiredStatusCode + ", received: " + statusCode;
+		if (statusCode != check.getReturnHttpCode()) {
+			output = "Invalid status: " + url + " required: " + check.getReturnHttpCode() + ", received: " + statusCode;
 			return false;
 		}
 		return true;
@@ -87,7 +82,7 @@ public abstract class AbstractSingleCheckThread extends AbstractCheckThread {
 		if (log.isDebugEnabled()) {
 			log.debug(request.getMethod() + " " + request.getURI());
 		}
-		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(socketTimeoutMillis).setConnectTimeout(connectionTimeoutMillis).build();
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(check.getSocketTimeout()).setConnectTimeout(check.getConnectionTimeout()).build();
 		request.setConfig(requestConfig);
 		CloseableHttpResponse response = null;
 		try {
