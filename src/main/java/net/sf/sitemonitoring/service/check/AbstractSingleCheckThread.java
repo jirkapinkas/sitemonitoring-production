@@ -9,8 +9,10 @@ import javax.net.ssl.SSLHandshakeException;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.entity.Check;
 
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.config.RequestConfig.Builder;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
@@ -82,12 +84,16 @@ public abstract class AbstractSingleCheckThread extends AbstractCheckThread {
 		if (log.isDebugEnabled()) {
 			log.debug(request.getMethod() + " " + request.getURI());
 		}
-		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(check.getSocketTimeout()).setConnectTimeout(check.getConnectionTimeout()).build();
+		Builder requestConfigBuilder = RequestConfig.custom().setSocketTimeout(check.getSocketTimeout()).setConnectTimeout(check.getConnectionTimeout());
+		if (check.getHttpProxyServer() != null && !check.getHttpProxyServer().isEmpty()) {
+			HttpHost httpProxy = new HttpHost(check.getHttpProxyServer(), check.getHttpProxyPort());
+			requestConfigBuilder.setProxy(httpProxy);
+		}
+		RequestConfig requestConfig = requestConfigBuilder.build();
 		request.setConfig(requestConfig);
 		CloseableHttpResponse response = null;
 		try {
-			// TODO add correct header
-			// request.setHeader(arg0, arg1);
+			request.setHeader("User-Agent", check.getUserAgent());
 			response = httpClient.execute(request);
 		} catch (SSLHandshakeException ex) {
 			// ignore ValidatorException -> thrown when Java cannot validate

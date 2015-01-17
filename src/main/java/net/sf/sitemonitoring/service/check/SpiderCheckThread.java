@@ -51,6 +51,7 @@ public class SpiderCheckThread extends AbstractCheckThread {
 
 	private String checkHomepage(Map<URI, Object> visitedPagesGet, Map<URI, Object> visitedPagesHead, Map<String, String> allPages, Map<String, String> pagesVisitedBySpider) {
 		Check singleCheck = new Check();
+		copyConnectionSettings(check, singleCheck);
 		singleCheck.setId(check.getId());
 		singleCheck.setCondition(check.getCondition());
 		singleCheck.setConditionType(check.getConditionType());
@@ -58,8 +59,6 @@ public class SpiderCheckThread extends AbstractCheckThread {
 		singleCheck.setUrl(check.getUrl());
 		singleCheck.setDoNotFollowUrls(check.getDoNotFollowUrls());
 		singleCheck.setCheckBrokenLinks(check.isCheckBrokenLinks());
-		singleCheck.setConnectionTimeout(check.getConnectionTimeout());
-		singleCheck.setSocketTimeout(check.getSocketTimeout());
 		singleCheck.setStoreWebpage(true);
 		String result = singlePageCheckService.performCheck(singleCheck, visitedPagesGet, visitedPagesHead);
 		findUrls(singleCheck.getUrl(), singleCheck.getWebPage(), allPages);
@@ -86,9 +85,6 @@ public class SpiderCheckThread extends AbstractCheckThread {
 
 		StringBuilder stringBuilder = new StringBuilder();
 		while (pagesVisitedBySpider.size() != allPages.size()) {
-
-			System.out.println("spider stale bezi");
-
 			HashSet<String> set = new HashSet<String>(allPages.keySet());
 			for (String url : set) {
 				if (abort) {
@@ -110,8 +106,6 @@ public class SpiderCheckThread extends AbstractCheckThread {
 				singleCheck.setUrl(url);
 				singleCheck.setDoNotFollowUrls(check.getDoNotFollowUrls());
 				singleCheck.setCheckBrokenLinks(check.isCheckBrokenLinks());
-				singleCheck.setConnectionTimeout(check.getConnectionTimeout());
-				singleCheck.setSocketTimeout(check.getSocketTimeout());
 				singleCheck.setStoreWebpage(true);
 				String checkResultTxt = singlePageCheckService.performCheck(singleCheck, visitedPagesGet, visitedPagesHead);
 				findUrls(url, singleCheck.getWebPage(), allPages);

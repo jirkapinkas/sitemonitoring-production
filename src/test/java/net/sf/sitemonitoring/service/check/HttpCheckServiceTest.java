@@ -21,6 +21,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.littleshoot.proxy.HttpProxyServer;
+import org.littleshoot.proxy.ProxyAuthenticator;
+import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
 
 import com.google.common.eventbus.EventBus;
 
@@ -36,7 +39,9 @@ public class HttpCheckServiceTest {
 
 	private SitemapCheckThread sitemapCheckThread;
 
-	private static Server server;
+	private static Server jettyServer;
+	
+	private static HttpProxyServer proxyServer;
 
 	public static final String TEST_JETTY_HTTP = "http://localhost:8081/";
 
@@ -45,14 +50,31 @@ public class HttpCheckServiceTest {
 	@BeforeClass
 	public static void setUp() throws Exception {
 		System.out.println("*** STARTED TEST JETTY SERVER ***");
-		server = new Server(8081);
+		jettyServer = new Server(8081);
 
 		WebAppContext webAppContext = new WebAppContext();
 		webAppContext.setContextPath("/");
 		webAppContext.setWar("src/test/resources/test-app.war");
-		server.setHandler(webAppContext);
+		jettyServer.setHandler(webAppContext);
 
-		server.start();
+		jettyServer.start();
+		
+		System.out.println("*** STARTED TEST PROXY SERVER ***");
+		proxyServer = DefaultHttpProxyServer.bootstrap().withPort(8082).withProxyAuthenticator(new ProxyAuthenticator() {
+			@Override
+			public boolean authenticate(String username, String password) {
+				return username.equals("test") && password.equals("works");
+			}
+		}).start();
+	}
+
+	@AfterClass
+	public static void tearDown() throws Exception {
+		jettyServer.stop();
+		System.out.println("*** STOPPED TEST JETTY SERVER ***");
+		
+		proxyServer.stop();
+		System.out.println("*** STOPPED TEST PROXY SERVER ***");
 	}
 
 	@Before
@@ -69,12 +91,6 @@ public class HttpCheckServiceTest {
 		sitemapCheckThread.httpClient.close();
 	}
 
-	@AfterClass
-	public static void tearDown() throws Exception {
-		server.stop();
-		System.out.println("*** STOPPED TEST JETTY SERVER ***");
-	}
-
 	@Test
 	public void testPerformCheckSinglePageContains() throws Exception {
 		Check check = new Check();
@@ -86,6 +102,25 @@ public class HttpCheckServiceTest {
 		check.setCheckBrokenLinks(false);
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
+
+		Assert.assertNull(singlePageCheckService.performCheck(check));
+	}
+
+	@Test
+	public void testPerformCheckSinglePageContainsWithProxy() throws Exception {
+		Check check = new Check();
+		check.setCondition("</html>");
+		check.setReturnHttpCode(200);
+		check.setType(CheckType.SINGLE_PAGE);
+		check.setConditionType(CheckCondition.CONTAINS);
+		check.setUrl(TEST_JETTY_HTTP + "index.html");
+		check.setCheckBrokenLinks(false);
+		check.setSocketTimeout(timeout);
+		check.setConnectionTimeout(timeout);
+		check.setHttpProxyServer("localhost");
+		check.setHttpProxyPort(8082);
+		check.setHttpProxyUsername("test");
+		check.setHttpProxyPassword("works");
 
 		Assert.assertNull(singlePageCheckService.performCheck(check));
 	}

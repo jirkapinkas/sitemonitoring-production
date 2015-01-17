@@ -55,5 +55,5 @@ public class SpringConfiguration implements AsyncConfigurer {
 		cacheManager.setCaches(Arrays.asList(new ConcurrentMapCache("configuration")));
 		return cacheManager;
 	}
-	
+
 }

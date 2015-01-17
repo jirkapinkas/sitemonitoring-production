@@ -5,9 +5,11 @@ import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.entity.CheckResult;
+import net.sf.sitemonitoring.entity.Configuration;
 import net.sf.sitemonitoring.repository.CheckResultRepository;
 import net.sf.sitemonitoring.service.CheckResultService;
 import net.sf.sitemonitoring.service.CheckService;
+import net.sf.sitemonitoring.service.ConfigurationService;
 import net.sf.sitemonitoring.service.SendEmailService;
 
 import org.primefaces.push.EventBus;
@@ -40,6 +42,9 @@ public class MonitoringService {
 
 	@Autowired
 	private SendEmailService sendEmailService;
+	
+	@Autowired
+	private ConfigurationService configurationService;
 
 	@Async
 	public void startCheck(Check check, Date scheduledNextDate) {
@@ -52,6 +57,13 @@ public class MonitoringService {
 
 		long startTime = System.nanoTime();
 		String checkResultText = null;
+		
+		Configuration configuration = configurationService.find();
+		check.setUserAgent(configuration.getUserAgent());
+		check.setHttpProxyServer(configuration.getHttpProxyServer());
+		check.setHttpProxyPort(configuration.getHttpProxyPort());
+		check.setHttpProxyUsername(configuration.getHttpProxyUsername());
+		check.setHttpProxyPassword(configuration.getHttpProxyPassword());
 
 		switch (check.getType()) {
 		case SINGLE_PAGE:

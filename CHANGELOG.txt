@@ -1,5 +1,5 @@
 TODO_DATE: version 2.1.3
-
++ configurable User-Agent header, proxy
 
 16.1.2015: version 2.1.2
 + more configuration options (default send emails, default spider check interval)

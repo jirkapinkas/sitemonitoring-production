@@ -50,7 +50,22 @@ public class Configuration implements Serializable {
 
 	@Column(name = "monitoring_version")
 	private String monitoringVersion;
-	
+
+	@Column(name = "user_agent")
+	private String userAgent;
+
+	@Column(name = "http_proxy_server")
+	private String httpProxyServer;
+
+	@Column(name = "http_proxy_port")
+	private Integer httpProxyPort;
+
+	@Column(name = "http_proxy_username")
+	private String httpProxyUsername;
+
+	@Column(name = "http_proxy_password")
+	private String httpProxyPassword;
+
 	/*
 	 * send email functionality
 	 */
@@ -81,10 +96,10 @@ public class Configuration implements Serializable {
 
 	@Column(name = "email_body")
 	private String emailBody;
-	
-	@Column(name="info_message")
+
+	@Column(name = "info_message")
 	private String infoMessage;
-	
+
 	private Boolean hideInfoMessage;
 
 }

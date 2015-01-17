@@ -109,6 +109,34 @@
 					<p:inputText value="#{configurationController.configuration.tooLongRunningCheckMinutes}" />
 					<h:outputText value="How long can check run before automatic abort" />
 	
+					user agent:
+					<p:inputText value="#{configurationController.configuration.userAgent}" />
+					<h:outputText value="User-Agent header" />
+	
+				</p:panelGrid>
+			</p:fieldset>
+			
+			<br />
+			
+			<p:fieldset legend="proxy" toggleable="true" collapsed="true" styleClass="tableNoBorder">
+				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2">
+			
+					proxy server:
+					<p:inputText value="#{configurationController.configuration.httpProxyServer}" />
+					<h:outputText value="Leave empty if you don't use proxy" />
+	
+					proxy port:
+					<p:inputText value="#{configurationController.configuration.httpProxyPort}" />
+					<h:outputText value="Leave empty if you don't use proxy" />
+	
+					proxy username:
+					<p:inputText value="#{configurationController.configuration.httpProxyUsername}" />
+					<h:outputText value="Leave empty if your proxy doesn't use authentication" />
+	
+					proxy password:
+					<p:inputText value="#{configurationController.configuration.httpProxyPassword}" />
+					<h:outputText value="Leave empty if your proxy doesn't use authentication" />
+	
 				</p:panelGrid>
 			</p:fieldset>
 			

@@ -6,6 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.event.AbortCheckEvent;
 
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
@@ -21,7 +25,7 @@ public abstract class AbstractCheckThread extends Thread {
 	protected Check check;
 
 	protected CloseableHttpClient httpClient;
-	
+
 	public AbstractCheckThread(Check check) {
 		this.check = check;
 	}
@@ -35,11 +39,22 @@ public abstract class AbstractCheckThread extends Thread {
 			httpClient.close();
 		}
 	}
-	
+
 	public abstract void performCheck();
 
+	protected CloseableHttpClient buildHttpClient() {
+		if (check.getHttpProxyUsername() != null && !check.getHttpProxyPassword().isEmpty()) {
+			CredentialsProvider credsProvider = new BasicCredentialsProvider();
+			credsProvider.setCredentials(new AuthScope(check.getHttpProxyServer(), check.getHttpProxyPort()),
+					new UsernamePasswordCredentials(check.getHttpProxyUsername(), check.getHttpProxyPassword()));
+			return HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
+		} else {
+			return HttpClients.createDefault();
+		}
+	}
+
 	public void run() {
-		httpClient = HttpClients.createDefault();
+		httpClient = buildHttpClient();
 		try {
 			performCheck();
 		} finally {
@@ -62,6 +77,16 @@ public abstract class AbstractCheckThread extends Thread {
 		if (message != null && !message.trim().isEmpty()) {
 			output += message;
 		}
+	}
+
+	protected void copyConnectionSettings(Check original, Check result) {
+		result.setConnectionTimeout(original.getConnectionTimeout());
+		result.setSocketTimeout(original.getSocketTimeout());
+		result.setUserAgent(original.getUserAgent());
+		result.setHttpProxyServer(original.getHttpProxyServer());
+		result.setHttpProxyPort(original.getHttpProxyPort());
+		result.setHttpProxyUsername(original.getHttpProxyUsername());
+		result.setHttpProxyPassword(original.getHttpProxyPassword());
 	}
 
 }

@@ -30,15 +30,28 @@ public class UpgradeService {
 	public void upgradeDatabase(Configuration configuration) {
 		if (configuration.getMonitoringVersion() == null || configuration.getMonitoringVersion().isEmpty()) {
 			configuration.setMonitoringVersion("2.1");
-			configuration.setInfoMessage("Please don't monitor my websites (like javavids.com and sitemonitoring.sourceforge.net). Lot's of people started doing it and effectively DDOSed them. If you monitor them anyway, your IP address will be blocked!");
 			configurationService.saveExcludingPassword(configuration);
 			update("update monit_check set condition_value = condition");
 		}
 		if (configuration.getMonitoringVersion().equals("2.1")) {
 			configuration.setDefaultSpiderCheckInterval(60);
 			configuration.setDefaultSendEmails(false);
+			configuration.setMonitoringVersion("2.1.1");
+			configurationService.saveExcludingPassword(configuration);
+		}
+		if (configuration.getMonitoringVersion().equals("2.1.1")) {
+			configuration.setDefaultSpiderCheckInterval(60);
+			configuration.setDefaultSendEmails(false);
 			configuration.setInfoMessage("Please don't monitor my websites (like javavids.com and sitemonitoring.sourceforge.net). Lot's of people started doing it and effectively DDOSed them. If you monitor them anyway, your IP address will be blocked!");
 			configuration.setMonitoringVersion("2.1.2");
+			configurationService.saveExcludingPassword(configuration);
+		}
+		if (configuration.getMonitoringVersion().equals("2.1.2")) {
+			configuration.setDefaultSpiderCheckInterval(60);
+			configuration.setDefaultSendEmails(false);
+			configuration.setInfoMessage("Please don't monitor my websites (like javavids.com and sitemonitoring.sourceforge.net). Lot's of people started doing it and effectively DDOSed them. If you monitor them anyway, your IP address will be blocked!");
+			configuration.setUserAgent("sitemonitoring http://sitemonitoring.sourceforge.net");
+			configuration.setMonitoringVersion("2.1.3");
 			configurationService.saveExcludingPassword(configuration);
 		}
 	}

@@ -42,7 +42,7 @@ public class InitDbService {
 		}
 		System.out.println("*** TEST DATABASE INIT STARTED ***");
 		configuration = new Configuration();
-		configuration.setMonitoringVersion("2.1.2");
+		configuration.setMonitoringVersion("2.1.3");
 		configuration.setEmailSubject("sitemonitoring error");
 		configuration.setEmailBody("check name:{CHECK-NAME}\n\ncheck url: {CHECK-URL}\n\nerror:\n{ERROR}");
 		configuration.setDefaultSingleCheckInterval(5);
@@ -56,6 +56,7 @@ public class InitDbService {
 		configuration.setAdminUsername("admin");
 		configuration.setAdminPassword(new BCryptPasswordEncoder().encode("admin"));
 		configuration.setSendEmails(true);
+		configuration.setUserAgent("sitemonitoring http://sitemonitoring.sourceforge.net");
 		configuration.setInfoMessage("Please don't monitor my websites (like javavids.com and sitemonitoring.sourceforge.net). Lot's of people started doing it and effectively DDOSed them. If you monitor them anyway, your IP address will be blocked!");
 		
 		configurationService.save(configuration);

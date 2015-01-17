@@ -81,11 +81,10 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 
 							if (!url.isEmpty() && !url.startsWith("mailto:") && !SinglePageCheckService.ignoreUrl(url, check.getDoNotFollowUrls())) {
 								Check subCheck = new Check();
+								copyConnectionSettings(check, subCheck);
 								subCheck.setId(check.getId());
 								subCheck.setUrl(url);
 								subCheck.setType(CheckType.SINGLE_PAGE);
-								subCheck.setConnectionTimeout(check.getConnectionTimeout());
-								subCheck.setSocketTimeout(check.getSocketTimeout());
 								subCheck.setCheckBrokenLinks(check.isCheckBrokenLinks());
 								SinglePageCheckThread checkThread = new SinglePageCheckThread(subCheck, visitedPagesGet, visitedPagesHead);
 								log.debug("check sub-link: " + subCheck.getUrl());

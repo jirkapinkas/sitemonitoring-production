@@ -86,6 +86,7 @@ public class SitemapCheckThread extends AbstractCheckThread {
 				continue;
 			}
 			Check singleCheck = new Check();
+			copyConnectionSettings(sitemapCheck, singleCheck);
 			singleCheck.setId(sitemapCheck.getId());
 			singleCheck.setCondition(sitemapCheck.getCondition());
 			singleCheck.setConditionType(sitemapCheck.getConditionType());
@@ -93,8 +94,6 @@ public class SitemapCheckThread extends AbstractCheckThread {
 			singleCheck.setUrl(url.getLoc());
 			singleCheck.setDoNotFollowUrls(sitemapCheck.getDoNotFollowUrls());
 			singleCheck.setCheckBrokenLinks(sitemapCheck.isCheckBrokenLinks());
-			singleCheck.setConnectionTimeout(sitemapCheck.getConnectionTimeout());
-			singleCheck.setSocketTimeout(sitemapCheck.getSocketTimeout());
 			String checkResultTxt = singlePageCheckService.performCheck(singleCheck, visitedPagesGet, visitedPagesHead);
 			if (checkResultTxt != null) {
 				stringBuilder.append(checkResultTxt);

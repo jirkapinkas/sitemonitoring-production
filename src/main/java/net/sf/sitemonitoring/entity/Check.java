@@ -181,8 +181,27 @@ public class Check implements Serializable {
 	 */
 	@Transient
 	private String webPage;
-	
+
 	@Transient
 	private boolean storeWebpage;
-	
+
+	/**
+	 * Used in HTTP request, retrieved from Configuration
+	 */
+
+	@Transient
+	private String userAgent;
+
+	@Transient
+	private String httpProxyServer;
+
+	@Transient
+	private Integer httpProxyPort;
+
+	@Transient
+	private String httpProxyUsername;
+
+	@Transient
+	private String httpProxyPassword;
+
 }
