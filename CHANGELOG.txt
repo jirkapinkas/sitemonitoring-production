@@ -1,5 +1,12 @@
 TODO_DATE: version 2.1.3
-+ configurable User-Agent header, proxy
++ configurable User-Agent header
++ proxy support
++ optimized standalone application startup speed
++ reset-admin-credentials.bat for standalone application
++ spider check optimization and bugfixes
++ basic authentication
++ split configuration to several parts
+
 
 16.1.2015: version 2.1.2
 + more configuration options (default send emails, default spider check interval)

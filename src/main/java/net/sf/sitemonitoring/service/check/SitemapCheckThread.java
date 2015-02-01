@@ -11,6 +11,7 @@ import javax.xml.bind.JAXBException;
 
 import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.entity.Check;
+import net.sf.sitemonitoring.entity.Check.HttpMethod;
 import net.sf.sitemonitoring.jaxb.sitemap.Url;
 import net.sf.sitemonitoring.jaxb.sitemap.Urlset;
 
@@ -94,6 +95,11 @@ public class SitemapCheckThread extends AbstractCheckThread {
 			singleCheck.setUrl(url.getLoc());
 			singleCheck.setDoNotFollowUrls(sitemapCheck.getDoNotFollowUrls());
 			singleCheck.setCheckBrokenLinks(sitemapCheck.isCheckBrokenLinks());
+			if (sitemapCheck.getCondition() != null && !sitemapCheck.getCondition().isEmpty()) {
+				singleCheck.setHttpMethod(HttpMethod.GET);
+			} else {
+				singleCheck.setHttpMethod(HttpMethod.HEAD);
+			}
 			String checkResultTxt = singlePageCheckService.performCheck(singleCheck, visitedPagesGet, visitedPagesHead);
 			if (checkResultTxt != null) {
 				stringBuilder.append(checkResultTxt);
@@ -122,7 +128,7 @@ public class SitemapCheckThread extends AbstractCheckThread {
 		} catch (IOException e) {
 			log.error("Error executing sitemap", e);
 			output = e.getMessage();
-		} 
+		}
 		log.debug("sitemap performCheck() finish");
 	}
 

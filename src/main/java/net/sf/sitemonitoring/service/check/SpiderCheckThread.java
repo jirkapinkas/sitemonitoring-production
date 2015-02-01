@@ -8,6 +8,7 @@ import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.entity.Check;
+import net.sf.sitemonitoring.entity.Check.HttpMethod;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -39,7 +40,9 @@ public class SpiderCheckThread extends AbstractCheckThread {
 				break;
 			}
 			Element element = (Element) iterator.next();
-			element.setBaseUri(check.getUrl());
+			element.setBaseUri(referer);
+//			System.out.println("base uri: "+ check.getUrl());
+//			System.out.println("referer: "+ referer);
 			String url = element.absUrl("href").trim();
 			log.debug("spider check found url: " + url);
 			if (!url.toString().isEmpty() && !url.startsWith("mailto:") && !SinglePageCheckService.ignoreUrl(url, check.getDoNotFollowUrls()) && url.startsWith(check.getUrl()) && !url.equals(referer)) {
@@ -60,6 +63,7 @@ public class SpiderCheckThread extends AbstractCheckThread {
 		singleCheck.setDoNotFollowUrls(check.getDoNotFollowUrls());
 		singleCheck.setCheckBrokenLinks(check.isCheckBrokenLinks());
 		singleCheck.setStoreWebpage(true);
+		singleCheck.setHttpMethod(HttpMethod.GET);
 		String result = singlePageCheckService.performCheck(singleCheck, visitedPagesGet, visitedPagesHead);
 		findUrls(singleCheck.getUrl(), singleCheck.getWebPage(), allPages);
 		allPages.put(check.getUrl(), check.getUrl());
@@ -78,12 +82,11 @@ public class SpiderCheckThread extends AbstractCheckThread {
 		log.debug("spider performCheck() start");
 
 		String homepageResult = checkHomepage(visitedPagesGet, visitedPagesHead, allPages, pagesVisitedBySpider);
+		StringBuilder stringBuilder = new StringBuilder();
 		if (homepageResult != null && !homepageResult.isEmpty()) {
-			output = homepageResult;
-			return;
+			stringBuilder.append(homepageResult);
 		}
 
-		StringBuilder stringBuilder = new StringBuilder();
 		while (pagesVisitedBySpider.size() != allPages.size()) {
 			HashSet<String> set = new HashSet<String>(allPages.keySet());
 			for (String url : set) {
@@ -107,6 +110,7 @@ public class SpiderCheckThread extends AbstractCheckThread {
 				singleCheck.setDoNotFollowUrls(check.getDoNotFollowUrls());
 				singleCheck.setCheckBrokenLinks(check.isCheckBrokenLinks());
 				singleCheck.setStoreWebpage(true);
+				singleCheck.setHttpMethod(HttpMethod.GET);
 				String checkResultTxt = singlePageCheckService.performCheck(singleCheck, visitedPagesGet, visitedPagesHead);
 				findUrls(url, singleCheck.getWebPage(), allPages);
 				pagesVisitedBySpider.put(singleCheck.getUrl(), null);

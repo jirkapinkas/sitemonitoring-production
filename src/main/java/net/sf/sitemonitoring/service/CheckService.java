@@ -11,6 +11,7 @@ import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.entity.Check.IntervalType;
 import net.sf.sitemonitoring.event.AbortCheckEvent;
 import net.sf.sitemonitoring.repository.CheckRepository;
+import net.sf.sitemonitoring.repository.CredentialsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -26,6 +27,9 @@ public class CheckService {
 
 	@Autowired
 	private CheckRepository checkRepository;
+	
+	@Autowired
+	private CredentialsRepository credentialsRepository;
 
 	@Autowired
 	private EventBus eventBus;
@@ -78,6 +82,12 @@ public class CheckService {
 
 	public Check findOne(int checkId) {
 		return checkRepository.findOne(checkId);
+	}
+
+	@Transactional
+	public void removeCredentials(int id) {
+		checkRepository.removeCredentials(id);
+		credentialsRepository.removeCredentials(id);
 	}
 
 }

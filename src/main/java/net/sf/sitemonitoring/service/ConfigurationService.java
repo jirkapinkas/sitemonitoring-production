@@ -46,6 +46,14 @@ public class ConfigurationService {
 		save(newConfiguration);
 	}
 
+	@CacheEvict(value = "configuration", allEntries = true)
+	public void resetAdminLoginCredentials() {
+		Configuration configuration = find();
+		configuration.setAdminUsername("admin");
+		configuration.setAdminPassword(new BCryptPasswordEncoder().encode("admin"));
+		save(configuration);
+	}
+
 	@Cacheable("configuration")
 	public Configuration find() {
 		List<Configuration> configurations = configurationRepository.findAll();

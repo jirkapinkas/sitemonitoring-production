@@ -20,8 +20,10 @@
 				url:
 				<p:inputText value="#{checkController.check.url}" style="width:100%" />
 				
-				<h:outputText value="excluded URLs &lt;br /&gt; asterisk = anything &lt;br /&gt;(for example *.pdf):" escape="false" />
-				<p:inputTextarea value="#{checkController.check.excludedUrls}" style="width:100%" />
+				<h:outputText value="excluded URLs:" escape="false" />
+				<p:inputTextarea value="#{checkController.check.excludedUrls}" style="width:100%" 
+								 placeholder="One excluded URL per line. Asterisk = anything (for example *.pdf or http://www.your-web.com/do-not-follow/*)"
+								 autoResize="false" rows="2" />
 
 				<style>
 					.firstColumn {

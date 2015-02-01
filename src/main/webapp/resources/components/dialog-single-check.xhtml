@@ -3,7 +3,8 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:components="http://xmlns.jcp.org/jsf/composite/components">
 
 <composite:interface>
 </composite:interface>
@@ -114,6 +115,18 @@
 				</h:panelGrid>
 		
 			</p:panelGrid>
+
+			<h:panelGroup id="credentialsPanel">
+
+				<br />
+
+				<p:commandButton value="add basic auth." style="margin-bottom:20px" update="credentialsPanel" action="#{checkController.addCredentials()}" rendered="#{checkController.check.credentials eq null or checkController.removeCredentialsAfterSave eq true}" process="@this" />
+
+				<p:commandButton value="remove basic auth." style="margin-bottom:20px" update="credentialsPanel" action="#{checkController.removeCredentials()}" rendered="#{checkController.check.credentials ne null and checkController.removeCredentialsAfterSave eq false}" process="@this" />
+
+				<components:credentials rendered="#{checkController.check.credentials ne null and checkController.removeCredentialsAfterSave eq false}" />
+
+			</h:panelGroup>
 
 			<br />
 

@@ -1,9 +1,12 @@
 package net.sf.sitemonitoring.service.check;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.entity.Check;
+import net.sf.sitemonitoring.entity.Credentials;
 import net.sf.sitemonitoring.event.AbortCheckEvent;
 
 import org.apache.http.auth.AuthScope;
@@ -11,6 +14,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 
 import com.google.common.eventbus.Subscribe;
@@ -28,6 +32,7 @@ public abstract class AbstractCheckThread extends Thread {
 
 	public AbstractCheckThread(Check check) {
 		this.check = check;
+		setDaemon(true);
 	}
 
 	@Subscribe
@@ -43,14 +48,30 @@ public abstract class AbstractCheckThread extends Thread {
 	public abstract void performCheck();
 
 	protected CloseableHttpClient buildHttpClient() {
+		HttpClientBuilder httpClientBuilder = HttpClients.custom();
+		CredentialsProvider credsProvider = new BasicCredentialsProvider();
+
+		try {
+			Credentials credentials = check.getCredentials();
+			if (credentials != null) {
+				basicAuthentication(httpClientBuilder, credsProvider, credentials);
+			}
+		} catch (Exception ex) {
+			throw new RuntimeException("Could not use credentials");
+		}
+		// set proxy
 		if (check.getHttpProxyUsername() != null && !check.getHttpProxyPassword().isEmpty()) {
-			CredentialsProvider credsProvider = new BasicCredentialsProvider();
 			credsProvider.setCredentials(new AuthScope(check.getHttpProxyServer(), check.getHttpProxyPort()),
 					new UsernamePasswordCredentials(check.getHttpProxyUsername(), check.getHttpProxyPassword()));
-			return HttpClients.custom().setDefaultCredentialsProvider(credsProvider).build();
-		} else {
-			return HttpClients.createDefault();
+			httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
 		}
+		return httpClientBuilder.build();
+	}
+
+	private void basicAuthentication(HttpClientBuilder httpClientBuilder, CredentialsProvider credsProvider, Credentials credentials) throws URISyntaxException {
+		URI uri = new URI(check.getUrl());
+		credsProvider.setCredentials(new AuthScope(uri.getHost(), uri.getPort()), new UsernamePasswordCredentials(credentials.getUsername(), credentials.getPassword()));
+		httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
 	}
 
 	public void run() {

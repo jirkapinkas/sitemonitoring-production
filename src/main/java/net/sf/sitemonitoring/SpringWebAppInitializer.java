@@ -6,7 +6,11 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-public class MyWebAppInitializer implements WebApplicationInitializer {
+/**
+ * This class replaces the need for web.xml for Spring bootstrap.
+ * 
+ */
+public class SpringWebAppInitializer implements WebApplicationInitializer {
 
 	@Override
 	public void onStartup(ServletContext container) {

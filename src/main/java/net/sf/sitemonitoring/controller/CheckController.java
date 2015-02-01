@@ -2,7 +2,6 @@ package net.sf.sitemonitoring.controller;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -18,8 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.entity.Check.CheckCondition;
 import net.sf.sitemonitoring.entity.Check.CheckType;
+import net.sf.sitemonitoring.entity.Check.HttpMethod;
 import net.sf.sitemonitoring.entity.Check.IntervalType;
 import net.sf.sitemonitoring.entity.Configuration;
+import net.sf.sitemonitoring.entity.Credentials;
 import net.sf.sitemonitoring.service.CheckResultService;
 import net.sf.sitemonitoring.service.CheckService;
 import net.sf.sitemonitoring.service.ConfigurationService;
@@ -43,15 +44,11 @@ public class CheckController implements Serializable {
 
 	private Check check;
 
-	private Date originalScheduledStartDate;
-
-	private int originalScheduledInterval;
-
 	private List<Check> checks;
 
 	@ManagedProperty("#{checkResultsController}")
 	private CheckResultsController checkResultsController;
-	
+
 	@PostConstruct
 	public void init() {
 		log.debug("constructed CheckController");
@@ -60,11 +57,13 @@ public class CheckController implements Serializable {
 		 */
 		checkResultsController.setCheckController(this);
 	}
-	
+
+	private boolean removeCredentialsAfterSave;
+
 	public Configuration getConfiguration() {
 		return configurationService.find();
 	}
-	
+
 	public void hideInfoMessage() {
 		Configuration configuration = configurationService.find();
 		configuration.setHideInfoMessage(true);
@@ -81,8 +80,6 @@ public class CheckController implements Serializable {
 
 	public void setCheck(Check check) {
 		this.check = check;
-		this.originalScheduledInterval = check.getScheduledInterval();
-		this.originalScheduledStartDate = check.getScheduledStartDate();
 	}
 
 	public void loadChecks() {
@@ -142,14 +139,15 @@ public class CheckController implements Serializable {
 
 	public void save() {
 		log.debug("save check: " + check.getType());
-		if (check.getScheduledInterval() != originalScheduledInterval || !check.getScheduledStartDate().equals(originalScheduledStartDate)) {
-			log.debug("interval or start date has changed");
-			log.debug("intervals: new:" + check.getScheduledInterval() + ", old: " + originalScheduledInterval);
-			log.debug("start dates: new:" + check.getScheduledStartDate() + ", old: " + originalScheduledStartDate);
-
-			check.setScheduledNextDate(null);
+		if (check.getCondition() != null && !check.getCondition().isEmpty()) {
+			check.setHttpMethod(HttpMethod.GET);
+		} else {
+			check.setHttpMethod(HttpMethod.HEAD);
 		}
 		checkService.save(check);
+		if (removeCredentialsAfterSave) {
+			checkService.removeCredentials(check.getCredentials().getId());
+		}
 		clearCheck();
 		checkResultsController.loadChecks();
 		updateResults();
@@ -159,6 +157,18 @@ public class CheckController implements Serializable {
 	public void delete(int id) {
 		checkService.delete(id);
 		loadChecks();
+	}
+
+	public void addCredentials() {
+		if (check.getCredentials() == null) {
+			Credentials credentials = new Credentials();
+			check.setCredentials(credentials);
+		}
+		removeCredentialsAfterSave = false;
+	}
+
+	public void removeCredentials() {
+		removeCredentialsAfterSave = true;
 	}
 
 }

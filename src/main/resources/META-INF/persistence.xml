@@ -4,5 +4,6 @@
 		<class>net.sf.sitemonitoring.entity.Configuration</class>
 		<class>net.sf.sitemonitoring.entity.Check</class>
 		<class>net.sf.sitemonitoring.entity.CheckResult</class>
+		<class>net.sf.sitemonitoring.entity.Credentials</class>
 	</persistence-unit>
 </persistence>

@@ -49,4 +49,8 @@ public interface CheckRepository extends JpaRepository<Check, Integer> {
 	@Query("update Check c set c.currentErrorCount = 0 where c.id = ?1")
 	void clearErrorCount(int checkId);
 
+	@Modifying
+	@Query("update Check c set c.credentials = null where c.credentials.id = ?1")
+	void removeCredentials(int id);
+
 }

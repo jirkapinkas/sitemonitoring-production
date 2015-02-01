@@ -9,6 +9,7 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.entity.Check.CheckType;
+import net.sf.sitemonitoring.entity.Check.HttpMethod;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -33,14 +34,14 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 		log.debug("start perform check");
 		CloseableHttpResponse httpResponse = null;
 		try {
-			if ((check.getCondition() == null || check.getCondition().isEmpty()) && !check.isStoreWebpage()) {
+			if(check.getHttpMethod() == HttpMethod.HEAD) {
 				httpResponse = doHead(check.getUrl());
 				if (httpResponse == null) {
 					return;
 				} else {
 					checkStatusCode(httpResponse, check.getUrl());
 				}
-			} else {
+			} else if(check.getHttpMethod() == HttpMethod.GET) {
 				httpResponse = doGet(check.getUrl());
 				if (httpResponse == null) {
 					return;
@@ -86,6 +87,7 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 								subCheck.setUrl(url);
 								subCheck.setType(CheckType.SINGLE_PAGE);
 								subCheck.setCheckBrokenLinks(check.isCheckBrokenLinks());
+								subCheck.setHttpMethod(HttpMethod.HEAD);
 								SinglePageCheckThread checkThread = new SinglePageCheckThread(subCheck, visitedPagesGet, visitedPagesHead);
 								log.debug("check sub-link: " + subCheck.getUrl());
 								checkThread.start();
@@ -97,6 +99,8 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 						}
 					}
 				}
+			} else {
+				throw new UnsupportedOperationException("Unknown HTTP METHOD: " + check.getHttpMethod());
 			}
 			log.debug("check successful");
 		} catch (IllegalArgumentException ex) {

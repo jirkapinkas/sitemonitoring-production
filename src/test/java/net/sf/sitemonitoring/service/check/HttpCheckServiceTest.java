@@ -6,15 +6,18 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 import net.sf.sitemonitoring.entity.Check;
+import net.sf.sitemonitoring.entity.Credentials;
 import net.sf.sitemonitoring.entity.Check.CheckCondition;
 import net.sf.sitemonitoring.entity.Check.CheckType;
+import net.sf.sitemonitoring.entity.Check.HttpMethod;
 import net.sf.sitemonitoring.jaxb.sitemap.Url;
 import net.sf.sitemonitoring.jaxb.sitemap.Urlset;
+import net.sf.sitemonitoring.service.check.util.JettyServerUtil;
+import net.sf.sitemonitoring.service.check.util.ProxyServerUtil;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -22,8 +25,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.littleshoot.proxy.HttpProxyServer;
-import org.littleshoot.proxy.ProxyAuthenticator;
-import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
 
 import com.google.common.eventbus.EventBus;
 
@@ -39,42 +40,26 @@ public class HttpCheckServiceTest {
 
 	private SitemapCheckThread sitemapCheckThread;
 
+	private SpiderCheckThread spiderCheckThread;
+
 	private static Server jettyServer;
 	
-	private static HttpProxyServer proxyServer;
+	private static HttpProxyServer httpProxyServer;
 
 	public static final String TEST_JETTY_HTTP = "http://localhost:8081/";
 
-	private static final int timeout = 1000;
+	private static final int timeout = 2000;
 
 	@BeforeClass
 	public static void setUp() throws Exception {
-		System.out.println("*** STARTED TEST JETTY SERVER ***");
-		jettyServer = new Server(8081);
-
-		WebAppContext webAppContext = new WebAppContext();
-		webAppContext.setContextPath("/");
-		webAppContext.setWar("src/test/resources/test-app.war");
-		jettyServer.setHandler(webAppContext);
-
-		jettyServer.start();
-		
-		System.out.println("*** STARTED TEST PROXY SERVER ***");
-		proxyServer = DefaultHttpProxyServer.bootstrap().withPort(8082).withProxyAuthenticator(new ProxyAuthenticator() {
-			@Override
-			public boolean authenticate(String username, String password) {
-				return username.equals("test") && password.equals("works");
-			}
-		}).start();
+		jettyServer = JettyServerUtil.start();
+		httpProxyServer = ProxyServerUtil.start();
 	}
 
 	@AfterClass
 	public static void tearDown() throws Exception {
-		jettyServer.stop();
-		System.out.println("*** STOPPED TEST JETTY SERVER ***");
-		
-		proxyServer.stop();
-		System.out.println("*** STOPPED TEST PROXY SERVER ***");
+		JettyServerUtil.stop(jettyServer); // this will also stop proxy
+		ProxyServerUtil.stop(httpProxyServer);
 	}
 
 	@Before
@@ -82,13 +67,17 @@ public class HttpCheckServiceTest {
 		singlePageCheckService = new SinglePageCheckService();
 		singlePageCheckService.setEventBus(new EventBus());
 		sitemapCheckThread = new SitemapCheckThread(JAXBContext.newInstance(Urlset.class, Url.class), singlePageCheckService, null);
-		// created in AbstractCheckThread.run(), that's why I have to create it here.
+		// created in AbstractCheckThread.run(), that's why I have to create it
+		// here.
 		sitemapCheckThread.httpClient = HttpClients.createDefault();
+		spiderCheckThread = new SpiderCheckThread(singlePageCheckService, null);
+		spiderCheckThread.httpClient = HttpClients.createDefault();
 	}
-	
+
 	@After
 	public void after() throws IOException {
 		sitemapCheckThread.httpClient.close();
+		spiderCheckThread.httpClient.close();
 	}
 
 	@Test
@@ -102,6 +91,7 @@ public class HttpCheckServiceTest {
 		check.setCheckBrokenLinks(false);
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
+		check.setHttpMethod(HttpMethod.GET);
 
 		Assert.assertNull(singlePageCheckService.performCheck(check));
 	}
@@ -121,6 +111,7 @@ public class HttpCheckServiceTest {
 		check.setHttpProxyPort(8082);
 		check.setHttpProxyUsername("test");
 		check.setHttpProxyPassword("works");
+		check.setHttpMethod(HttpMethod.GET);
 
 		Assert.assertNull(singlePageCheckService.performCheck(check));
 	}
@@ -137,6 +128,7 @@ public class HttpCheckServiceTest {
 		check.setCheckBrokenLinks(true);
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
+		check.setHttpMethod(HttpMethod.GET);
 
 		Assert.assertNull(singlePageCheckService.performCheck(check));
 	}
@@ -154,6 +146,7 @@ public class HttpCheckServiceTest {
 		check.setCheckBrokenLinks(true);
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
+		check.setHttpMethod(HttpMethod.GET);
 
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
@@ -171,6 +164,7 @@ public class HttpCheckServiceTest {
 		check.setCheckBrokenLinks(false);
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
+		check.setHttpMethod(HttpMethod.GET);
 
 		Assert.assertNull(singlePageCheckService.performCheck(check));
 	}
@@ -184,6 +178,7 @@ public class HttpCheckServiceTest {
 		check.setCheckBrokenLinks(false);
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
+		check.setHttpMethod(HttpMethod.GET);
 
 		Assert.assertEquals("Invalid status: http://localhost:8081/not-exists.html required: 200, received: 404", singlePageCheckService.performCheck(check));
 	}
@@ -197,6 +192,7 @@ public class HttpCheckServiceTest {
 		check.setCheckBrokenLinks(false);
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
+		check.setHttpMethod(HttpMethod.HEAD);
 
 		Assert.assertNull(singlePageCheckService.performCheck(check));
 	}
@@ -210,6 +206,7 @@ public class HttpCheckServiceTest {
 		check.setCheckBrokenLinks(false);
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
+		check.setHttpMethod(HttpMethod.HEAD);
 
 		Assert.assertEquals("Incorrect URL: http://", singlePageCheckService.performCheck(check));
 	}
@@ -223,6 +220,7 @@ public class HttpCheckServiceTest {
 		check.setCheckBrokenLinks(false);
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
+		check.setHttpMethod(HttpMethod.GET);
 
 		Assert.assertNull(singlePageCheckService.performCheck(check));
 	}
@@ -253,7 +251,7 @@ public class HttpCheckServiceTest {
 		check.setCheckBrokenLinks(false);
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
-		
+
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
 		Assert.assertNull(sitemapCheckThread.output);
@@ -271,5 +269,128 @@ public class HttpCheckServiceTest {
 			}
 		}
 	}
+
+	@Test
+	public void testSpiderWithoutBrokenLinks() {
+		Check check = new Check();
+		check.setReturnHttpCode(200);
+		check.setType(CheckType.SPIDER);
+		// TODO spider url cannot point to some first page, but to base url! add info to documentation
+		check.setUrl(TEST_JETTY_HTTP + "spider/");
+		check.setCheckBrokenLinks(false);
+		check.setSocketTimeout(timeout);
+		check.setConnectionTimeout(timeout);
+		spiderCheckThread.check = check;
+		spiderCheckThread.performCheck();
+		Assert.assertEquals(
+				"http://localhost:8081/spider/ has error: Invalid status: http://localhost:8081/spider/broken-link.html required: 200, received: 404<br />http://localhost:8081/spider/contains-broken-links.html has error: Invalid status: http://localhost:8081/spider/doesnt-exist required: 200, received: 404<br />http://localhost:8081/spider/page?id=9 has error: Invalid status: http://localhost:8081/spider/not-found.html required: 200, received: 404<br />",
+				spiderCheckThread.output);
+
+	}
+
+	@Test
+	public void testSpiderWithBrokenLinks() {
+		Check check = new Check();
+		check.setReturnHttpCode(200);
+		check.setType(CheckType.SPIDER);
+		check.setUrl(TEST_JETTY_HTTP + "spider/");
+		check.setCheckBrokenLinks(true);
+		check.setSocketTimeout(timeout);
+		check.setConnectionTimeout(timeout);
+		spiderCheckThread.check = check;
+		spiderCheckThread.performCheck();
+		// TODO prints more than necessary
+		Assert.assertEquals(
+				"http://localhost:8081/spider/ has error: Invalid status: http://localhost:8081/spider/broken-link.html required: 200, received: 404<br />http://localhost:8081/spider/ has error: http://localhost:8081/spider/contains-broken-links.html has error: Invalid status: http://localhost:8081/spider/doesnt-exist required: 200, received: 404<br />http://localhost:8081/spider/contains-broken-links.html has error: Error downloading: http://www.doesntexist93283893289292947987498.com/<br /><br />http://localhost:8081/spider/ has error: Invalid status: http://localhost:8081/spider/broken-link.html required: 200, received: 404<br />http://localhost:8081/spider/contains-broken-links.html has error: Invalid status: http://localhost:8081/spider/doesnt-exist required: 200, received: 404<br />http://localhost:8081/spider/page?id=8 has error: http://localhost:8081/spider/page?id=9 has error: Invalid status: http://localhost:8081/spider/not-found.html required: 200, received: 404<br /><br />http://localhost:8081/spider/page?id=9 has error: Invalid status: http://localhost:8081/spider/not-found.html required: 200, received: 404<br />",
+				spiderCheckThread.output);
+	}
+
+	@Test
+	public void testPerformCheckSitemapWithErrorsNoBrokenLinks() throws Exception {
+		Check check = new Check();
+		check.setType(CheckType.SITEMAP);
+		check.setReturnHttpCode(200);
+		check.setConditionType(CheckCondition.CONTAINS);
+		check.setCondition("</html>");
+		check.setExcludedUrls("*pdf");
+		check.setUrl(TEST_JETTY_HTTP + "local-sitemap-with-errors.xml");
+		check.setCheckBrokenLinks(false);
+		check.setSocketTimeout(timeout);
+		check.setConnectionTimeout(timeout);
+		check.setHttpMethod(HttpMethod.GET);
+
+		sitemapCheckThread.check = check;
+		sitemapCheckThread.performCheck();
+		Assert.assertEquals("Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />", sitemapCheckThread.output);
+	}
+
+	@Test
+	public void testPerformCheckSitemapWithErrorsAndBrokenLinks() throws Exception {
+		Check check = new Check();
+		check.setType(CheckType.SITEMAP);
+		check.setReturnHttpCode(200);
+		check.setConditionType(CheckCondition.CONTAINS);
+		check.setCondition("</html>");
+		check.setExcludedUrls("*pdf");
+		check.setUrl(TEST_JETTY_HTTP + "local-sitemap-with-errors.xml");
+		check.setCheckBrokenLinks(true);
+		check.setSocketTimeout(timeout);
+		check.setConnectionTimeout(timeout);
+		check.setHttpMethod(HttpMethod.GET);
+
+		sitemapCheckThread.check = check;
+		sitemapCheckThread.performCheck();
+		Assert.assertEquals(
+				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: Error downloading: http://www.doesntexist93283893289292947987498.com/<br /><br />",
+				sitemapCheckThread.output);
+	}
+
+	@Test
+	public void testSingleCheckBasicAuthentication() {
+		Check check = new Check();
+		check.setCondition("this is protected using BasicAuthenticationFilter.java");
+		check.setReturnHttpCode(200);
+		check.setType(CheckType.SINGLE_PAGE);
+		check.setConditionType(CheckCondition.CONTAINS);
+		check.setUrl(TEST_JETTY_HTTP + "security/basic.html");
+		check.setCheckBrokenLinks(false);
+		check.setSocketTimeout(timeout);
+		check.setConnectionTimeout(timeout);
+		check.setHttpMethod(HttpMethod.GET);
+		
+		Credentials credentials = new Credentials();
+		credentials.setUsername("admin");
+		credentials.setPassword("admin");
+		check.setCredentials(credentials);
+
+		Assert.assertNull(singlePageCheckService.performCheck(check));
+	}
+
+
+	@Test
+	public void testSingleCheckBasicAuthenticationWithProxy() throws Exception {
+		Check check = new Check();
+		check.setCondition("this is protected using BasicAuthenticationFilter.java");
+		check.setReturnHttpCode(200);
+		check.setType(CheckType.SINGLE_PAGE);
+		check.setConditionType(CheckCondition.CONTAINS);
+		check.setUrl(TEST_JETTY_HTTP + "security/basic.html");
+		check.setCheckBrokenLinks(false);
+		check.setSocketTimeout(timeout);
+		check.setConnectionTimeout(timeout);
+		check.setHttpProxyServer("localhost");
+		check.setHttpProxyPort(8082);
+		check.setHttpProxyUsername("test");
+		check.setHttpProxyPassword("works");
+		check.setHttpMethod(HttpMethod.GET);
+
+		Credentials credentials = new Credentials();
+		credentials.setUsername("admin");
+		credentials.setPassword("admin");
+		check.setCredentials(credentials);
+
+		Assert.assertNull(singlePageCheckService.performCheck(check));
+	}
+
 
 }

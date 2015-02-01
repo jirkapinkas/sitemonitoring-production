@@ -1,4 +1,4 @@
-package net.sf.sitemonitoring;
+package net.sf.sitemonitoring.servlet;
 import java.awt.Desktop;
 import java.net.URI;
 

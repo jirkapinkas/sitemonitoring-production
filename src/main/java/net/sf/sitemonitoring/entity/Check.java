@@ -9,9 +9,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -51,6 +54,14 @@ public class Check implements Serializable {
 	public enum IntervalType {
 		MINUTE, HOUR, DAY, MONTH
 	}
+	
+	public enum HttpMethod {
+		GET, HEAD, POST, PUT, DELETE
+	}
+	
+	@Column(name="http_method")
+	@Enumerated(EnumType.STRING)
+	private HttpMethod httpMethod;
 
 	@Column(name = "check_state", nullable = false, updatable = false)
 	@Enumerated(EnumType.STRING)
@@ -149,6 +160,11 @@ public class Check implements Serializable {
 	@Column(name = "last_sent_email", updatable = false)
 	private Date lastSentEmail;
 
+	// TODO Change to FetchType.LAZY
+	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "credentials_id")
+	private Credentials credentials;
+
 	public Check() {
 		active = true;
 		returnHttpCode = HttpServletResponse.SC_OK;
@@ -175,7 +191,7 @@ public class Check implements Serializable {
 			break;
 		}
 	}
-
+	
 	/**
 	 * Used only in spider
 	 */

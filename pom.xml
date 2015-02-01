@@ -9,6 +9,20 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-plus</artifactId>
+			<version>9.2.3.v20140905</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-annotations</artifactId>
+			<version>9.2.3.v20140905</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.littleshoot</groupId>
 			<artifactId>littleproxy</artifactId>
 			<version>1.0.0-beta8</version>

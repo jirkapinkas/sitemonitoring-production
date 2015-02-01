@@ -211,24 +211,27 @@
 		<p:dialog widgetVar="checkDialogSingle" closeOnEscape="true" modal="true" header="single check">
 			<h:form id="checkFormSingle">
 				<components:dialog-single-check />
-				<p:commandButton value="save" action="#{checkController.save()}"
+				<p:commandButton id="save" value="save" action="#{checkController.save()}"
 					update="checkFormSingle, :checksTable" oncomplete="handleDialogSubmit(args, 'checkDialogSingle')" />
+				<p:defaultCommand target="save" />
 			</h:form>
 		</p:dialog>
 
 		<p:dialog widgetVar="checkDialogSitemap" closeOnEscape="true" modal="true" header="sitemap check">
 			<h:form id="checkFormSitemap">
 				<components:dialog-sitemap-check />
-				<p:commandButton value="save" action="#{checkController.save()}"
+				<p:commandButton id="save" value="save" action="#{checkController.save()}"
 					update="checkFormSitemap, :checksTable" oncomplete="handleDialogSubmit(args, 'checkDialogSitemap')" />
+				<p:defaultCommand target="save" />
 			</h:form>
 		</p:dialog>
 		
 		<p:dialog widgetVar="checkDialogSpider" closeOnEscape="true" modal="true" header="spider check">
 			<h:form id="checkFormSpider">
 				<components:dialog-spider-check />
-				<p:commandButton value="save" action="#{checkController.save()}"
+				<p:commandButton id="save" value="save" action="#{checkController.save()}"
 					update="checkFormSpider, :checksTable" oncomplete="handleDialogSubmit(args, 'checkDialogSpider')" />
+				<p:defaultCommand target="save" />
 			</h:form>
 		</p:dialog>
 		

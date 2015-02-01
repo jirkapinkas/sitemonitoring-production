@@ -13,7 +13,14 @@ http://maven.apache.org/xsd/assembly-1.1.2.xsd">
 			<outputDirectory>/</outputDirectory>
 			<includes>
 				<include>LICENCE.txt</include>
-				<include>startup.bat</include>
+				<include>CHANGELOG.txt</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/scripts</directory>
+			<outputDirectory>/</outputDirectory>
+			<includes>
+				<include>*</include>
 			</includes>
 		</fileSet>
 	</fileSets>
