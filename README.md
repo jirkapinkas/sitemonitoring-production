@@ -8,12 +8,12 @@
 
 <h2>Standalone application (with HSQL database)</h2>
 
-<p>Just download <a href="https://sourceforge.net/projects/sitemonitoring/files/latest/download?source=files" target="_blank">compiled file</a>
+<p>Just download latest <a href="http://sourceforge.net/projects/sitemonitoring/files/Site%20monitoring%202.0/" target="_blank">ZIP file</a>.
 <br />
-Next run: <code>java -jar sitemonitoring.jar</code></p>
+Extract and run: <code>startup.bat</code> (Linux is also supported)</p>
 </p>
 
-<p>OR run: <code>mvn clean package -P standalone</code>
+<p>OR download sources and run: <code>mvn clean package -P standalone</code>
 <br />
 Next run: <code>java -jar target/sitemonitoring.war</code></p>
 
