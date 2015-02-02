@@ -276,7 +276,7 @@ public class HttpCheckServiceTest {
 		Check check = new Check();
 		check.setReturnHttpCode(200);
 		check.setType(CheckType.SPIDER);
-		// TODO spider url cannot point to some first page, but to base url! add info to documentation
+		// note: URL must be base URL (directory!), not some web page
 		check.setUrl(TEST_JETTY_HTTP + "spider/");
 		check.setCheckBrokenLinks(false);
 		check.setSocketTimeout(timeout);
