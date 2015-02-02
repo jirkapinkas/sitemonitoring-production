@@ -27,7 +27,7 @@ public class SpringCustomConfiguration {
 		Properties jpaProperties = new Properties();
 		jpaProperties.put("hibernate.hbm2ddl.auto", "update");
 		jpaProperties.put("hibernate.show_sql", "false");
-		// jpaProperties.put("hibernate.format_sql", "true");
+		jpaProperties.put("hibernate.dialect", dialect);
 		entityManagerFactory.setJpaProperties(jpaProperties);
 		entityManagerFactory.setPackagesToScan("net.sf.sitemonitoring.entity");
 		entityManagerFactory.setPersistenceProvider(new HibernatePersistenceProvider());
@@ -62,6 +62,9 @@ public class SpringCustomConfiguration {
 
 	@Value("${dbDriver}")
 	private String driver;
+
+	@Value("${dbDialect}")
+	private String dialect;
 
 	@Bean
 	public static PropertyPlaceholderConfigurer propertyConfigurer() throws IOException {
