@@ -1,15 +1,19 @@
 package net.sf.sitemonitoring.service.check;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 import net.sf.sitemonitoring.entity.Check;
-import net.sf.sitemonitoring.entity.Credentials;
 import net.sf.sitemonitoring.entity.Check.CheckCondition;
 import net.sf.sitemonitoring.entity.Check.CheckType;
 import net.sf.sitemonitoring.entity.Check.HttpMethod;
+import net.sf.sitemonitoring.entity.Credentials;
 import net.sf.sitemonitoring.jaxb.sitemap.Url;
 import net.sf.sitemonitoring.jaxb.sitemap.Urlset;
 import net.sf.sitemonitoring.service.check.util.JettyServerUtil;
@@ -20,7 +24,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.eclipse.jetty.server.Server;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -94,7 +97,7 @@ public class HttpCheckServiceTest {
 		check.setConnectionTimeout(timeout);
 		check.setHttpMethod(HttpMethod.GET);
 
-		Assert.assertNull(singlePageCheckService.performCheck(check));
+		assertNull(singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -114,7 +117,7 @@ public class HttpCheckServiceTest {
 		check.setHttpProxyPassword("works");
 		check.setHttpMethod(HttpMethod.GET);
 
-		Assert.assertNull(singlePageCheckService.performCheck(check));
+		assertNull(singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -131,7 +134,7 @@ public class HttpCheckServiceTest {
 		check.setConnectionTimeout(timeout);
 		check.setHttpMethod(HttpMethod.GET);
 
-		Assert.assertNull(singlePageCheckService.performCheck(check));
+		assertNull(singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -151,7 +154,7 @@ public class HttpCheckServiceTest {
 
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
-		Assert.assertNull(sitemapCheckThread.output);
+		assertNull(sitemapCheckThread.output);
 	}
 
 	@Test
@@ -167,7 +170,7 @@ public class HttpCheckServiceTest {
 		check.setConnectionTimeout(timeout);
 		check.setHttpMethod(HttpMethod.GET);
 
-		Assert.assertNull(singlePageCheckService.performCheck(check));
+		assertNull(singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -181,7 +184,7 @@ public class HttpCheckServiceTest {
 		check.setConnectionTimeout(timeout);
 		check.setHttpMethod(HttpMethod.GET);
 
-		Assert.assertEquals("Invalid status: http://localhost:8081/not-exists.html required: 200, received: 404", singlePageCheckService.performCheck(check));
+		assertEquals("Invalid status: http://localhost:8081/not-exists.html required: 200, received: 404", singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -195,7 +198,7 @@ public class HttpCheckServiceTest {
 		check.setConnectionTimeout(timeout);
 		check.setHttpMethod(HttpMethod.HEAD);
 
-		Assert.assertNull(singlePageCheckService.performCheck(check));
+		assertNull(singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -209,7 +212,7 @@ public class HttpCheckServiceTest {
 		check.setConnectionTimeout(timeout);
 		check.setHttpMethod(HttpMethod.HEAD);
 
-		Assert.assertEquals("Incorrect URL: http://", singlePageCheckService.performCheck(check));
+		assertEquals("Incorrect URL: http://", singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -223,7 +226,7 @@ public class HttpCheckServiceTest {
 		check.setConnectionTimeout(timeout);
 		check.setHttpMethod(HttpMethod.GET);
 
-		Assert.assertNull(singlePageCheckService.performCheck(check));
+		assertNull(singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -232,7 +235,7 @@ public class HttpCheckServiceTest {
 		try {
 			httpClient = HttpClients.createDefault();
 			String sitemapXml = sitemapCheckThread.downloadSitemap(httpClient, TEST_JETTY_HTTP + "sitemap.xml");
-			Assert.assertTrue(sitemapXml.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
+			assertTrue(sitemapXml.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"));
 		} finally {
 			if (httpClient != null) {
 				httpClient.close();
@@ -255,7 +258,7 @@ public class HttpCheckServiceTest {
 
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
-		Assert.assertNull(sitemapCheckThread.output);
+		assertNull(sitemapCheckThread.output);
 	}
 
 	@Test(expected = IOException.class)
@@ -283,7 +286,7 @@ public class HttpCheckServiceTest {
 		check.setConnectionTimeout(timeout);
 		spiderCheckThread.check = check;
 		spiderCheckThread.performCheck();
-		Assert.assertEquals(
+		assertEquals(
 				"http://localhost:8081/spider/ has error: Invalid status: http://localhost:8081/spider/broken-link.html required: 200, received: 404<br />http://localhost:8081/spider/contains-broken-links.html has error: Invalid status: http://localhost:8081/spider/doesnt-exist required: 200, received: 404<br />http://localhost:8081/spider/page?id=9 has error: Invalid status: http://localhost:8081/spider/not-found.html required: 200, received: 404<br />",
 				spiderCheckThread.output);
 
@@ -303,7 +306,7 @@ public class HttpCheckServiceTest {
 		spiderCheckThread.check = check;
 		spiderCheckThread.performCheck();
 		// TODO prints more than necessary
-		Assert.assertEquals(
+		assertEquals(
 				"http://localhost:8081/spider/ has error: Invalid status: http://localhost:8081/spider/broken-link.html required: 200, received: 404<br />http://localhost:8081/spider/ has error: http://localhost:8081/spider/contains-broken-links.html has error: Invalid status: http://localhost:8081/spider/doesnt-exist required: 200, received: 404<br />http://localhost:8081/spider/contains-broken-links.html has error: Error downloading: http://www.doesntexist93283893289292947987498.com/<br /><br />http://localhost:8081/spider/ has error: Invalid status: http://localhost:8081/spider/broken-link.html required: 200, received: 404<br />http://localhost:8081/spider/contains-broken-links.html has error: Invalid status: http://localhost:8081/spider/doesnt-exist required: 200, received: 404<br />http://localhost:8081/spider/page?id=8 has error: http://localhost:8081/spider/page?id=9 has error: Invalid status: http://localhost:8081/spider/not-found.html required: 200, received: 404<br /><br />http://localhost:8081/spider/page?id=9 has error: Invalid status: http://localhost:8081/spider/not-found.html required: 200, received: 404<br />",
 				spiderCheckThread.output);
 	}
@@ -324,7 +327,7 @@ public class HttpCheckServiceTest {
 
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
-		Assert.assertEquals("Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />", sitemapCheckThread.output);
+		assertEquals("Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />", sitemapCheckThread.output);
 	}
 
 	@Test
@@ -343,7 +346,7 @@ public class HttpCheckServiceTest {
 
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
-		Assert.assertEquals(
+		assertEquals(
 				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: Error downloading: http://www.doesntexist93283893289292947987498.com/<br /><br />",
 				sitemapCheckThread.output);
 	}
@@ -366,7 +369,7 @@ public class HttpCheckServiceTest {
 		credentials.setPassword("admin");
 		check.setCredentials(credentials);
 
-		Assert.assertNull(singlePageCheckService.performCheck(check));
+		assertNull(singlePageCheckService.performCheck(check));
 	}
 
 
@@ -392,7 +395,7 @@ public class HttpCheckServiceTest {
 		credentials.setPassword("admin");
 		check.setCredentials(credentials);
 
-		Assert.assertNull(singlePageCheckService.performCheck(check));
+		assertNull(singlePageCheckService.performCheck(check));
 	}
 
 

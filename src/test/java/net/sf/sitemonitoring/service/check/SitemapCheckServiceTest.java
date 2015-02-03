@@ -1,5 +1,8 @@
 package net.sf.sitemonitoring.service.check;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import java.io.File;
 import java.net.URI;
 import java.util.HashMap;
@@ -14,7 +17,6 @@ import net.sf.sitemonitoring.jaxb.sitemap.Url;
 import net.sf.sitemonitoring.jaxb.sitemap.Urlset;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,16 +52,16 @@ public class SitemapCheckServiceTest {
 	public void testConvertSitemap() throws Exception {
 		String sitemapXml = FileUtils.readFileToString(new File("src/test/resources/sitemap.xml"));
 		Urlset urlset = sitemapCheckThread.readSitemap(sitemapXml);
-		Assert.assertEquals(2, urlset.getUrls().size());
-		Assert.assertEquals("http://www.sqlvids.com/", urlset.getUrls().get(0).getLoc());
+		assertEquals(2, urlset.getUrls().size());
+		assertEquals("http://www.sqlvids.com/", urlset.getUrls().get(0).getLoc());
 	}
 
 	@Test(expected = JAXBException.class)
 	public void testConvertSitemapError() throws Exception {
 		String sitemapXml = FileUtils.readFileToString(new File("src/test/resources/sitemap.corrupt.xml"));
 		Urlset urlset = sitemapCheckThread.readSitemap(sitemapXml);
-		Assert.assertEquals(2, urlset.getUrls().size());
-		Assert.assertEquals("http://www.sqlvids.com/", urlset.getUrls().get(0).getLoc());
+		assertEquals(2, urlset.getUrls().size());
+		assertEquals("http://www.sqlvids.com/", urlset.getUrls().get(0).getLoc());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -77,7 +79,7 @@ public class SitemapCheckServiceTest {
 		sitemapCheck.setSocketTimeout(timeout);
 		sitemapCheck.setConnectionTimeout(timeout);
 		String checkResult = sitemapCheckThread.check(urlset, sitemapCheck, null, null);
-		Assert.assertEquals("Error!<br />Error!<br />", checkResult);
+		assertEquals("Error!<br />Error!<br />", checkResult);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -95,7 +97,7 @@ public class SitemapCheckServiceTest {
 		sitemapCheck.setSocketTimeout(timeout);
 		sitemapCheck.setConnectionTimeout(timeout);
 		String checkResult = sitemapCheckThread.check(urlset, sitemapCheck, visitedPagesGet, visitedPagesHead);
-		Assert.assertEquals(null, checkResult);
+		assertNull(checkResult);
 	}
 
 }
