@@ -1,5 +1,5 @@
-TODO_SET_DATE: version 2.1.4
-
+5.2.2015: version 2.1.4
++ XML (using XPath) and JSON (using JSONPath) monitoring - so far only GET method and XPath only retrieves text value, this will change in future
 
 1.2.2015: version 2.1.3
 + configurable User-Agent header

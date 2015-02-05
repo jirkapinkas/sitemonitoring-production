@@ -40,7 +40,7 @@ public class Check implements Serializable {
 	private int id;
 
 	public enum CheckType {
-		SITEMAP, SINGLE_PAGE, SPIDER
+		SITEMAP, SINGLE_PAGE, SPIDER, XML, JSON
 	}
 
 	public enum CheckCondition {
@@ -54,12 +54,12 @@ public class Check implements Serializable {
 	public enum IntervalType {
 		MINUTE, HOUR, DAY, MONTH
 	}
-	
+
 	public enum HttpMethod {
 		GET, HEAD, POST, PUT, DELETE
 	}
-	
-	@Column(name="http_method")
+
+	@Column(name = "http_method")
 	@Enumerated(EnumType.STRING)
 	private HttpMethod httpMethod;
 
@@ -92,6 +92,9 @@ public class Check implements Serializable {
 
 	@Column(name = "condition_value", length = 500)
 	private String condition;
+
+	@Column(name = "text_result", length = 4000)
+	private String textResult;
 
 	@Column(name = "excluded_urls", length = 1000)
 	private String excludedUrls;
@@ -177,21 +180,9 @@ public class Check implements Serializable {
 
 	public Check(CheckType checkType) {
 		this();
-		switch (checkType) {
-		case SINGLE_PAGE:
-			type = CheckType.SINGLE_PAGE;
-			break;
-
-		case SITEMAP:
-			type = CheckType.SITEMAP;
-			break;
-
-		case SPIDER:
-			type = CheckType.SPIDER;
-			break;
-		}
+		type = checkType;
 	}
-	
+
 	/**
 	 * Used only in spider
 	 */

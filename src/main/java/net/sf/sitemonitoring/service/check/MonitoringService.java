@@ -32,6 +32,12 @@ public class MonitoringService {
 	private SpiderCheckService spiderCheckService;
 
 	@Autowired
+	private XmlCheckService xmlCheckService;
+
+	@Autowired
+	private JsonCheckService jsonCheckService;
+
+	@Autowired
 	private CheckResultRepository checkResultRepository;
 
 	@Autowired
@@ -42,7 +48,7 @@ public class MonitoringService {
 
 	@Autowired
 	private SendEmailService sendEmailService;
-	
+
 	@Autowired
 	private ConfigurationService configurationService;
 
@@ -57,14 +63,14 @@ public class MonitoringService {
 
 		long startTime = System.nanoTime();
 		String checkResultText = null;
-		
+
 		Configuration configuration = configurationService.find();
 		check.setUserAgent(configuration.getUserAgent());
 		check.setHttpProxyServer(configuration.getHttpProxyServer());
 		check.setHttpProxyPort(configuration.getHttpProxyPort());
 		check.setHttpProxyUsername(configuration.getHttpProxyUsername());
 		check.setHttpProxyPassword(configuration.getHttpProxyPassword());
-
+		
 		switch (check.getType()) {
 		case SINGLE_PAGE:
 			checkResultText = singleCheckService.performCheck(check);
@@ -74,6 +80,12 @@ public class MonitoringService {
 			break;
 		case SPIDER:
 			checkResultText = spiderCheckService.performCheck(check);
+			break;
+		case XML:
+			checkResultText = xmlCheckService.performCheck(check);
+			break;
+		case JSON:
+			checkResultText = jsonCheckService.performCheck(check);
 			break;
 		default:
 			throw new UnsupportedOperationException("this check type is not supported!");

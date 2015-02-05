@@ -59,6 +59,10 @@ public class HttpCheckServiceTest {
 		jettyServer = JettyServerUtil.start();
 		httpProxyServer = ProxyServerUtil.start();
 	}
+	
+	public static void main(String[] args) throws Exception {
+		JettyServerUtil.start();
+	}
 
 	@AfterClass
 	public static void tearDown() throws Exception {

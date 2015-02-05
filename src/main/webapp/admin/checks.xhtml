@@ -33,7 +33,7 @@
         
         <h:form>
         	<p:menuButton value="add">
-        		<p:menuitem value="single check" icon="addButton"
+        		<p:menuitem value="HTML check" icon="addButton"
 							action="#{checkController.prepareSingleCheck()}"
 							oncomplete="PF('checkDialogSingle').show()"
 							update=":checkFormSingle"
@@ -47,6 +47,16 @@
 							action="#{checkController.prepareSpiderCheck()}"
 							oncomplete="PF('checkDialogSpider').show()"
 							update=":checkFormSpider"
+							resetValues="true" />
+				<p:menuitem value="XML check" icon="addButton"
+							action="#{checkController.prepareXmlCheck()}"
+							oncomplete="PF('checkDialogXml').show()"
+							update=":checkFormXml"
+							resetValues="true" />
+				<p:menuitem value="JSON check" icon="addButton"
+							action="#{checkController.prepareJsonCheck()}"
+							oncomplete="PF('checkDialogJson').show()"
+							update=":checkFormJson"
 							resetValues="true" />
         	</p:menuButton>
         </h:form>
@@ -110,6 +120,16 @@
 							update=":checkFormSpider"
 							oncomplete="PF('checkDialogSpider').show()" resetValues="true"
 							rendered="#{check.type eq 'SPIDER'}" />
+						<p:commandButton icon="editButton" title="edit"
+							action="#{checkController.setCheck(check)}"
+							update=":checkFormXml"
+							oncomplete="PF('checkDialogXml').show()" resetValues="true"
+							rendered="#{check.type eq 'XML'}" />
+						<p:commandButton icon="editButton" title="edit"
+							action="#{checkController.setCheck(check)}"
+							update=":checkFormJson"
+							oncomplete="PF('checkDialogJson').show()" resetValues="true"
+							rendered="#{check.type eq 'JSON'}" />
 					</div>
 					<div class="menuButton">
 						<p:commandButton icon="stopButton" title="stop" action="#{checkController.abort(check.id)}" rendered="#{check.checkState eq 'RUNNING' and check.active eq true}" />
@@ -208,7 +228,7 @@
 		</p:dataTable>
 
 
-		<p:dialog widgetVar="checkDialogSingle" closeOnEscape="true" modal="true" header="single check">
+		<p:dialog widgetVar="checkDialogSingle" closeOnEscape="true" modal="true" header="HTML check">
 			<h:form id="checkFormSingle">
 				<components:dialog-single-check />
 				<p:commandButton id="save" value="save" action="#{checkController.save()}"
@@ -231,6 +251,24 @@
 				<components:dialog-spider-check />
 				<p:commandButton id="save" value="save" action="#{checkController.save()}"
 					update="checkFormSpider, :checksTable" oncomplete="handleDialogSubmit(args, 'checkDialogSpider')" />
+				<p:defaultCommand target="save" />
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog widgetVar="checkDialogXml" closeOnEscape="true" modal="true" header="XML check">
+			<h:form id="checkFormXml">
+				<components:dialog-xml-check />
+				<p:commandButton id="save" value="save" action="#{checkController.save()}"
+					update="checkFormXml, :checksTable" oncomplete="handleDialogSubmit(args, 'checkDialogXml')" />
+				<p:defaultCommand target="save" />
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog widgetVar="checkDialogJson" closeOnEscape="true" modal="true" header="JSON check">
+			<h:form id="checkFormJson">
+				<components:dialog-json-check />
+				<p:commandButton id="save" value="save" action="#{checkController.save()}"
+					update="checkFormJson, :checksTable" oncomplete="handleDialogSubmit(args, 'checkDialogJson')" />
 				<p:defaultCommand target="save" />
 			</h:form>
 		</p:dialog>

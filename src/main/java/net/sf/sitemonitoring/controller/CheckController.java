@@ -121,6 +121,22 @@ public class CheckController implements Serializable {
 		prepareCheck();
 	}
 
+	public void prepareXmlCheck() {
+		log.debug("create xml check");
+		check = new Check(CheckType.XML);
+		check.setScheduledInterval(configurationService.find().getDefaultSingleCheckInterval());
+		check.setConditionType(CheckCondition.CONTAINS);
+		prepareCheck();
+	}
+
+	public void prepareJsonCheck() {
+		log.debug("create json check");
+		check = new Check(CheckType.JSON);
+		check.setScheduledInterval(configurationService.find().getDefaultSingleCheckInterval());
+		check.setConditionType(CheckCondition.CONTAINS);
+		prepareCheck();
+	}
+
 	private void prepareCheck() {
 		check.setUrl("http://");
 		Configuration configuration = configurationService.find();

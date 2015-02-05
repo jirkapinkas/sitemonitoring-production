@@ -9,6 +9,26 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>1.2.0</version>
+			<exclusions>
+				<!-- I had to exclude this package and repackage it inside WEB-INF/lib 
+					(without org/objectweb/asm package) to avoid conflict with asm 5.0.3 -->
+				<exclusion>
+					<artifactId>asm</artifactId>
+					<groupId>net.minidev</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm</artifactId>
+			<version>5.0.3</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-plus</artifactId>
 			<version>9.2.3.v20140905</version>
@@ -405,12 +425,6 @@
 					<groupId>org.eclipse.jetty.websocket</groupId>
 					<artifactId>websocket-server</artifactId>
 					<version>9.2.3.v20140905</version>
-				</dependency>
-				<dependency>
-					<groupId>org.ow2.asm</groupId>
-					<artifactId>asm</artifactId>
-					<version>5.0.3</version>
-					<scope>provided</scope>
 				</dependency>
 				<dependency>
 					<groupId>javax.annotation</groupId>
