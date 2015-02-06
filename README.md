@@ -8,6 +8,8 @@
 
 <ul>
 	<li>User friendly</li>
+	<li>Platform independent</li>
+	<li>Can run standalone or on your custom Java EE server and your database</li>
 	<li>Monitor single web page, pages in sitemap and even your whole web site using spider</li>
 	<li>Check not only HTTP result codes, but also page contents</li>
 	<li>Find broken links on your website</li>
