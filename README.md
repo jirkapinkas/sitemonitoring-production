@@ -28,7 +28,7 @@
 Extract and run: <code>startup.bat</code> (Linux is also supported)</p>
 </p>
 
-<p>OR download sources and run: <code>mvn clean package -P standalone</code>
+<p>OR download sources and run: <code>mvn clean install -P standalone</code>
 <br />
 Next run: <code>java -jar target/sitemonitoring.war</code></p>
 
@@ -41,10 +41,4 @@ Set database properties in <code>src/main/resources/db.properties</code>, add to
 <h2>Development (with embedded HSQL database)</h2>
 
 <p>To run in development mode: <code>mvn jetty:run -P dev</code></p>
-
-<h2>Heroku (with PostgreSQL database)</h2>
-
-<p>To deploy on Heroku change in pom.xml: <code>&lt;argument&gt;sitemonitoring&lt;/argument&gt;</code> change "sitemonitoring" to your application name in Heroku and run: <code>mvn clean install -P heroku</code>
-
-<p>How to create Heroku application and install Heroku toolbelt is in this <a href="http://www.javavids.com/video/spring-web-app-tutorial-50-heroku.html" target="_blank">video</a></p>
 
