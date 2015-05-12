@@ -400,7 +400,7 @@ public class HttpCheckServiceTest {
 		credentials.setPassword("admin");
 		check.setCredentials(credentials);
 
-		assertNotNull(singlePageCheckService.performCheck(check));
+		assertNull(singlePageCheckService.performCheck(check));
 	}
 
 
