@@ -10,21 +10,23 @@ import org.hsqldb.jdbc.JDBCDataSource;
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		if(args.length != 0 && args[0].startsWith("--reset-admin-credentials")) {
+		if (args.length != 0 && args[0].startsWith("--reset-admin-credentials")) {
 			System.out.println("*** RESET ADMIN CREDENTIALS TO admin / admin ***");
 			JDBCDataSource dataSource = new JDBCDataSource();
 			dataSource.setUrl("jdbc:hsqldb:hsql://localhost/data");
 			dataSource.setUser("sa");
 			dataSource.setPassword("");
 			Connection connection = dataSource.getConnection();
-			// admin ~ $2a$10$UHdpe.t2Xr3npu1AcDygO.FkiK5Ki4SmUU8oW.gD8liApMG4yDqw6
-			PreparedStatement preparedStatement = connection.prepareStatement("update monit_configuration set admin_username = 'admin', admin_password = '$2a$10$UHdpe.t2Xr3npu1AcDygO.FkiK5Ki4SmUU8oW.gD8liApMG4yDqw6'");
+			// admin ~
+			// $2a$10$UHdpe.t2Xr3npu1AcDygO.FkiK5Ki4SmUU8oW.gD8liApMG4yDqw6
+			PreparedStatement preparedStatement = connection
+					.prepareStatement("update monit_configuration set admin_username = 'admin', admin_password = '$2a$10$UHdpe.t2Xr3npu1AcDygO.FkiK5Ki4SmUU8oW.gD8liApMG4yDqw6'");
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			connection.close();
 			return;
 		}
-		
+
 		System.out.println("*** START HSQL SERVER ***");
 		org.hsqldb.server.Server hsql = new org.hsqldb.server.Server();
 		hsql.setDatabasePath(0, "file:monit/data");
@@ -54,7 +56,8 @@ public class Main {
 		ProtectionDomain domain = Main.class.getProtectionDomain();
 		URL location = domain.getCodeSource().getLocation();
 		WebAppContext webapp = new WebAppContext();
-		// classpath scanning optimization ... if something isn't working on standalone deployment but elsewhere it works, this is the culprit
+		// classpath scanning optimization ... if something isn't working on
+		// standalone deployment but elsewhere it works, this is the culprit
 		webapp.setAttribute("org.eclipse.jetty.server.webapp.WebInfIncludeJarPattern", ".*spring-security-web.*\\.jar|.*primefaces.*\\.jar|.*atmosphere.*\\.jar$");
 		webapp.setContextPath("/");
 		webapp.setWar(location.toExternalForm());
@@ -62,9 +65,9 @@ public class Main {
 
 		// won't delete temp directory
 		webapp.setPersistTempDirectory(true);
-		
+
 		jetty.setHandler(webapp);
-		
+
 		webapp.setInitParameter("port", String.valueOf(port));
 
 		jetty.start();

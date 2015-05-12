@@ -40,20 +40,23 @@ public class UpgradeService {
 			configurationService.saveExcludingPassword(configuration);
 		}
 		if (configuration.getMonitoringVersion().equals("2.1.1")) {
-			configuration.setDefaultSpiderCheckInterval(60);
-			configuration.setDefaultSendEmails(false);
-			configuration.setInfoMessage("Please don't monitor my websites (like javavids.com and sitemonitoring.sourceforge.net). Lot's of people started doing it and effectively DDOSed them. If you monitor them anyway, your IP address will be blocked!");
 			configuration.setMonitoringVersion("2.1.2");
 			configurationService.saveExcludingPassword(configuration);
 		}
 		if (configuration.getMonitoringVersion().equals("2.1.2")) {
-			configuration.setDefaultSpiderCheckInterval(60);
-			configuration.setDefaultSendEmails(false);
 			configuration.setInfoMessage("Please don't monitor my websites (like javavids.com and sitemonitoring.sourceforge.net). Lot's of people started doing it and effectively DDOSed them. If you monitor them anyway, your IP address will be blocked!");
 			configuration.setUserAgent("sitemonitoring http://sitemonitoring.sourceforge.net");
 			configuration.setMonitoringVersion("2.1.3");
 			configurationService.saveExcludingPassword(configuration);
 		}
+		if (configuration.getMonitoringVersion().equals("2.1.3")) {
+			configuration.setMonitoringVersion("2.1.4");
+			configurationService.saveExcludingPassword(configuration);
+		}
+//		if (configuration.getMonitoringVersion().equals("2.1.4")) {
+//			configuration.setMonitoringVersion("2.1.5");
+//			configurationService.saveExcludingPassword(configuration);
+//		}
 	}
 
 	private void update(String sql) {

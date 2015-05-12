@@ -1,6 +1,7 @@
 package net.sf.sitemonitoring.service.check;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -399,7 +400,7 @@ public class HttpCheckServiceTest {
 		credentials.setPassword("admin");
 		check.setCredentials(credentials);
 
-		assertNull(singlePageCheckService.performCheck(check));
+		assertNotNull(singlePageCheckService.performCheck(check));
 	}
 
 
