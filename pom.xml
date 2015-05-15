@@ -386,9 +386,9 @@
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
-			<id>openshift</id>
+			<id>myserver</id>
 			<properties>
-				<filter.name>openshift</filter.name>
+				<filter.name>myserver</filter.name>
 			</properties>
 			<dependencies>
 				<dependency>
@@ -411,18 +411,6 @@
 					<scope>provided</scope>
 				</dependency>
 			</dependencies>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-war-plugin</artifactId>
-						<version>2.1.1</version>
-						<configuration>
-							<outputDirectory>webapps</outputDirectory>
-							<warName>ROOT</warName>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
 		</profile>
 
 		<!-- basic inspiration: http://uguptablog.blogspot.cz/2012/09/embedded-jetty-executable-war-with.html -->

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = { ElementType.TYPE, ElementType.METHOD })
-@Profile("openshift")
-public @interface OpenShiftProfile {
+@Profile("myserver")
+public @interface MyServerProfile {
 
 }

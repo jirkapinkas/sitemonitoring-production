@@ -6,7 +6,7 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import net.sf.sitemonitoring.annotation.OpenShiftProfile;
+import net.sf.sitemonitoring.annotation.MyServerProfile;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.context.annotation.Bean;
@@ -15,9 +15,9 @@ import org.springframework.jndi.JndiTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
-@OpenShiftProfile
+@MyServerProfile
 @Configuration
-public class SpringOpenShiftConfiguration {
+public class SpringMyServerConfiguration {
 
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
@@ -43,7 +43,7 @@ public class SpringOpenShiftConfiguration {
 	public DataSource dataSource() throws NamingException {
 		DataSource dataSource = null;
 		JndiTemplate jndi = new JndiTemplate();
-		dataSource = (DataSource) jndi.lookup("java:comp/env/jdbc/PostgreSQLDS");
+		dataSource = (DataSource) jndi.lookup("java:comp/env/jdbc/scheduler");
 		return dataSource;
 	}
 
