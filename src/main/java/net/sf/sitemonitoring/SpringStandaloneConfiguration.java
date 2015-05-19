@@ -3,12 +3,14 @@ package net.sf.sitemonitoring;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
+import javax.servlet.ServletContext;
 import javax.sql.DataSource;
 
 import net.sf.sitemonitoring.annotation.StandaloneProfile;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -17,6 +19,9 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 @StandaloneProfile
 @Configuration
 public class SpringStandaloneConfiguration {
+
+	@Autowired
+	private ServletContext context;
 
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
@@ -42,7 +47,7 @@ public class SpringStandaloneConfiguration {
 	@Bean
 	public DataSource dataSource() {
 		BasicDataSource dataSource = new BasicDataSource();
-		dataSource.setUrl("jdbc:hsqldb:hsql://localhost/data");
+		dataSource.setUrl("jdbc:hsqldb:hsql://localhost:" + context.getInitParameter("hsqlPort") + "/data");
 		dataSource.setUsername("sa");
 		dataSource.setPassword("");
 		return dataSource;

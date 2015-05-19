@@ -10,10 +10,31 @@ import org.hsqldb.jdbc.JDBCDataSource;
 public class Main {
 
 	public static void main(String[] args) throws Exception {
+		int httpPort = 8081;
+		int hsqlPort = 9001;
+
+		for (String argument : args) {
+			if (argument.startsWith("--port=")) {
+				String portString = argument.replace("--port=", "");
+				try {
+					httpPort = Integer.parseInt(portString);
+				} catch (NumberFormatException ex) {
+					System.out.println("invalid port specified: " + portString);
+				}
+			} else if(argument.startsWith("--dbport=")) {
+				String portString = argument.replace("--dbport=", "");
+				try {
+					hsqlPort = Integer.parseInt(portString);
+				} catch (NumberFormatException ex) {
+					System.out.println("invalid db port specified: " + portString);
+				}
+			}
+		}
+
 		if (args.length != 0 && args[0].startsWith("--reset-admin-credentials")) {
 			System.out.println("*** RESET ADMIN CREDENTIALS TO admin / admin ***");
 			JDBCDataSource dataSource = new JDBCDataSource();
-			dataSource.setUrl("jdbc:hsqldb:hsql://localhost/data");
+			dataSource.setUrl("jdbc:hsqldb:hsql://localhost:" + hsqlPort + "/data");
 			dataSource.setUser("sa");
 			dataSource.setPassword("");
 			Connection connection = dataSource.getConnection();
@@ -32,21 +53,12 @@ public class Main {
 		hsql.setDatabasePath(0, "file:monit/data");
 		hsql.setDatabaseName(0, "data");
 		hsql.setSilent(true);
+		hsql.setPort(hsqlPort);
 		hsql.start();
 
-		int port = 8081;
-		if (args.length != 0 && args[0].startsWith("--port=")) {
-			String portString = args[0].replace("--port=", "");
-			try {
-				port = Integer.parseInt(portString);
-			} catch (NumberFormatException ex) {
-				System.out.println("invalid port specified: " + portString);
-			}
-		}
-
 		System.out.println("*** START JETTY SERVER ***");
-		System.out.println("*** USING PORT " + port + " ***");
-		org.eclipse.jetty.server.Server jetty = new org.eclipse.jetty.server.Server(port);
+		System.out.println("*** USING PORT " + httpPort + " ***");
+		org.eclipse.jetty.server.Server jetty = new org.eclipse.jetty.server.Server(httpPort);
 
 		// enables annotations
 		org.eclipse.jetty.webapp.Configuration.ClassList classlist = org.eclipse.jetty.webapp.Configuration.ClassList.setServerDefault(jetty);
@@ -68,7 +80,8 @@ public class Main {
 
 		jetty.setHandler(webapp);
 
-		webapp.setInitParameter("port", String.valueOf(port));
+		webapp.setInitParameter("httpPort", String.valueOf(httpPort));
+		webapp.setInitParameter("hsqlPort", String.valueOf(hsqlPort));
 
 		jetty.start();
 		jetty.join();

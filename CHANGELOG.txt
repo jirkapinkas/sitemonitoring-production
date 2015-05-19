@@ -1,4 +1,5 @@
-TODO_SET_DATE: version 2.1.5
+19.5.2015: version 2.1.5
++ added configurable db port
 
 5.2.2015: version 2.1.4
 + XML (using XPath) and JSON (using JSONPath) monitoring 

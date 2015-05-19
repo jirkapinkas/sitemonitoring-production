@@ -22,7 +22,7 @@ public class StartBrowserServlet extends HttpServlet {
 		try {
 			if (Desktop.isDesktopSupported()) {
 				System.out.println("*** START DEFAULT BROWSER ***");
-				Desktop.getDesktop().browse(new URI("http://localhost:" + getServletContext().getInitParameter("port")));
+				Desktop.getDesktop().browse(new URI("http://localhost:" + getServletContext().getInitParameter("httpPort")));
 			}
 		} catch (Throwable ex) {
 			log.error("Couldn't start default browser", ex);
