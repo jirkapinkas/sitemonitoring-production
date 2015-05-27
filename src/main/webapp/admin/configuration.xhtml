@@ -38,27 +38,42 @@
 				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
 				
 					admin email:
-					<p:inputText value="#{configurationController.configuration.adminEmail}" />
+					<p:inputText value="#{configurationController.configuration.adminEmail}" binding="#{adminEmail}" />
 					<h:outputText value="" />
 	
 					send emails:
 					<p:selectBooleanCheckbox value="#{configurationController.configuration.sendEmails}" />
-					<h:outputText value="You can disable globally sending emails (useful for testing purposes)" />
-	
+					<h:outputText value="In order to send emails, this checkbox must be checked!!!" />
+
+					<h:outputText value="" />
+					<p:panelGrid>
+						<h3>load email defaults for:</h3>
+						<p:commandButton value="localhost" action="#{configurationController.loadDefaultsLocalhost()}" update="formConfiguration" />
+						<br />
+						<br />
+						<p:commandButton value="mandrillapp" action="#{configurationController.loadDefaultsMandrillapp()}" update="formConfiguration" />
+						<br />
+						<br />
+						<p:commandButton value="gmail" action="#{configurationController.loadDefaultsGmail()}" update="formConfiguration" />
+						<br />
+						<br />
+					</p:panelGrid>
+					<h:outputText value="" />
+
 					email server host:
-					<p:inputText value="#{configurationController.configuration.emailServerHost}" />
+					<p:inputText value="#{configurationController.configuration.emailServerHost}" binding="#{emailServerHost}" />
 					<h:outputText value="Email server host" />
 	
 					email server port:
-					<p:inputText value="#{configurationController.configuration.emailServerPort}" />
+					<p:inputText value="#{configurationController.configuration.emailServerPort}" binding="#{emailServerPort}" />
 					<h:outputText value="Email server port" />
 	
 					email server username:
-					<p:inputText value="#{configurationController.configuration.emailServerUsername}" />
+					<p:inputText value="#{configurationController.configuration.emailServerUsername}" binding="#{emailServerUsername}" />
 					<h:outputText value="Email server username" />
 	
 					email server password:
-					<p:inputText value="#{configurationController.configuration.emailServerPassword}" />
+					<p:inputText value="#{configurationController.configuration.emailServerPassword}" binding="#{emailServerPassword}" />
 					<h:outputText value="Email server password" />
 	
 					email subject template:
@@ -69,7 +84,17 @@
 					<p:inputTextarea value="#{configurationController.configuration.emailBody}" style="width:95%" />
 					<h:outputText value="Email body template, special values: {CHECK-NAME}, {CHECK-URL}, {ERROR}" />
 
+					test:
+					<p:commandButton 
+						value="test" 
+						action="#{configurationController.testSendEmails(adminEmail.value, emailServerHost.value, emailServerPort.value, emailServerUsername.value, emailServerPassword.value)}" 
+						update="emailTestResults" ajax="false" />
+					<h:outputText value="" />
+
 				</p:panelGrid>
+				<h:panelGroup id="emailTestResults">
+					<h:outputText value="#{configurationController.emailTestResults}" escape="false" />
+				</h:panelGroup>
 			</p:fieldset>
 			
 			<br />

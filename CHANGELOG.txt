@@ -1,3 +1,7 @@
+27.5.2015: version 2.1.6
++ modified defaults for sending emails
++ added email configuration examples and a test tool to check if your configuration is valid
+
 19.5.2015: version 2.1.5
 + added configurable db port
 

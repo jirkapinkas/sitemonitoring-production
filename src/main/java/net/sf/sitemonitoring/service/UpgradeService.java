@@ -35,7 +35,7 @@ public class UpgradeService {
 		}
 		if (configuration.getMonitoringVersion().equals("2.1")) {
 			configuration.setDefaultSpiderCheckInterval(60);
-			configuration.setDefaultSendEmails(false);
+			configuration.setDefaultSendEmails(true);
 			configuration.setMonitoringVersion("2.1.1");
 			configurationService.saveExcludingPassword(configuration);
 		}

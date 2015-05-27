@@ -49,14 +49,14 @@ public class InitDbService {
 		configuration.setDefaultSingleCheckInterval(5);
 		configuration.setDefaultSitemapCheckInterval(30);
 		configuration.setDefaultSpiderCheckInterval(60);
-		configuration.setDefaultSendEmails(false);
+		configuration.setDefaultSendEmails(true);
 		configuration.setSocketTimeout(20000);
 		configuration.setConnectionTimeout(20000);
 		configuration.setTooLongRunningCheckMinutes(30);
 		configuration.setCheckBrokenLinks(false);
 		configuration.setAdminUsername("admin");
 		configuration.setAdminPassword(new BCryptPasswordEncoder().encode("admin"));
-		configuration.setSendEmails(true);
+		configuration.setSendEmails(false);
 		configuration.setUserAgent("sitemonitoring http://sitemonitoring.sourceforge.net");
 		configuration.setInfoMessage("Please don't monitor my websites (like javavids.com and sitemonitoring.sourceforge.net). Lot's of people started doing it and effectively DDOSed them. If you monitor them anyway, your IP address will be blocked!");
 		
@@ -70,6 +70,7 @@ public class InitDbService {
 			check.setCondition("</html>");
 			check.setType(CheckType.SINGLE_PAGE);
 			check.setCheckBrokenLinks(false);
+			check.setSendEmails(true);
 			check.setSocketTimeout(20000);
 			check.setConnectionTimeout(20000);
 			check.setScheduledInterval(1);

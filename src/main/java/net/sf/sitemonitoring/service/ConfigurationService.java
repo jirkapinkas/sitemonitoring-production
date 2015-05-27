@@ -65,4 +65,9 @@ public class ConfigurationService {
 		return configurations.get(0);
 	}
 	
+	@CacheEvict(value = "configuration", allEntries = true)
+	public void clearCacheConfiguration() {
+		
+	}
+	
 }
