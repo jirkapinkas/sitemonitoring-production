@@ -108,6 +108,7 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>1.9.5</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -436,6 +437,20 @@
 					<groupId>org.eclipse.jetty</groupId>
 					<artifactId>jetty-jsp</artifactId>
 					<version>9.2.3.v20140905</version>
+					<exclusions>
+						<exclusion>
+							<groupId>org.eclipse.jetty.orbit</groupId>
+							<artifactId>org.eclipse.jdt.core</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>org.glassfish.web</groupId>
+							<artifactId>javax.servlet.jsp.jstl</artifactId>
+						</exclusion>
+						<exclusion>
+							<groupId>org.eclipse.jetty.orbit</groupId>
+							<artifactId>javax.servlet.jsp.jstl</artifactId>
+						</exclusion>
+					</exclusions>
 				</dependency>
 				<dependency>
 					<groupId>org.eclipse.jetty</groupId>
