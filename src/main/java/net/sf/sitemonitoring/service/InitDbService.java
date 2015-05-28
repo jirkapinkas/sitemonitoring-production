@@ -41,7 +41,7 @@ public class InitDbService {
 			upgradeService.upgradeDatabase(configuration);
 			return;
 		}
-		System.out.println("*** TEST DATABASE INIT STARTED ***");
+		System.out.println("*** DATABASE INIT STARTED ***");
 		configuration = new Configuration();
 		configuration.setMonitoringVersion("2.1.4");
 		configuration.setEmailSubject("sitemonitoring error");
@@ -85,7 +85,7 @@ public class InitDbService {
 			checkRepository.save(check);
 		}
 
-		System.out.println("*** TEST DATABASE INIT FINISHED ***");
+		System.out.println("*** DATABASE INIT FINISHED ***");
 	}
 
 }

@@ -1,9 +1,11 @@
+TODO: version 2.1.7
+
 27.5.2015: version 2.1.6
 + modified defaults for sending emails, now it's much easier
 + added email configuration examples (localhost, mandrillapp, gmail) and a test tool to easily validate email configuration
 
 19.5.2015: version 2.1.5
-+ added configurable db port
++ configurable db port in standalone application
 
 5.2.2015: version 2.1.4
 + XML (using XPath) and JSON (using JSONPath) monitoring 
@@ -26,7 +28,7 @@
 + rearranged input fields in check forms
 
 9.1.2015: version 2.1
-+ configurable port in standalone application
++ configurable http port in standalone application
 + in standalone application default port changed from 8080 to 8081
 + startup.bat, zipped all files together
 
