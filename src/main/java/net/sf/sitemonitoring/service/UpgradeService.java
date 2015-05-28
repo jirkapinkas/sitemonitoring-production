@@ -53,10 +53,11 @@ public class UpgradeService {
 			configuration.setMonitoringVersion("2.1.4");
 			configurationService.saveExcludingPassword(configuration);
 		}
-//		if (configuration.getMonitoringVersion().equals("2.1.4")) {
-//			configuration.setMonitoringVersion("2.1.5");
-//			configurationService.saveExcludingPassword(configuration);
-//		}
+		if (configuration.getMonitoringVersion().equals("2.1.4")) {
+			configuration.setMonitoringVersion("2.1.6");
+			configuration.setDefaultSendEmails(true);
+			configurationService.saveExcludingPassword(configuration);
+		}
 	}
 
 	private void update(String sql) {

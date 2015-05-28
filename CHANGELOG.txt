@@ -1,6 +1,6 @@
 27.5.2015: version 2.1.6
-+ modified defaults for sending emails
-+ added email configuration examples and a test tool to check if your configuration is valid
++ modified defaults for sending emails, now it's much easier
++ added email configuration examples (localhost, mandrillapp, gmail) and a test tool to easily validate email configuration
 
 19.5.2015: version 2.1.5
 + added configurable db port
