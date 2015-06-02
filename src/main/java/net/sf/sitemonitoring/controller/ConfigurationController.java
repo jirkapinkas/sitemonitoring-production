@@ -42,8 +42,8 @@ public class ConfigurationController implements Serializable {
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Configuration saved"));
 	}
 
-	public void testSendEmails(String adminEmail, String emailServerHost, String emailServerPort, String emailServerUsername, String emailServerPassword) {
-		emailTestResults = "<h2>Email test results:</h2>\n\n" + sendEmailService.sendEmailTest(adminEmail, emailServerHost, emailServerPort, emailServerUsername, emailServerPassword);
+	public void testSendEmails(String emailFrom, String adminEmail, String emailServerHost, String emailServerPort, String emailServerUsername, String emailServerPassword) {
+		emailTestResults = "<h2>Email test results:</h2>\n\n" + sendEmailService.sendEmailTest(emailFrom, adminEmail, emailServerHost, emailServerPort, emailServerUsername, emailServerPassword);
 	}
 	
 	public void loadDefaultsLocalhost() {

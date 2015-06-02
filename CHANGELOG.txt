@@ -1,4 +1,6 @@
-TODO: version 2.1.7
+2.6.2015: version 2.1.7
++ added emailFrom field in configuration
++ tested more email providers
 
 27.5.2015: version 2.1.6
 + modified defaults for sending emails, now it's much easier

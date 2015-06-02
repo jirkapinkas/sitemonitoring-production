@@ -2,6 +2,7 @@ package net.sf.sitemonitoring.service;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.security.GeneralSecurityException;
 import java.util.Properties;
 
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
+
+import com.sun.mail.util.MailSSLSocketFactory;
 
 @Slf4j
 @Service
@@ -29,6 +32,7 @@ public class SendEmailService {
 	}
 
 	public void sendEmail(Check check, String checkResultText) {
+		log.debug("sending email ...");
 		try {
 			Configuration configuration = configurationService.find();
 			if (!configuration.isSendEmails()) {
@@ -40,36 +44,36 @@ public class SendEmailService {
 				return;
 			}
 
-			checkRepository.sendEmail(check.getId());
-
-			log.debug("send email");
-			JavaMailSenderImpl javaMailSender = constructJavaMailSender(configuration);
-			String from = configuration.getAdminEmail();
+			JavaMailSenderImpl javaMailSender = constructJavaMailSender(configuration.getEmailServerHost(), configuration.getEmailServerPort(), configuration.getEmailServerUsername(),
+					configuration.getEmailServerPassword());
+			String from = configuration.getEmailFrom();
 			String to = configuration.getAdminEmail();
 			String subject = replaceTemplateValues(check, configuration.getEmailSubject(), checkResultText);
 			String body = replaceTemplateValues(check, configuration.getEmailBody(), checkResultText);
-			fixGmail(javaMailSender);
+			applyFixes(javaMailSender);
 			sendEmail(javaMailSender, from, to, subject, body);
+			checkRepository.emailSent(check.getId());
+			log.debug("... email sent");
 		} catch (Exception ex) {
 			log.error("error sending email!", ex);
 		}
 	}
 
-	private JavaMailSenderImpl constructJavaMailSender(Configuration configuration) {
+	private JavaMailSenderImpl constructJavaMailSender(String emailServerHost, Integer emailServerPort, String emailServerUsername, String emailServerPassword) {
 		JavaMailSenderImpl javaMailSenderImpl = new JavaMailSenderImpl();
-		javaMailSenderImpl.setHost(configuration.getEmailServerHost());
-		if (configuration.getEmailServerPort() != null) {
-			javaMailSenderImpl.setPort(configuration.getEmailServerPort());
+		javaMailSenderImpl.setHost(emailServerHost);
+		if (emailServerPort != null) {
+			javaMailSenderImpl.setPort(emailServerPort);
 		}
-		if (configuration.getEmailServerUsername() != null && !configuration.getEmailServerUsername().isEmpty()) {
-			javaMailSenderImpl.setUsername(configuration.getEmailServerUsername());
+		if (emailServerUsername != null && !emailServerUsername.isEmpty()) {
+			javaMailSenderImpl.setUsername(emailServerUsername);
 		}
-		if (configuration.getEmailServerPassword() != null && !configuration.getEmailServerPassword().isEmpty()) {
-			javaMailSenderImpl.setPassword(configuration.getEmailServerPassword());
+		if (emailServerPassword != null && !emailServerPassword.isEmpty()) {
+			javaMailSenderImpl.setPassword(emailServerPassword);
 		}
 		return javaMailSenderImpl;
 	}
-
+	
 	private void sendEmail(JavaMailSenderImpl javaMailSenderImpl, String from, String to, String subject, String body) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setFrom(from);
@@ -79,25 +83,15 @@ public class SendEmailService {
 		javaMailSenderImpl.send(mailMessage);
 	}
 
-	public String sendEmailTest(String adminEmail, String emailServerHost, String emailServerPort, String emailServerUsername, String emailServerPassword) {
+	public String sendEmailTest(String emailFrom, String adminEmail, String emailServerHost, String emailServerPort, String emailServerUsername, String emailServerPassword) {
 		log.debug("called sendEmailTest");
 		try {
-			String from = adminEmail;
+			String from = emailFrom;
 			String to = adminEmail;
 			String subject = "test subject";
 			String body = "test body";
-			JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-			javaMailSender.setHost(emailServerHost);
-			if (emailServerPort != null && !emailServerPort.isEmpty()) {
-				javaMailSender.setPort(Integer.parseInt(emailServerPort));
-			}
-			if (emailServerUsername != null && !emailServerUsername.isEmpty()) {
-				javaMailSender.setUsername(emailServerUsername);
-			}
-			if (emailServerPassword != null && !emailServerPassword.isEmpty()) {
-				javaMailSender.setPassword(emailServerPassword);
-			}
-			fixGmail(javaMailSender);
+			JavaMailSenderImpl javaMailSender = constructJavaMailSender(emailServerHost, Integer.parseInt(emailServerPort), emailServerUsername, emailServerPassword);
+			applyFixes(javaMailSender);
 			sendEmail(javaMailSender, from, to, subject, body);
 			return "all ok";
 		} catch (Exception ex) {
@@ -109,16 +103,29 @@ public class SendEmailService {
 		}
 	}
 
-	private void fixGmail(JavaMailSenderImpl javaMailSender) {
-		if("smtp.gmail.com".equals(javaMailSender.getHost()) && javaMailSender.getPort() == 465) {
-			log.debug("gmail fix applied");
-			Properties props = new Properties();
+	private void applyFixes(JavaMailSenderImpl javaMailSender) throws GeneralSecurityException {
+		Properties props = new Properties();
+		fixAuth(javaMailSender, props);
+		fixSSL(props);
+		if (props.size() > 0) {
+			javaMailSender.setJavaMailProperties(props);
+		}
+	}
+
+	private void fixSSL(Properties props) throws GeneralSecurityException {
+		MailSSLSocketFactory mailSSLSocketFactory;
+		mailSSLSocketFactory = new MailSSLSocketFactory();
+		mailSSLSocketFactory.setTrustAllHosts(true);
+		props.put("mail.smtp.ssl.socketFactory", mailSSLSocketFactory);
+	}
+
+	private void fixAuth(JavaMailSenderImpl javaMailSender, Properties props) {
+		if (javaMailSender.getPort() == 465) {
 			props.put("mail.smtp.auth", true);
 			props.put("mail.smtp.starttls.enable", false);
 			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 			props.put("mail.smtp.socketFactory.fallback", false);
 			props.put("mail.debug", true);
-			javaMailSender.setJavaMailProperties(props);
 			javaMailSender.setProtocol("smtp");
 		}
 	}

@@ -76,6 +76,9 @@ public class Configuration implements Serializable {
 	@Column(name = "send_emails", nullable = false)
 	private boolean sendEmails;
 
+	@Column(name = "email_from")
+	private String emailFrom;
+
 	@Column(name = "admin_email")
 	private String adminEmail;
 

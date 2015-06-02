@@ -37,17 +37,21 @@
 			<p:fieldset legend="email" toggleable="true" collapsed="true">
 				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
 				
-					admin email:
+					email from:
+					<p:inputText value="#{configurationController.configuration.emailFrom}" binding="#{emailFrom}" />
+					<h:outputText value="" />
+
+					email to:
 					<p:inputText value="#{configurationController.configuration.adminEmail}" binding="#{adminEmail}" />
 					<h:outputText value="" />
-	
+
 					send emails:
 					<p:selectBooleanCheckbox value="#{configurationController.configuration.sendEmails}" />
 					<h:outputText value="In order to send emails, this checkbox must be checked!!!" />
 
 					<h:outputText value="" />
 					<p:panelGrid>
-						<h3>load email defaults for:</h3>
+						<h3>load defaults for:</h3>
 						<p:commandButton value="localhost" action="#{configurationController.loadDefaultsLocalhost()}" update="formConfiguration" />
 						<br />
 						<br />
@@ -87,9 +91,9 @@
 					test:
 					<p:commandButton 
 						value="test" 
-						action="#{configurationController.testSendEmails(adminEmail.value, emailServerHost.value, emailServerPort.value, emailServerUsername.value, emailServerPassword.value)}" 
+						action="#{configurationController.testSendEmails(emailFrom.value, adminEmail.value, emailServerHost.value, emailServerPort.value, emailServerUsername.value, emailServerPassword.value)}" 
 						update="emailTestResults" ajax="false" />
-					<h:outputText value="" />
+					<h:outputText value="Don't forget to press SAVE button after successfull test! Testing doesn't save your configuration!!!" />
 
 				</p:panelGrid>
 				<h:panelGroup id="emailTestResults">

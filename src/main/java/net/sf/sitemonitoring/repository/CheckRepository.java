@@ -37,7 +37,7 @@ public interface CheckRepository extends JpaRepository<Check, Integer> {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	@Modifying
 	@Query("update Check c set c.lastSentEmail = current_timestamp, currentErrorCount = 0 where c.id = ?1")
-	void sendEmail(int checkId);
+	void emailSent(int checkId);
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	@Modifying
