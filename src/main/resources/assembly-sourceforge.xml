@@ -20,7 +20,7 @@ http://maven.apache.org/xsd/assembly-1.1.2.xsd">
 			<directory>${project.basedir}/scripts</directory>
 			<outputDirectory>/</outputDirectory>
 			<includes>
-				<include>*</include>
+				<include>**</include>
 			</includes>
 		</fileSet>
 	</fileSets>

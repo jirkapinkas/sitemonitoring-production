@@ -5,6 +5,7 @@ Old version location: [sitemon-old]
 How to upgrade:
 1. Stop application
 2. Download newer ZIP file, unzip it's contents to [sitemon-old] and overwrite existing files.
+NOTE: if you manually changed some files (for example startup.bat), you must merge their contents manually!!!
 3. Remove [sitemon-old]/temp
 4. Start application
 

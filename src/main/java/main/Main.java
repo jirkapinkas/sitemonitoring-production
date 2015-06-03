@@ -1,3 +1,4 @@
+package main;
 import java.io.File;
 import java.net.URL;
 import java.security.ProtectionDomain;
@@ -8,6 +9,10 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.hsqldb.jdbc.JDBCDataSource;
 
 public class Main {
+	
+	protected static org.hsqldb.server.Server hsql;
+	
+	protected static org.eclipse.jetty.server.Server jetty;
 
 	public static void main(String[] args) throws Exception {
 		int httpPort = 8081;
@@ -49,7 +54,7 @@ public class Main {
 		}
 
 		System.out.println("*** START HSQL SERVER ***");
-		org.hsqldb.server.Server hsql = new org.hsqldb.server.Server();
+		hsql = new org.hsqldb.server.Server();
 		hsql.setDatabasePath(0, "file:monit/data");
 		hsql.setDatabaseName(0, "data");
 		hsql.setSilent(true);
@@ -58,7 +63,7 @@ public class Main {
 
 		System.out.println("*** START JETTY SERVER ***");
 		System.out.println("*** USING PORT " + httpPort + " ***");
-		org.eclipse.jetty.server.Server jetty = new org.eclipse.jetty.server.Server(httpPort);
+		jetty = new org.eclipse.jetty.server.Server(httpPort);
 
 		// enables annotations
 		org.eclipse.jetty.webapp.Configuration.ClassList classlist = org.eclipse.jetty.webapp.Configuration.ClassList.setServerDefault(jetty);

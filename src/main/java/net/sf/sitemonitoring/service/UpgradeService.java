@@ -63,6 +63,10 @@ public class UpgradeService {
 			configuration.setEmailFrom(configuration.getAdminEmail());
 			configurationService.saveExcludingPassword(configuration);
 		}
+		if (configuration.getMonitoringVersion().equals("2.1.7")) {
+			configuration.setMonitoringVersion("2.1.8");
+			configurationService.saveExcludingPassword(configuration);
+		}
 	}
 
 	private void update(String sql) {
