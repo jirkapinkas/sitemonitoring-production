@@ -8,7 +8,7 @@
 	<ui:param name="title" value="configuration" />
 
 	<ui:define name="content">
-
+	
 		<h:form id="formConfiguration">
 
 <!-- fix for chrome, because autocomplete="off" isn't working -->
@@ -18,6 +18,9 @@
 
 			<p:messages />
 			
+			<p:commandButton value="save" action="#{configurationController.save()}" update="formConfiguration" style="padding:5px;margin:15px;font-size:24px;background-color:#00E800" />
+			<br />
+
 			<p:fieldset legend="login" toggleable="true" collapsed="false">
 				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
 
@@ -169,8 +172,7 @@
 				</p:panelGrid>
 			</p:fieldset>
 			
-			<br />
-			<p:commandButton value="save" action="#{configurationController.save()}" update="formConfiguration" />
+			<p:commandButton value="save" action="#{configurationController.save()}" update="formConfiguration" style="padding:5px;margin:15px;font-size:24px;background-color:#00E800" />
 		</h:form>
 
 	</ui:define>
