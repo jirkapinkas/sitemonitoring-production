@@ -15,8 +15,6 @@
 			<f:viewAction action="#{checkResultsController.loadChecks()}" />
 		</f:metadata>
 
-		<h1>checks:</h1>
-
 		<p:socket channel="/running" onMessage="handleCheckMessage" />
 
 		<script type="text/javascript">
