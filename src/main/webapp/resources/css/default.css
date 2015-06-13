@@ -11,6 +11,10 @@
 	background-image: url("#{resource['images/minus.png']}") !important;
 }
 
+.clearButton {
+	background-image: url("#{resource['images/clear.png']}") !important;
+}
+
 .editButton {
 	background-image: url("#{resource['images/edit.png']}") !important;
 }

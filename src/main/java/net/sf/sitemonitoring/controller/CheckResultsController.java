@@ -41,9 +41,10 @@ public class CheckResultsController implements Serializable {
 	public enum ShowType {
 		LAST, TABLE, CHART
 	}
-	
+
 	/**
-	 * custom cyclic reference in order to load checks in checkController from this bean
+	 * custom cyclic reference in order to load checks in checkController from
+	 * this bean
 	 */
 	private CheckController checkController;
 
@@ -126,13 +127,15 @@ public class CheckResultsController implements Serializable {
 				lineChartSeries2.set(checkResultDto.getStartDate().getTime(), 0);
 			}
 		}
-		
-		int maxMillis = checkResultService.findMaxMillis(checkId);
 
+		Integer maxMillis = checkResultService.findMaxMillis(checkId);
+		if (maxMillis == null) {
+			maxMillis = 0;
+		}
 		chartResults.put(checkId, constructChartModel(datePeriod, lineChartSeries1, lineChartSeries2, maxMillis));
 	}
 
-	private void clearAllResults(int checkId) {
+	public void clearAllResults(int checkId) {
 		tableResults.remove(checkId);
 		chartResults.remove(checkId);
 	}

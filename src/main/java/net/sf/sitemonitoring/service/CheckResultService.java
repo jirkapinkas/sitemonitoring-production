@@ -173,8 +173,13 @@ public class CheckResultService {
 		checkResultRepository.deleteOld(checkId, date);
 	}
 
-	public int findMaxMillis(int checkId) {
+	public Integer findMaxMillis(int checkId) {
 		return checkResultRepository.findMaxMillis(checkId);
+	}
+
+	@Transactional
+	public void deleteResults(int checkId) {
+		checkResultRepository.deleteResults(checkId);
 	}
 
 }

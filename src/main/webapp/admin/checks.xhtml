@@ -143,6 +143,14 @@
 							<p:confirm header="Confirmation" message="Really remove?" icon="ui-icon-alert" />
 						</p:commandButton>
 					</div>
+					<div class="menuButton">
+						<p:commandButton icon="clearButton" title="clear results"
+							action="#{checkController.clearResults(check.id)}"
+							update=":checksTable"
+							oncomplete="linkifyContent()">
+							<p:confirm header="Confirmation" message="Really clear check results?" icon="ui-icon-alert" />
+						</p:commandButton>
+					</div>
 				</h:form>
 				</h:panelGroup>
 

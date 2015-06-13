@@ -187,4 +187,16 @@ public class CheckController implements Serializable {
 		removeCredentialsAfterSave = true;
 	}
 
+	public void clearResults(int checkId) {
+		// delete check results from database
+		checkResultService.deleteResults(checkId);
+		// clears chart and table results
+		checkResultsController.clearAllResults(checkId);
+		// if user is displaying chart, we need to reload it, otherwise
+		// exception is thrown
+		checkResultsController.loadChartResults(checkId);
+		// if user is displaying last results, we need to reload it
+		checkResultsController.getLastResults().remove(checkId);
+	}
+
 }

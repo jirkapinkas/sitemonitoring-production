@@ -23,9 +23,13 @@ public interface CheckResultRepository extends JpaRepository<CheckResult, Intege
 	List<CheckResult> findByCheckIdDateRange(int checkId, Date dateFrom, Date dateTo);
 
 	@Query("select max(c.responseTime) from CheckResult c where c.check.id = ?1")
-	int findMaxMillis(int checkId);
+	Integer findMaxMillis(int checkId);
 
 	@Query("select c from CheckResult c where c.check.id = ?1 and c.success = false")
 	List<CheckResult> findByCheckIdErrors(int checkId);
+	
+	@Modifying
+	@Query("delete from CheckResult c where c.check.id = ?1")
+	void deleteResults(int checkId);
 
 }
