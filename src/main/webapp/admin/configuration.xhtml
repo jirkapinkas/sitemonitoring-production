@@ -21,7 +21,7 @@
 			<p:commandButton value="save" action="#{configurationController.save()}" update="formConfiguration" style="padding:5px;margin:15px;font-size:24px;background-color:#00E800" />
 			<br />
 
-			<p:fieldset legend="login" toggleable="true" collapsed="false">
+			<p:fieldset legend="login" toggleable="true" collapsed="false" styleClass="configurationFieldset">
 				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
 
 					admin username:
@@ -37,7 +37,7 @@
 			
 			<br />
 			
-			<p:fieldset legend="email" toggleable="true" collapsed="true">
+			<p:fieldset legend="email" toggleable="true" collapsed="true" styleClass="configurationFieldset">
 				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
 				
 					email from:
@@ -106,8 +106,8 @@
 			
 			<br />
 
-			<p:fieldset legend="timeouts, intervals, defaults" toggleable="true" collapsed="true" styleClass="tableNoBorder">
-				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2">
+			<p:fieldset legend="timeouts, intervals, defaults" toggleable="true" collapsed="true" styleClass="configurationFieldset">
+				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
 			
 					default connection timeout (milliseconds):
 					<p:inputText value="#{configurationController.configuration.connectionTimeout}" />
@@ -150,8 +150,8 @@
 			
 			<br />
 			
-			<p:fieldset legend="proxy" toggleable="true" collapsed="true" styleClass="tableNoBorder">
-				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2">
+			<p:fieldset legend="proxy" toggleable="true" collapsed="true" styleClass="configurationFieldset">
+				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
 			
 					proxy server:
 					<p:inputText value="#{configurationController.configuration.httpProxyServer}" />

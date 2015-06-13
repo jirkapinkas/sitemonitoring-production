@@ -73,4 +73,9 @@
 
 .tableNoBorder tr td {
 	border: 0 !important;
+	background-color:#eeeeee;
+}
+
+.configurationFieldset {
+	background-color:#eeeeee;
 }

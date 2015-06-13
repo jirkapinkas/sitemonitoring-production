@@ -61,7 +61,7 @@
         
         <h:panelGroup id="infoMessagePanel">
         <br />
-        <p:panel rendered="#{checkController.configuration.hideInfoMessage ne true}">
+        <p:panel rendered="#{checkController.configuration.hideInfoMessage ne true}" style="background-color:#eeeeee;">
         	#{checkController.configuration.infoMessage}
         	<br />
         	<br />
@@ -78,7 +78,7 @@
 		<p:dataTable value="#{checkController.checks}" var="check"
 			id="checksTable" styleClass="resultsTable">
 			
-			<p:column headerText="checks" style="width:250px;vertical-align:top">
+			<p:column headerText="checks" style="width:250px;vertical-align:top;background-color:#eeeeee;">
 
 				<h:panelGroup style="float:left;padding-top:5px">
 					<h:panelGroup rendered="#{check.active}">
