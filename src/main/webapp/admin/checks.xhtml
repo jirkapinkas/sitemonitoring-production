@@ -136,19 +136,19 @@
 						<p:commandButton icon="playButton" title="start now!" action="#{checkController.startNow(check.id)}" rendered="#{check.checkState ne 'RUNNING' and check.active eq true}" />
 					</div>
 					<div class="menuButton">
-						<p:commandButton icon="deleteButton" title="remove"
-							action="#{checkController.delete(check.id)}"
-							update=":checksTable"
-							oncomplete="linkifyContent()">
-							<p:confirm header="Confirmation" message="Really remove?" icon="ui-icon-alert" />
-						</p:commandButton>
-					</div>
-					<div class="menuButton">
 						<p:commandButton icon="clearButton" title="clear results"
 							action="#{checkController.clearResults(check.id)}"
 							update=":checksTable"
 							oncomplete="linkifyContent()">
 							<p:confirm header="Confirmation" message="Really clear check results?" icon="ui-icon-alert" />
+						</p:commandButton>
+					</div>
+					<div class="menuButton">
+						<p:commandButton icon="deleteButton" title="remove"
+							action="#{checkController.delete(check.id)}"
+							update=":checksTable"
+							oncomplete="linkifyContent()">
+							<p:confirm header="Confirmation" message="Really remove?" icon="ui-icon-alert" />
 						</p:commandButton>
 					</div>
 				</h:form>
