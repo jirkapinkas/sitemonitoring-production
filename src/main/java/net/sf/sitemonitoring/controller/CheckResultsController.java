@@ -13,6 +13,7 @@ import javax.faces.bean.ViewScoped;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.entity.Check;
+import net.sf.sitemonitoring.push.ChartResultsStats;
 import net.sf.sitemonitoring.push.CheckResultDto;
 import net.sf.sitemonitoring.push.CheckResultDtoList;
 import net.sf.sitemonitoring.service.CheckResultService;
@@ -53,6 +54,8 @@ public class CheckResultsController implements Serializable {
 	private Map<Integer, CheckResultDtoList> tableResults = new HashMap<Integer, CheckResultDtoList>();
 
 	private Map<Integer, LineChartModel> chartResults = new HashMap<Integer, LineChartModel>();
+
+	private Map<Integer, ChartResultsStats> chartResultsStatsMap = new HashMap<Integer, ChartResultsStats>();
 
 	private Map<Integer, Integer> chartOffsets = new HashMap<Integer, Integer>();
 
@@ -133,11 +136,32 @@ public class CheckResultsController implements Serializable {
 			maxMillis = 0;
 		}
 		chartResults.put(checkId, constructChartModel(datePeriod, lineChartSeries1, lineChartSeries2, maxMillis));
+
+		chartResultsStatsMap.put(checkId, constructStats(results.getList()));
+	}
+
+	private ChartResultsStats constructStats(List<CheckResultDto> checkResults) {
+		ChartResultsStats chartResultsStats = new ChartResultsStats();
+		long millisSum = 0;
+		int down = 0;
+		int up = 0;
+		for (CheckResultDto checkResultDto : checkResults) {
+			millisSum += checkResultDto.getResponseTime();
+			if (checkResultDto.getSuccess()) {
+				up++;
+			} else {
+				down++;
+			}
+		}
+		chartResultsStats.setAverageResponseTime((int) (millisSum / checkResults.size()));
+		chartResultsStats.setAverageUptime(Math.round((up * 100) / (up + down)));
+		return chartResultsStats;
 	}
 
 	public void clearAllResults(int checkId) {
 		tableResults.remove(checkId);
 		chartResults.remove(checkId);
+		chartResultsStatsMap.remove(checkId);
 	}
 
 	public void showTable(int checkId) {

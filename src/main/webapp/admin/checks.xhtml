@@ -203,7 +203,13 @@
 											 action="#{checkResultsController.resetOffset(check.id)}"
 											 update=":checksTable" />
 						</h:form>
-					
+						
+						<div style="padding-top:5px">
+							<strong>stats for selected time period:</strong>
+							average response time: #{checkResultsController.chartResultsStatsMap[check.id].averageResponseTime}ms,
+							average uptime: #{checkResultsController.chartResultsStatsMap[check.id].averageUptime}%
+						</div>
+						
 						<p:chart type="line" style="height:300px" model="#{checkResultsController.chartResults[check.id]}"  />
 
 					</h:panelGroup>
