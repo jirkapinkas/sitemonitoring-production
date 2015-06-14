@@ -32,44 +32,59 @@ public class UpgradeService {
 			configuration.setMonitoringVersion("2.1");
 			configurationService.saveExcludingPassword(configuration);
 			update("update monit_check set condition_value = condition");
+			configuration = configurationService.find();
+		}
+		if(configuration.getMonitoringVersion().equals("2.2")) {
+			// this was error
+			configuration.setMonitoringVersion("2.1");
+			configurationService.saveExcludingPassword(configuration);
+			configuration = configurationService.find();
 		}
 		if (configuration.getMonitoringVersion().equals("2.1")) {
 			configuration.setDefaultSpiderCheckInterval(60);
 			configuration.setDefaultSendEmails(true);
 			configuration.setMonitoringVersion("2.1.1");
 			configurationService.saveExcludingPassword(configuration);
+			configuration = configurationService.find();
 		}
 		if (configuration.getMonitoringVersion().equals("2.1.1")) {
 			configuration.setMonitoringVersion("2.1.2");
 			configurationService.saveExcludingPassword(configuration);
+			configuration = configurationService.find();
 		}
 		if (configuration.getMonitoringVersion().equals("2.1.2")) {
 			configuration.setInfoMessage("Please don't monitor my websites (like javavids.com and sitemonitoring.sourceforge.net). Lot's of people started doing it and effectively DDOSed them. If you monitor them anyway, your IP address will be blocked!");
 			configuration.setUserAgent("sitemonitoring http://sitemonitoring.sourceforge.net");
 			configuration.setMonitoringVersion("2.1.3");
 			configurationService.saveExcludingPassword(configuration);
+			configuration = configurationService.find();
 		}
 		if (configuration.getMonitoringVersion().equals("2.1.3")) {
 			configuration.setMonitoringVersion("2.1.4");
 			configurationService.saveExcludingPassword(configuration);
+			configuration = configurationService.find();
 		}
 		if (configuration.getMonitoringVersion().equals("2.1.4")) {
 			configuration.setMonitoringVersion("2.1.6");
 			configuration.setDefaultSendEmails(true);
 			configurationService.saveExcludingPassword(configuration);
+			configuration = configurationService.find();
 		}
 		if (configuration.getMonitoringVersion().equals("2.1.6")) {
 			configuration.setMonitoringVersion("2.1.7");
 			configuration.setEmailFrom(configuration.getAdminEmail());
 			configurationService.saveExcludingPassword(configuration);
+			configuration = configurationService.find();
 		}
 		if (configuration.getMonitoringVersion().equals("2.1.7")) {
 			configuration.setMonitoringVersion("2.1.8");
 			configurationService.saveExcludingPassword(configuration);
+			configuration = configurationService.find();
 		}
 		if (configuration.getMonitoringVersion().equals("2.1.8")) {
 			configuration.setMonitoringVersion("2.1.9");
 			configurationService.saveExcludingPassword(configuration);
+			configuration = configurationService.find();
 		}
 	}
 
