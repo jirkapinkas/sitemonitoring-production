@@ -59,9 +59,9 @@
         	</p:menuButton>
         </h:form>
         
-        <h:panelGroup id="infoMessagePanel">
+        <h:panelGroup id="infoMessagePanel" rendered="#{checkController.configuration.hideInfoMessage ne true}" styleClass="greyBackground">
         <br />
-        <p:panel rendered="#{checkController.configuration.hideInfoMessage ne true}" style="background-color:#eeeeee;">
+        <p:panel styleClass="greyBackground">
         	#{checkController.configuration.infoMessage}
         	<br />
         	<br />
@@ -76,9 +76,9 @@
 		<p:messages autoUpdate="true" severity="info" />
 		
 		<p:dataTable value="#{checkController.checks}" var="check"
-			id="checksTable" styleClass="resultsTable">
+			id="checksTable" styleClass="resultsTable, hide-column-names" emptyMessage="No checks.">
 			
-			<p:column headerText="checks" style="width:250px;vertical-align:top;background-color:#eeeeee;">
+			<p:column style="width:250px;vertical-align:top;" styleClass="greyBackground">
 
 				<h:panelGroup style="float:left;padding-top:5px">
 					<h:panelGroup rendered="#{check.active}">

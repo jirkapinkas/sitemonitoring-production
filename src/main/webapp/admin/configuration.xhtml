@@ -18,10 +18,11 @@
 
 			<p:messages />
 			
-			<p:commandButton value="save" action="#{configurationController.save()}" update="formConfiguration" style="padding:5px;margin:15px;font-size:24px;background-color:#A6A6A6" />
+			<p:commandButton value="save" action="#{configurationController.save()}" update=":formConfiguration" style="padding:5px;margin:15px;font-size:24px;background-color:#A6A6A6" />
 			<br />
 
-			<p:fieldset legend="login" toggleable="true" collapsed="false" styleClass="configurationFieldset">
+		<p:accordionPanel>
+			<p:tab title="login">
 				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
 
 					admin username:
@@ -33,11 +34,11 @@
 					<h:outputText value="" />
 
 				</p:panelGrid>
-			</p:fieldset>
+			</p:tab>
 			
 			<br />
 			
-			<p:fieldset legend="email" toggleable="true" collapsed="true" styleClass="configurationFieldset">
+			<p:tab title="email">
 				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
 				
 					email from:
@@ -55,13 +56,13 @@
 					<h:outputText value="" />
 					<p:panelGrid>
 						<h3>load defaults for:</h3>
-						<p:commandButton value="localhost" action="#{configurationController.loadDefaultsLocalhost()}" update="formConfiguration" />
+						<p:commandButton value="localhost" action="#{configurationController.loadDefaultsLocalhost()}" update=":formConfiguration" />
 						<br />
 						<br />
-						<p:commandButton value="mandrillapp" action="#{configurationController.loadDefaultsMandrillapp()}" update="formConfiguration" />
+						<p:commandButton value="mandrillapp" action="#{configurationController.loadDefaultsMandrillapp()}" update=":formConfiguration" />
 						<br />
 						<br />
-						<p:commandButton value="gmail" action="#{configurationController.loadDefaultsGmail()}" update="formConfiguration" />
+						<p:commandButton value="gmail" action="#{configurationController.loadDefaultsGmail()}" update=":formConfiguration" />
 						<br />
 						<br />
 					</p:panelGrid>
@@ -102,11 +103,11 @@
 				<h:panelGroup id="emailTestResults">
 					<h:outputText value="#{configurationController.emailTestResults}" escape="false" />
 				</h:panelGroup>
-			</p:fieldset>
+			</p:tab>
 			
 			<br />
 
-			<p:fieldset legend="timeouts, intervals, defaults" toggleable="true" collapsed="true" styleClass="configurationFieldset">
+			<p:tab title="timeouts, intervals, defaults">
 				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
 			
 					default connection timeout (milliseconds):
@@ -146,11 +147,11 @@
 					<h:outputText value="User-Agent header" />
 	
 				</p:panelGrid>
-			</p:fieldset>
+			</p:tab>
 			
 			<br />
 			
-			<p:fieldset legend="proxy" toggleable="true" collapsed="true" styleClass="configurationFieldset">
+			<p:tab title="proxy">
 				<p:panelGrid columns="3" columnClasses="configurationGridCol1,configurationGridCol2" styleClass="tableNoBorder">
 			
 					proxy server:
@@ -170,9 +171,10 @@
 					<h:outputText value="Leave empty if your proxy doesn't use authentication" />
 	
 				</p:panelGrid>
-			</p:fieldset>
-			
-			<p:commandButton value="save" action="#{configurationController.save()}" update="formConfiguration" style="padding:5px;margin:15px;font-size:24px;background-color:#A6A6A6" />
+			</p:tab>
+		</p:accordionPanel>
+
+			<p:commandButton value="save" action="#{configurationController.save()}" update=":formConfiguration" style="padding:5px;margin:15px;font-size:24px;background-color:#A6A6A6" />
 		</h:form>
 
 	</ui:define>

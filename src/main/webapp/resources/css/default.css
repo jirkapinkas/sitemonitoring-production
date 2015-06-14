@@ -76,6 +76,18 @@
 	background-color:#eeeeee;
 }
 
-.configurationFieldset {
-	background-color:#eeeeee;
+.hide-column-names table thead tr {
+    display: none;
+}
+
+.ui-datatable-empty-message {
+	background-color: #eeeeee;
+}
+
+.greyBackground {
+	background-color: #eeeeee;
+}
+
+.ui-accordion-content {
+	background-color: #eeeeee;
 }
