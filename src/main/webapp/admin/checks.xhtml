@@ -59,6 +59,7 @@
         	</p:menuButton>
         </h:form>
         
+        <h:panelGroup id="infoMessagePanelOuter">
         <h:panelGroup id="infoMessagePanel" rendered="#{checkController.configuration.hideInfoMessage ne true}" styleClass="greyBackground">
         <br />
         <p:panel styleClass="greyBackground">
@@ -66,11 +67,12 @@
         	<br />
         	<br />
         	<h:form>
-        		<p:commandButton value="I understand" action="#{checkController.hideInfoMessage()}" update=":infoMessagePanel" />
+        		<p:commandButton value="I understand" action="#{checkController.hideInfoMessage()}" update=":infoMessagePanelOuter" />
         	</h:form>
         </p:panel>
         </h:panelGroup>
-                 
+        </h:panelGroup>
+
 		<br />
 		
 		<p:messages autoUpdate="true" severity="info" />
