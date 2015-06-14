@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.sitemonitoring</groupId>
 	<artifactId>sitemonitoring</artifactId>
-	<version>2.1.8</version>
+	<version>2.1.9</version>
 	<packaging>war</packaging>
 
 	<dependencies>
@@ -101,7 +101,7 @@
 		<dependency>
 			<groupId>org.atmosphere</groupId>
 			<artifactId>atmosphere-runtime</artifactId>
-			<version>2.2.3</version>
+			<version>2.2.7</version>
 		</dependency>
 
 		<dependency>
@@ -311,7 +311,6 @@
 						<artifactId>jetty-maven-plugin</artifactId>
 						<version>9.2.3.v20140905</version>
 						<configuration>
-							<scanIntervalSeconds>1</scanIntervalSeconds>
 							<systemProperties>
 								<systemProperty>
 									<name>log4j.configuration</name>
@@ -434,9 +433,9 @@
 					<scope>provided</scope>
 				</dependency>
 				<dependency>
-				    <groupId>org.glassfish</groupId>
-				    <artifactId>javax.el</artifactId>
-				    <version>3.0.0</version>
+					<groupId>org.glassfish</groupId>
+					<artifactId>javax.el</artifactId>
+					<version>3.0.0</version>
 				</dependency>
 				<dependency>
 					<groupId>org.eclipse.jetty</groupId>

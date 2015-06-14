@@ -147,6 +147,9 @@ public class Check implements Serializable {
 	@Column(name = "keep_results_value", nullable = false)
 	private int keepResultsValue;
 
+	@Column(name = "chart_max_millis")
+	private Integer chartMaxMillis;
+
 	/*
 	 * follows sending emails functionality
 	 */

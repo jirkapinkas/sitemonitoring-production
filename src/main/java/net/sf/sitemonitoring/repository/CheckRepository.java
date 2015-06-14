@@ -25,6 +25,10 @@ public interface CheckRepository extends JpaRepository<Check, Integer> {
 	@Query("update Check c set c.chartPeriodType = ?2, c.chartPeriodValue = ?3 where c.id = ?1")
 	void updateChartInterval(int checkId, IntervalType chartPeriodType, int chartIntervalValue);
 
+	@Modifying(clearAutomatically = true)
+	@Query("update Check c set c.chartMaxMillis = ?2 where c.id = ?1")
+	void updateChartMaxMillis(int checkId, Integer chartMaxMillis);
+
 	@Modifying
 	@Query("update Check c set scheduledNextDate = null where c.id = ?1")
 	void startCheck(int checkId);
@@ -53,4 +57,6 @@ public interface CheckRepository extends JpaRepository<Check, Integer> {
 	@Query("update Check c set c.credentials = null where c.credentials.id = ?1")
 	void removeCredentials(int id);
 
+	@Query("select c.chartMaxMillis from Check c where c.id = ?1")
+	Integer findChartMaxMillis(int checkId);
 }

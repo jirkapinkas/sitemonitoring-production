@@ -90,4 +90,8 @@ public class CheckService {
 		credentialsRepository.removeCredentials(id);
 	}
 
+	public void updateChartMaxMillis(int checkId, Integer chartMaxMillis) {
+		checkRepository.updateChartMaxMillis(checkId, chartMaxMillis);
+	}
+
 }

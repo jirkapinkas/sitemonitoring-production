@@ -202,6 +202,10 @@
 							<p:commandButton value="now" 
 											 action="#{checkResultsController.resetOffset(check.id)}"
 											 update=":checksTable" />
+							<p:commandButton value="Y-axis max." 
+											 action="#{checkResultsController.setCurrentCheck(check.id)}"
+											 update=":chartMaximumForm" 
+											 oncomplete="PF('chartMaximumDialog').show()" />
 						</h:form>
 						
 						<div style="padding-top:5px">
@@ -307,6 +311,27 @@
 											 action="#{checkResultsController.updateCheckPeriod(chartPeriodType.value, chartPeriodValue.value)}"
 											 update=":checksTable, :chartPeriodForm" oncomplete="handleDialogSubmit(args, 'chartPeriodDialog')" style="float:left" />
 						</td>
+					</tr>
+				</table>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog widgetVar="chartMaximumDialog" closeOnEscape="true" modal="true" header="change Y-axis maximum">
+			<h:form id="chartMaximumForm">
+				<table>
+					<tr>
+						<td>chart Y-axis maximum:</td>
+						<td>
+							<p:inputText binding="#{chartMaxMillis}" value="#{checkResultsController.currentCheck.chartMaxMillis}" style="width:100px;float:left" />
+						</td>
+						<td>
+							<p:commandButton value="change" 
+											 action="#{checkResultsController.updateChartMaxMillis(chartMaxMillis.value)}"
+											 update=":checksTable" oncomplete="handleDialogSubmit(args, 'chartMaximumDialog')" style="float:left" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">Note: leave empty for automatic value</td>
 					</tr>
 				</table>
 			</h:form>

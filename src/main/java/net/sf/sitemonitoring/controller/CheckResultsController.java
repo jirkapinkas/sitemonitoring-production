@@ -198,6 +198,12 @@ public class CheckResultsController implements Serializable {
 		updateResults();
 		checkController.loadChecks();
 	}
+	
+	public void updateChartMaxMillis(Integer chartMaxMillis) {
+		checkService.updateChartMaxMillis(currentCheck.getId(), chartMaxMillis);
+		updateResults();
+		checkController.loadChecks();
+	}
 
 	public void incOffset(int checkId, int offset) {
 		if (chartOffsets.containsKey(checkId)) {

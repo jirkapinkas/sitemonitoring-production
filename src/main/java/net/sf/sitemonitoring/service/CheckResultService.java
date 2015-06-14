@@ -174,7 +174,11 @@ public class CheckResultService {
 	}
 
 	public Integer findMaxMillis(int checkId) {
-		return checkResultRepository.findMaxMillis(checkId);
+		Integer maxMillis = checkRepository.findChartMaxMillis(checkId);
+		if(maxMillis == null) {
+			return checkResultRepository.findMaxMillis(checkId);
+		}
+		return maxMillis;
 	}
 
 	@Transactional

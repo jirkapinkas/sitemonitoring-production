@@ -1,4 +1,13 @@
+TODO: version 2.1.9
+> thanks Ashley Hardesty for these suggestions
++ displaying current version in admin zone
++ button for clearing check results
++ chart stats
++ configurable chart Y-axis maximum
++ overall UI changes
+
 3.6.2015: version 2.1.8
+> thanks Ashley Hardesty for these suggestions
 + it's possible now to run the application as a Windows service
 
 2.6.2015: version 2.1.7
