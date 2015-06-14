@@ -1,4 +1,4 @@
-TODO: version 2.1.9
+14.6.2015: version 2.1.9
 > thanks Ashley Hardesty for these suggestions
 + displaying current version in admin zone
 + button for clearing check results
