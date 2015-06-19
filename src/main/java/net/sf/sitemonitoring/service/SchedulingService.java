@@ -10,6 +10,7 @@ import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.entity.Check.CheckState;
 import net.sf.sitemonitoring.service.check.MonitoringService;
 
+import org.primefaces.push.EventBusFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -34,12 +35,17 @@ public class SchedulingService {
 
 	@Autowired
 	private ConfigurationService configurationService;
-	
+
 	/**
 	 * Schedule monitoring
 	 */
 	@Scheduled(fixedDelay = 1000)
 	public void runMonitoring() {
+		if (EventBusFactory.getDefault() == null) {
+			// Atmosphere is not yet initialized (this can happen because it's a
+			// servlet and it's initialized after Spring listener.
+			return;
+		}
 		log.debug("start run monitoring");
 		List<Check> checks = checkService.findAll();
 		for (Check check : checks) {
