@@ -8,8 +8,8 @@
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>${title}</title>
-	<link rel="icon" type="image/png" href="/favicon.ico" />
-	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+	<link rel="icon" type="image/png" href="#{request.contextPath}/favicon.ico" />
+	<link rel="apple-touch-icon" href="#{request.contextPath}/apple-touch-icon.png" />
 </h:head>
 <h:body styleClass="greyBackground">
 <h:outputStylesheet library="css" name="default.css" />
@@ -24,7 +24,7 @@
 			<p:menubar>
 				<p:menuitem>
 					<a href="checks.xhtml">
-						<img src="/apple-touch-icon.png" style="width:36px;margin-left:3px;margin-right:3px;margin-top:3px" />
+						<h:graphicImage value="#{'/apple-touch-icon.png'}" style="width:36px;margin-left:3px;margin-right:3px;margin-top:3px" />
 					</a>
 				</p:menuitem>
 				<p:menuitem value="Checks" url="checks.xhtml" styleClass="customMenuItem" />
