@@ -55,4 +55,9 @@
 		<param-value>true</param-value>
 	</context-param>
 
+	<!-- disable jsessionid -->
+	<session-config>
+		<tracking-mode>COOKIE</tracking-mode>
+	</session-config>
+
 </web-app>

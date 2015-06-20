@@ -1,5 +1,6 @@
 TODO: version 2.2.0
 + upgraded libraries versions
++ added gzip compression to standalone so that it's even faster
 
 14.6.2015: version 2.1.9
 > thanks Ashley Hardesty for these suggestions
