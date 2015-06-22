@@ -1,4 +1,7 @@
 TODO: version 2.2.0
+
+
+22.6.2015: version 2.1.10
 + upgraded libraries versions
 + added gzip compression to standalone so that it's even faster
 
