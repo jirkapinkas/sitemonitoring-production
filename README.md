@@ -23,7 +23,7 @@
 
 <h2>Standalone application (with HSQL database)</h2>
 
-<p>Just download latest <a href="http://sourceforge.net/projects/sitemonitoring/files/Site%20monitoring%202.0/" target="_blank">ZIP file</a>.
+<p>Just download latest <a href="https://github.com/jirkapinkas/sitemonitoring-production/releases" target="_blank">ZIP file</a>.
 <br />
 Extract and run: <code>startup.bat</code> (Linux is also supported)</p>
 </p>
