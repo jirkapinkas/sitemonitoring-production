@@ -31,27 +31,27 @@
         
         <h:form>
         	<p:menuButton value="add">
-        		<p:menuitem value="HTML check" icon="addButton"
+        		<p:menuitem value="HTML check" icon="fa fa-header fa-menu"
 							action="#{checkController.prepareSingleCheck()}"
 							oncomplete="PF('checkDialogSingle').show()"
 							update=":checkFormSingle"
 							resetValues="true" />
-				<p:menuitem value="sitemap check" icon="addButton"
+				<p:menuitem value="sitemap check" icon="fa fa-sitemap fa-menu"
 							action="#{checkController.prepareSitemapCheck()}"
 							oncomplete="PF('checkDialogSitemap').show()"
 							update=":checkFormSitemap"
 							resetValues="true" />
-				<p:menuitem value="spider check" icon="addButton"
+				<p:menuitem value="spider check" icon="fa fa-bug fa-menu"
 							action="#{checkController.prepareSpiderCheck()}"
 							oncomplete="PF('checkDialogSpider').show()"
 							update=":checkFormSpider"
 							resetValues="true" />
-				<p:menuitem value="XML check" icon="addButton"
+				<p:menuitem value="XML check" icon="fa fa-code fa-menu"
 							action="#{checkController.prepareXmlCheck()}"
 							oncomplete="PF('checkDialogXml').show()"
 							update=":checkFormXml"
 							resetValues="true" />
-				<p:menuitem value="JSON check" icon="addButton"
+				<p:menuitem value="JSON check" icon="fa fa-code fa-menu"
 							action="#{checkController.prepareJsonCheck()}"
 							oncomplete="PF('checkDialogJson').show()"
 							update=":checkFormJson"
@@ -96,59 +96,60 @@
 				<h:panelGroup style="float:left;padding-left:0">
 				<h:form>
 					<div class="menuButton">
-						<p:commandButton icon="topButton" title="last check result" action="#{checkResultsController.showLast(check.id)}" update=":checksTable" oncomplete="linkifyContent()" rendered="#{check.active eq true}" />
+						<p:commandButton icon="fa fa-chevron-up" title="last check result" action="#{checkResultsController.showLast(check.id)}" update=":checksTable" oncomplete="linkifyContent()" rendered="#{check.active eq true}" />
 					</div>
 					<div class="menuButton">
-						<p:commandButton icon="chartButton" title="chart" action="#{checkResultsController.showChart(check.id)}" update=":checksTable" oncomplete="linkifyContent()" rendered="#{check.active eq true}" />
+						<p:commandButton icon="fa fa-bar-chart" title="chart" action="#{checkResultsController.showChart(check.id)}" update=":checksTable" oncomplete="linkifyContent()" rendered="#{check.active eq true}" />
 					</div>
 					<div class="menuButton">
-						<p:commandButton icon="listButton" title="list errors" action="#{checkResultsController.showTable(check.id)}" update=":checksTable" oncomplete="linkifyContent()" rendered="#{check.active eq true}" />
+						<p:commandButton icon="fa fa-list-ul" title="list errors" action="#{checkResultsController.showTable(check.id)}" update=":checksTable" oncomplete="linkifyContent()" rendered="#{check.active eq true}" />
 					</div>
 					<div class="menuButton">
-						<p:commandButton icon="editButton" title="edit"
+						<p:commandButton icon="fa fa-wrench" title="edit"
 							action="#{checkController.setCheck(check)}"
 							update=":checkFormSingle"
 							oncomplete="PF('checkDialogSingle').show()" resetValues="true"
 							rendered="#{check.type eq 'SINGLE_PAGE'}" />
-						<p:commandButton icon="editButton" title="edit"
+						<p:commandButton icon="fa fa-wrench" title="edit"
 							action="#{checkController.setCheck(check)}"
 							update=":checkFormSitemap"
 							oncomplete="PF('checkDialogSitemap').show()" resetValues="true"
 							rendered="#{check.type eq 'SITEMAP'}" />
-						<p:commandButton icon="editButton" title="edit"
+						<p:commandButton icon="fa fa-wrench" title="edit"
 							action="#{checkController.setCheck(check)}"
 							update=":checkFormSpider"
 							oncomplete="PF('checkDialogSpider').show()" resetValues="true"
 							rendered="#{check.type eq 'SPIDER'}" />
-						<p:commandButton icon="editButton" title="edit"
+						<p:commandButton icon="fa fa-wrench" title="edit"
 							action="#{checkController.setCheck(check)}"
 							update=":checkFormXml"
 							oncomplete="PF('checkDialogXml').show()" resetValues="true"
 							rendered="#{check.type eq 'XML'}" />
-						<p:commandButton icon="editButton" title="edit"
+						<p:commandButton icon="fa fa-wrench" title="edit"
 							action="#{checkController.setCheck(check)}"
 							update=":checkFormJson"
 							oncomplete="PF('checkDialogJson').show()" resetValues="true"
 							rendered="#{check.type eq 'JSON'}" />
 					</div>
 					<div class="menuButton">
-						<p:commandButton icon="stopButton" title="stop" action="#{checkController.abort(check.id)}" rendered="#{check.checkState eq 'RUNNING' and check.active eq true}" />
-						<p:commandButton icon="playButton" title="start now!" action="#{checkController.startNow(check.id)}" rendered="#{check.checkState ne 'RUNNING' and check.active eq true}" />
+						<p:commandButton icon="fa fa-stop fa-red" title="stop" action="#{checkController.abort(check.id)}" rendered="#{check.checkState eq 'RUNNING' and check.active eq true}" />
+						<p:commandButton icon="fa fa-play fa-green" title="start now!" action="#{checkController.startNow(check.id)}" rendered="#{check.checkState ne 'RUNNING' and check.active eq true}" />
 					</div>
 					<div class="menuButton">
-						<p:commandButton icon="clearButton" title="clear results"
+						<p:commandButton icon="fa fa-eraser" title="clear results"
 							action="#{checkController.clearResults(check.id)}"
 							update=":checksTable"
-							oncomplete="linkifyContent()">
-							<p:confirm header="Confirmation" message="Really clear check results?" icon="ui-icon-alert" />
+							oncomplete="linkifyContent()"
+							rendered="#{check.active eq true}">
+							<p:confirm header="Confirmation" message="Really clear check results?" icon="fa fa-warning" />
 						</p:commandButton>
 					</div>
 					<div class="menuButton">
-						<p:commandButton icon="deleteButton" title="remove"
+						<p:commandButton icon="fa fa-trash" title="remove"
 							action="#{checkController.delete(check.id)}"
 							update=":checksTable"
 							oncomplete="linkifyContent()">
-							<p:confirm header="Confirmation" message="Really remove?" icon="ui-icon-alert" />
+							<p:confirm header="Confirmation" message="Really remove?" icon="fa fa-warning" />
 						</p:commandButton>
 					</div>
 				</h:form>
@@ -174,8 +175,7 @@
 								#{checkResultDto.responseTime} ms
 							</p:column>
 							<p:column headerText="result">
-								<h:graphicImage value="/resources/images/yes.png" rendered="#{checkResultDto.success eq true}" />
-								<h:graphicImage value="/resources/images/no.png" rendered="#{checkResultDto.success eq false}" />
+								<h:panelGroup styleClass="fa fa-warning fa-red" style="padding-right:5px"></h:panelGroup>
 								<h:outputText value="#{checkResultDto.result}" escape="false" styleClass="content" />
 							</p:column>
 						</p:dataTable>
@@ -220,9 +220,9 @@
 
 					<h:panelGroup rendered="#{checkResultsController.getShowType(check.id) eq 'LAST'}">
 						last check:
-						<h:graphicImage value="/resources/images/yes.png" rendered="#{checkResultsController.lastResults[check.id].success eq true}" />
-						<h:graphicImage value="/resources/images/no.png" rendered="#{checkResultsController.lastResults[check.id].success eq false}" />
-						<h:graphicImage value="/resources/images/unknown.png" rendered="#{checkResultsController.lastResults[check.id].success eq null}" />
+						<h:panelGroup styleClass="fa fa-warning fa-red" rendered="#{checkResultsController.lastResults[check.id].success eq false}"></h:panelGroup>
+						<h:panelGroup styleClass="fa fa-check fa-green" rendered="#{checkResultsController.lastResults[check.id].success eq true}"></h:panelGroup>
+						<h:panelGroup styleClass="fa fa-question-circle" rendered="#{checkResultsController.lastResults[check.id].success eq null}"></h:panelGroup>
 						<br />
 						started:
 						<h:outputText value="#{checkResultsController.lastResults[check.id].startDate}" style="padding-left:5px" />
@@ -237,8 +237,7 @@
 	 				</h:panelGroup>
 				</h:panelGroup>
 				<h:panelGroup rendered="#{check.active eq false}">
-					<h:graphicImage value="/resources/images/unknown.png" rendered="#{checkResultsController.lastResults[check.id].success eq null}" />
-					<h:outputText value="--- check is not active ---" />
+					<h:outputText value="--- not active ---" />
 				</h:panelGroup>
 				<br />
 			</p:column>
@@ -246,7 +245,7 @@
 		</p:dataTable>
 
 
-		<p:dialog widgetVar="checkDialogSingle" closeOnEscape="true" modal="true" header="HTML check">
+		<p:dialog widgetVar="checkDialogSingle" closeOnEscape="true" modal="true" header="HTML check" styleClass="dialog-single">
 			<h:form id="checkFormSingle">
 				<components:dialog-single-check />
 				<p:commandButton id="save" value="save" action="#{checkController.save()}"
@@ -255,7 +254,7 @@
 			</h:form>
 		</p:dialog>
 
-		<p:dialog widgetVar="checkDialogSitemap" closeOnEscape="true" modal="true" header="sitemap check">
+		<p:dialog widgetVar="checkDialogSitemap" closeOnEscape="true" modal="true" header="sitemap check" styleClass="dialog-sitemap">
 			<h:form id="checkFormSitemap">
 				<components:dialog-sitemap-check />
 				<p:commandButton id="save" value="save" action="#{checkController.save()}"
@@ -264,7 +263,7 @@
 			</h:form>
 		</p:dialog>
 		
-		<p:dialog widgetVar="checkDialogSpider" closeOnEscape="true" modal="true" header="spider check">
+		<p:dialog widgetVar="checkDialogSpider" closeOnEscape="true" modal="true" header="spider check" styleClass="dialog-spider">
 			<h:form id="checkFormSpider">
 				<components:dialog-spider-check />
 				<p:commandButton id="save" value="save" action="#{checkController.save()}"
@@ -273,7 +272,7 @@
 			</h:form>
 		</p:dialog>
 		
-		<p:dialog widgetVar="checkDialogXml" closeOnEscape="true" modal="true" header="XML check">
+		<p:dialog widgetVar="checkDialogXml" closeOnEscape="true" modal="true" header="XML check" styleClass="dialog-xml">
 			<h:form id="checkFormXml">
 				<components:dialog-xml-check />
 				<p:commandButton id="save" value="save" action="#{checkController.save()}"
@@ -282,7 +281,7 @@
 			</h:form>
 		</p:dialog>
 		
-		<p:dialog widgetVar="checkDialogJson" closeOnEscape="true" modal="true" header="JSON check">
+		<p:dialog widgetVar="checkDialogJson" closeOnEscape="true" modal="true" header="JSON check" styleClass="dialog-json">
 			<h:form id="checkFormJson">
 				<components:dialog-json-check />
 				<p:commandButton id="save" value="save" action="#{checkController.save()}"

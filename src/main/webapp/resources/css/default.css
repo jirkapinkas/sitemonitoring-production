@@ -1,42 +1,78 @@
+.fa-red {
+	color: red;
+}
+
+.fa-green {
+	color: green;
+}
+
+.fa-menu {
+	padding-right:5px;
+}
+
+.dialog-single .ui-dialog-title {
+	padding-left:20px;
+}
+
+.dialog-single .ui-dialog-title:before {
+	position:absolute;
+	font-family:FontAwesome;
+	top:12px;
+	left:10px;
+	content: "\f1dc";
+}
+
+.dialog-sitemap .ui-dialog-title {
+	padding-left:20px;
+}
+
+.dialog-sitemap .ui-dialog-title:before {
+	position:absolute;
+	font-family:FontAwesome;
+	top:12px;
+	left:10px;
+	content: "\f0e8";
+}
+
+.dialog-spider .ui-dialog-title {
+	padding-left:20px;
+}
+
+.dialog-spider .ui-dialog-title:before {
+	position:absolute;
+	font-family:FontAwesome;
+	top:12px;
+	left:10px;
+	content: "\f188";
+}
+
+.dialog-xml .ui-dialog-title {
+	padding-left:20px;
+}
+
+.dialog-xml .ui-dialog-title:before {
+	position:absolute;
+	font-family:FontAwesome;
+	top:12px;
+	left:10px;
+	content: "\f121";
+}
+
+.dialog-json .ui-dialog-title {
+	padding-left:20px;
+}
+
+.dialog-json .ui-dialog-title:before {
+	position:absolute;
+	font-family:FontAwesome;
+	top:12px;
+	left:10px;
+	content: "\f121";
+}
+
 .customMenuItem {
 	padding-top: 12px !important;
 	padding-bottom: 12px !important;
-}
-
-.addButton {
-	background-image: url("#{resource['images/plus.png']}") !important;
-}
-
-.deleteButton {
-	background-image: url("#{resource['images/minus.png']}") !important;
-}
-
-.clearButton {
-	background-image: url("#{resource['images/clear.png']}") !important;
-}
-
-.editButton {
-	background-image: url("#{resource['images/edit.png']}") !important;
-}
-
-.playButton {
-	background-image: url("#{resource['images/play.png']}") !important;
-}
-
-.stopButton {
-	background-image: url("#{resource['images/stop.png']}") !important;
-}
-
-.topButton {
-	background-image: url("#{resource['images/top.png']}") !important;
-}
-
-.chartButton {
-	background-image: url("#{resource['images/chart.png']}") !important;
-}
-
-.listButton {
-	background-image: url("#{resource['images/list.png']}") !important;
 }
 
 .menuButton {
