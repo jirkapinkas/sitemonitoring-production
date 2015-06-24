@@ -224,8 +224,8 @@
 						<h:panelGroup styleClass="fa fa-question-circle" rendered="#{checkResultsController.lastResults[check.id].success eq null}"></h:panelGroup>
 						<br />
 						<h:outputText value="#{checkResultsController.lastResults[check.id].dateInterval}" />
-						<br />
 						<h:panelGroup styleClass="content" rendered="#{checkResultsController.lastResults[check.id].success eq false}">
+							<br />
 							error message: 
 							<h:outputText value="#{checkResultsController.lastResults[check.id].result}" escape="false" />
 						</h:panelGroup>
