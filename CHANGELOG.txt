@@ -1,5 +1,8 @@
 TODO: version 2.2.0
 
+24.6.2015: version 2.1.12
++ more icons
+
 23.6.2015: version 2.1.11
 + nicer icons
 
