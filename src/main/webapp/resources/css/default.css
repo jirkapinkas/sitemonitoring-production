@@ -127,3 +127,20 @@
 .ui-accordion-content {
 	background-color: #eeeeee;
 }
+
+.mandrillappButton {
+	background-image: url("#{resource['images/mandrillapp.png']}") !important;
+	height:41px;width:52px;
+}
+
+.gmailButton {
+	background-image: url("#{resource['images/gmail.png']}") !important;
+	height:41px;width:52px;
+}
+
+
+.homeButton {
+	background-image: url("#{resource['images/home.png']}") !important;
+	height:41px;width:52px;
+}
+

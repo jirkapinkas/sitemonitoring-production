@@ -223,11 +223,7 @@
 						<h:panelGroup styleClass="fa fa-check fa-green" rendered="#{checkResultsController.lastResults[check.id].success eq true}"></h:panelGroup>
 						<h:panelGroup styleClass="fa fa-question-circle" rendered="#{checkResultsController.lastResults[check.id].success eq null}"></h:panelGroup>
 						<br />
-						started:
-						<h:outputText value="#{checkResultsController.lastResults[check.id].startDate}" style="padding-left:5px" />
-	 					<br />
-	 					finished:
-						<h:outputText value="#{checkResultsController.lastResults[check.id].finishDate}" style="padding-left:5px" />
+						<h:outputText value="#{checkResultsController.lastResults[check.id].dateInterval}" />
 						<br />
 						<h:panelGroup styleClass="content" rendered="#{checkResultsController.lastResults[check.id].success eq false}">
 							error message: 

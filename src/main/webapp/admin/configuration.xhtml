@@ -55,15 +55,10 @@
 
 					<h:outputText value="" />
 					<p:panelGrid>
-						<h3>load defaults for:</h3>
-						<p:commandButton value="localhost" action="#{configurationController.loadDefaultsLocalhost()}" update=":formConfiguration" />
-						<br />
-						<br />
-						<p:commandButton value="mandrillapp" action="#{configurationController.loadDefaultsMandrillapp()}" update=":formConfiguration" />
-						<br />
-						<br />
-						<p:commandButton value="gmail" action="#{configurationController.loadDefaultsGmail()}" update=":formConfiguration" />
-						<br />
+						<strong>load defaults for:</strong><br />
+						<p:commandButton title="localhost" value="" styleClass="homeButton" action="#{configurationController.loadDefaultsLocalhost()}" update=":formConfiguration" />
+						<p:commandButton title="mandrillapp" value="" styleClass="mandrillappButton" action="#{configurationController.loadDefaultsMandrillapp()}" update=":formConfiguration" />
+						<p:commandButton title="gmail" value="" styleClass="gmailButton" action="#{configurationController.loadDefaultsGmail()}" update=":formConfiguration" />
 						<br />
 					</p:panelGrid>
 					<h:outputText value="" />
@@ -92,7 +87,7 @@
 					<p:inputTextarea value="#{configurationController.configuration.emailBody}" style="width:95%" />
 					<h:outputText value="Email body template, special values: {CHECK-NAME}, {CHECK-URL}, {ERROR}" />
 
-					test:
+					<h:outputText value="" />
 					<p:commandButton 
 						value="test" 
 						action="#{configurationController.testSendEmails(emailFrom.value, adminEmail.value, emailServerHost.value, emailServerPort.value, emailServerUsername.value, emailServerPassword.value)}" 
