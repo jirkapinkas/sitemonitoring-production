@@ -52,7 +52,7 @@ public class Check implements Serializable {
 	}
 
 	public enum IntervalType {
-		MINUTE, HOUR, DAY, MONTH
+		SECOND, MINUTE, HOUR, DAY, MONTH
 	}
 
 	public enum HttpMethod {

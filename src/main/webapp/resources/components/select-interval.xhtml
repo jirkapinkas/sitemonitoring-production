@@ -1,0 +1,23 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+
+<composite:interface>
+	<composite:attribute name="attribute" />
+</composite:interface>
+
+<composite:implementation>
+	<p:selectOneMenu value="#{cc.attrs.attribute}"
+			required="true">
+			<f:selectItem itemLabel="seconds" itemValue="SECOND" />
+			<f:selectItem itemLabel="minutes" itemValue="MINUTE" />
+			<f:selectItem itemLabel="hours" itemValue="HOUR" />
+			<f:selectItem itemLabel="days" itemValue="DAY" />
+			<f:selectItem itemLabel="months" itemValue="MONTH" />
+	</p:selectOneMenu>
+</composite:implementation>
+
+</html>

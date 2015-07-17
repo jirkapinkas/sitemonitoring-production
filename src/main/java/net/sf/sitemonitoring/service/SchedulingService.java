@@ -65,6 +65,9 @@ public class SchedulingService {
 				if (startCheck) {
 					Calendar calendar = new GregorianCalendar();
 					switch (check.getScheduledIntervalType()) {
+					case SECOND:
+						calendar.add(Calendar.SECOND, check.getScheduledInterval());
+						break;
 					case MINUTE:
 						calendar.add(Calendar.MINUTE, check.getScheduledInterval());
 						break;
@@ -77,6 +80,8 @@ public class SchedulingService {
 					case MONTH:
 						calendar.add(Calendar.MONTH, check.getScheduledInterval());
 						break;
+					default:
+						throw new UnsupportedOperationException("Unknown scheduled interval type");
 					}
 					monitoringService.startCheck(check, calendar.getTime());
 				}
@@ -89,13 +94,16 @@ public class SchedulingService {
 	 * Each hour delete old statistics
 	 * 
 	 */
-	@Scheduled(fixedDelay = 3600000)
+	@Scheduled(fixedDelay = 5000)
 	public void deleteHistoricData() {
 		log.debug("start delete historic data");
 		List<Check> checks = checkService.findAll();
 		for (Check check : checks) {
 			GregorianCalendar calendar = new GregorianCalendar();
 			switch (check.getKeepResultType()) {
+			case MONTH:
+				calendar.add(Calendar.MONTH, -check.getKeepResultsValue());
+				break;
 			case DAY:
 				calendar.add(Calendar.DATE, -check.getKeepResultsValue());
 				break;
@@ -105,8 +113,8 @@ public class SchedulingService {
 			case MINUTE:
 				calendar.add(Calendar.MINUTE, -check.getKeepResultsValue());
 				break;
-			case MONTH:
-				calendar.add(Calendar.MONTH, -check.getKeepResultsValue());
+			case SECOND:
+				calendar.add(Calendar.SECOND, -check.getKeepResultsValue());
 				break;
 			default:
 				throw new UnsupportedOperationException("Unknown keep results type");

@@ -1,5 +1,9 @@
 TODO: version 2.2.0
 
+17.7.2015: version 2.1.13
+> thanks Jan Reges for suggestion
++ possibility to check each few seconds
+
 24.6.2015: version 2.1.12
 + more nicer icons
 + more compact check date

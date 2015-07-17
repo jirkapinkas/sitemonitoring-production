@@ -3,7 +3,8 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:composite="http://xmlns.jcp.org/jsf/composite">
+	xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+	xmlns:components="http://xmlns.jcp.org/jsf/composite/components">
 
 <composite:interface>
 </composite:interface>
@@ -92,25 +93,13 @@
 					<p:calendar value="#{checkController.check.scheduledStartDate}" pattern="dd.MM.yyyy HH:mm" />
 					with interval
 					<p:inputText value="#{checkController.check.scheduledInterval}" style="width:60px" />
-					<p:selectOneMenu value="#{checkController.check.scheduledIntervalType}"
-							required="true">
-							<f:selectItem itemLabel="minutes" itemValue="MINUTE" />
-							<f:selectItem itemLabel="hours" itemValue="HOUR" />
-							<f:selectItem itemLabel="days" itemValue="DAY" />
-							<f:selectItem itemLabel="months" itemValue="MONTH" />
-					</p:selectOneMenu>
+					<components:select-interval attribute="#{checkController.check.scheduledIntervalType}" />
 				</h:panelGrid>
 		
 				keep results for:
 				<h:panelGrid columns="2">
 					<p:inputText value="#{checkController.check.keepResultsValue}" style="width:60px" />
-					<p:selectOneMenu value="#{checkController.check.keepResultType}"
-							required="true">
-							<f:selectItem itemLabel="minutes" itemValue="MINUTE" />
-							<f:selectItem itemLabel="hours" itemValue="HOUR" />
-							<f:selectItem itemLabel="days" itemValue="DAY" />
-							<f:selectItem itemLabel="months" itemValue="MONTH" />
-					</p:selectOneMenu>
+					<components:select-interval attribute="#{checkController.check.keepResultType}" />
 				</h:panelGrid>
 
 			</p:panelGrid>
