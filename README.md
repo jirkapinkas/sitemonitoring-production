@@ -41,4 +41,3 @@ Set database properties in <code>src/main/resources/db.properties</code>, add to
 <h2>Development (with embedded HSQL database)</h2>
 
 <p>To run in development mode: <code>mvn jetty:run -P dev</code></p>
-
