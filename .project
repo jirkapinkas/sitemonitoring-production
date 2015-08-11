@@ -45,6 +45,11 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.hibernate.eclipse.console.hibernateBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.springframework.ide.eclipse.core.springnature</nature>
@@ -57,5 +62,6 @@
 		<nature>org.jboss.tools.jst.web.kb.kbnature</nature>
 		<nature>org.jboss.tools.jsf.jsfnature</nature>
 		<nature>org.jboss.tools.cdi.core.cdinature</nature>
+		<nature>org.hibernate.eclipse.console.hibernateNature</nature>
 	</natures>
 </projectDescription>

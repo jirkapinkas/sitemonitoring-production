@@ -185,5 +185,10 @@ public class CheckResultService {
 	public void deleteResults(int checkId) {
 		checkResultRepository.deleteResults(checkId);
 	}
+	
+	public void setCheckResultRepository(
+			CheckResultRepository checkResultRepository) {
+		this.checkResultRepository = checkResultRepository;
+	}
 
 }

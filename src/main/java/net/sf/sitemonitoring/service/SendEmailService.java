@@ -130,7 +130,7 @@ public class SendEmailService {
 		}
 	}
 
-	private String replaceTemplateValues(Check check, String template, String errorText) {
+	String replaceTemplateValues(Check check, String template, String errorText) {
 		return template.replace("{CHECK-NAME}", check.getName()).replace("{CHECK-URL}", check.getUrl()).replace("{ERROR}", errorText);
 	}
 

@@ -10,11 +10,15 @@ public final class ErrorUtils {
         if (ex.getMessage() != null) {
             result.append(ex.getLocalizedMessage());
         }
-        if(ex.getCause() != null && ex.getCause().getMessage() != null) {
-            if(result.length() != 0) {
-                result.append(", ");
-            }
-            result.append(ex.getCause().getLocalizedMessage());
+        Throwable cause = ex.getCause();
+        while(cause != null) {
+	        if(cause.getMessage() != null) {
+	            if(result.length() != 0) {
+	                result.append(", ");
+	            }
+	            result.append(cause.getLocalizedMessage());
+	        }
+	        cause = cause.getCause();
         }
         return result.toString();
     }
