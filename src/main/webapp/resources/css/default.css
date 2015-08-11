@@ -7,66 +7,66 @@
 }
 
 .fa-menu {
-	padding-right:5px;
+	padding-right: 5px;
 }
 
 .dialog-single .ui-dialog-title {
-	padding-left:20px;
+	padding-left: 20px;
 }
 
 .dialog-single .ui-dialog-title:before {
-	position:absolute;
-	font-family:FontAwesome;
-	top:12px;
-	left:10px;
+	position: absolute;
+	font-family: FontAwesome;
+	top: 12px;
+	left: 10px;
 	content: "\f1dc";
 }
 
 .dialog-sitemap .ui-dialog-title {
-	padding-left:20px;
+	padding-left: 20px;
 }
 
 .dialog-sitemap .ui-dialog-title:before {
-	position:absolute;
-	font-family:FontAwesome;
-	top:12px;
-	left:10px;
+	position: absolute;
+	font-family: FontAwesome;
+	top: 12px;
+	left: 10px;
 	content: "\f0e8";
 }
 
 .dialog-spider .ui-dialog-title {
-	padding-left:20px;
+	padding-left: 20px;
 }
 
 .dialog-spider .ui-dialog-title:before {
-	position:absolute;
-	font-family:FontAwesome;
-	top:12px;
-	left:10px;
+	position: absolute;
+	font-family: FontAwesome;
+	top: 12px;
+	left: 10px;
 	content: "\f188";
 }
 
 .dialog-xml .ui-dialog-title {
-	padding-left:20px;
+	padding-left: 20px;
 }
 
 .dialog-xml .ui-dialog-title:before {
-	position:absolute;
-	font-family:FontAwesome;
-	top:12px;
-	left:10px;
+	position: absolute;
+	font-family: FontAwesome;
+	top: 12px;
+	left: 10px;
 	content: "\f121";
 }
 
 .dialog-json .ui-dialog-title {
-	padding-left:20px;
+	padding-left: 20px;
 }
 
 .dialog-json .ui-dialog-title:before {
-	position:absolute;
-	font-family:FontAwesome;
-	top:12px;
-	left:10px;
+	position: absolute;
+	font-family: FontAwesome;
+	top: 12px;
+	left: 10px;
 	content: "\f121";
 }
 
@@ -109,11 +109,11 @@
 
 .tableNoBorder tr td {
 	border: 0 !important;
-	background-color:#eeeeee;
+	background-color: #eeeeee;
 }
 
 .hide-column-names table thead tr {
-    display: none;
+	display: none;
 }
 
 .ui-datatable-empty-message {
@@ -129,18 +129,25 @@
 }
 
 .mandrillappButton {
-	background-image: url("#{resource['images/mandrillapp.png']}") !important;
-	height:41px;width:52px;
+	background-image: url("#{resource['images/mandrillapp.png']}")
+		!important;
+	height: 41px;
+	width: 52px;
 }
 
 .gmailButton {
 	background-image: url("#{resource['images/gmail.png']}") !important;
-	height:41px;width:52px;
+	height: 41px;
+	width: 52px;
 }
-
 
 .homeButton {
 	background-image: url("#{resource['images/home.png']}") !important;
-	height:41px;width:52px;
+	height: 41px;
+	width: 52px;
 }
 
+.center {
+	margin-left: auto;
+	margin-right: auto;
+}

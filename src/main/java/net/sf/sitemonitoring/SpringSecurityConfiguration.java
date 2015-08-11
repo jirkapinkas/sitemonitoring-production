@@ -23,6 +23,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().logout().logoutUrl("/logout").and().authorizeRequests().antMatchers("/admin/**").authenticated().and().formLogin().loginPage("/index.xhtml").loginProcessingUrl("/login")
-				.usernameParameter("username").passwordParameter("password").defaultSuccessUrl("/admin/checks.xhtml").and().httpBasic();
+				.usernameParameter("username").passwordParameter("password").defaultSuccessUrl("/admin/dashboard.xhtml").and().httpBasic();
 	}
 }
