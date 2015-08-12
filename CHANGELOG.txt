@@ -1,4 +1,4 @@
-TODO: version 2.2.0
+12.8.2015: version 2.2.0
 + dashboard
 + checks split to multiple pages
 
