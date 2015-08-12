@@ -21,31 +21,33 @@ public class PageController implements Serializable {
 
 	@ManagedProperty("#{pageService}")
 	private PageService pageService;
-	
+
 	@ManagedProperty("#{menubarController}")
 	private MenubarController menubarController;
 
 	private List<Page> pages;
-	
+
+	private Page page = new Page();
+
 	@PostConstruct
 	public void loadPages() {
 		pages = pageService.findAll();
 		menubarController.init();
 	}
-	
-	public void save(String pageName) {
-		if(pageName == null || pageName.trim().isEmpty()) {
+
+	public void save() {
+		if (page.getName() == null || page.getName().trim().isEmpty()) {
 			return;
 		}
-		Page page = new Page();
-		page.setName(pageName);
 		pageService.save(page);
 		loadPages();
+		page = new Page();
 	}
 
 	public void delete(int pageId) {
 		pageService.delete(pageId);
 		loadPages();
+		page = new Page();
 	}
 
 }

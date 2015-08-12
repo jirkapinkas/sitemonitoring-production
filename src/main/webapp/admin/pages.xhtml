@@ -9,10 +9,10 @@
 
 	<ui:define name="content">
 	
-		<h:form>
-			<h:outputText value="new page:" style="font-size:22px;padding-right:5px;" />
-			<p:inputText binding="#{pageName}" style="margin-right:5px;" />
-			<p:commandButton action="#{pageController.save(pageName.value)}" value="add page" update=":pagesTable, :menubarForm" />
+		<h:form id="pageForm">
+			<h:outputText value="page name:" style="font-size:22px;padding-right:5px;" />
+			<p:inputText value="#{pageController.page.name}" style="margin-right:5px;" />
+			<p:commandButton action="#{pageController.save()}" value="save" update=":pagesTable, :menubarForm, pageForm" />
 		</h:form>
 		
 		<br />
@@ -22,12 +22,13 @@
 				<p:column headerText="name">
 					<a href="checks.xhtml?page=#{page.id}">#{page.name}</a>
 				</p:column>
-				<p:column headerText="checks">
+				<p:column headerText="number of checks">
 					#{page.checks.size()}
 				</p:column>
 				<p:column headerText="operations">
-					<p:commandButton value="delete" update="pagesTable, :menubarForm" action="#{pageController.delete(page.id)}">
-						<p:confirm header="Confirmation" message="Really delete?" icon="ui-icon-alert"/>
+					<p:commandButton icon="fa fa-wrench" update=":pageForm" action="#{pageController.setPage(page)}" />
+					<p:commandButton icon="fa fa-trash" update="pagesTable, :menubarForm" action="#{pageController.delete(page.id)}">
+						<p:confirm header="Confirmation" message="Really delete? This will delete also associated checks!!!" icon="ui-icon-alert"/>
 					</p:commandButton>
 				</p:column>
 			</p:dataTable>
