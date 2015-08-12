@@ -64,6 +64,9 @@ public interface CheckRepository extends JpaRepository<Check, Integer> {
 
 	List<Check> findByPageId(Integer pageId, Sort sort);
 
+
 	List<Check> findByPageIdIsNull(Sort sort);
+
+	List<Check> findByPageIdIsNull(Integer pageId, Sort sort);
 
 }
