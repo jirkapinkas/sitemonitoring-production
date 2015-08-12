@@ -27,7 +27,7 @@ public class CheckService {
 
 	@Autowired
 	private CheckRepository checkRepository;
-	
+
 	@Autowired
 	private CredentialsRepository credentialsRepository;
 
@@ -75,8 +75,14 @@ public class CheckService {
 	public List<Check> findAll() {
 		return checkRepository.findAll(new Sort("id"));
 	}
-	
+
 	public List<Check> findByPageId(Integer pageId) {
+		if (pageId == null) {
+			return checkRepository.findByPageIdIsNull(new Sort("id"));
+		}
+		if (pageId <= 0) {
+			return checkRepository.findByPageIdIsNull(new Sort("id"));
+		}
 		return checkRepository.findByPageId(pageId, new Sort("id"));
 	}
 

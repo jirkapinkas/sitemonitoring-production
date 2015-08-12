@@ -63,4 +63,7 @@ public interface CheckRepository extends JpaRepository<Check, Integer> {
 	Integer findChartMaxMillis(int checkId);
 
 	List<Check> findByPageId(Integer pageId, Sort sort);
+
+	List<Check> findByPageIdIsNull(Sort sort);
+
 }
