@@ -77,6 +77,9 @@ public class CheckService {
 	}
 	
 	public List<Check> findByPageId(Integer pageId) {
+		if(pageId == null) {
+			return checkRepository.findByPageIdIsNull(pageId, new Sort("id"));
+		}
 		return checkRepository.findByPageId(pageId, new Sort("id"));
 	}
 
