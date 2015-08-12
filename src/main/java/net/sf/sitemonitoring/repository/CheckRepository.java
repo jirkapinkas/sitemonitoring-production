@@ -1,10 +1,12 @@
 package net.sf.sitemonitoring.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.entity.Check.IntervalType;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -59,4 +61,6 @@ public interface CheckRepository extends JpaRepository<Check, Integer> {
 
 	@Query("select c.chartMaxMillis from Check c where c.id = ?1")
 	Integer findChartMaxMillis(int checkId);
+
+	List<Check> findByPageId(Integer pageId, Sort sort);
 }

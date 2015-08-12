@@ -24,6 +24,7 @@ import net.sf.sitemonitoring.entity.Credentials;
 import net.sf.sitemonitoring.service.CheckResultService;
 import net.sf.sitemonitoring.service.CheckService;
 import net.sf.sitemonitoring.service.ConfigurationService;
+import net.sf.sitemonitoring.service.PageService;
 
 @Data
 @ManagedBean
@@ -42,12 +43,23 @@ public class CheckController implements Serializable {
 	@ManagedProperty("#{configurationService}")
 	private ConfigurationService configurationService;
 
+	@ManagedProperty("#{pageService}")
+	private PageService pageService;
+
+	@ManagedProperty("#{pageController}")
+	private PageController pageController;
+
 	private Check check;
 
 	private List<Check> checks;
 
 	@ManagedProperty("#{checkResultsController}")
 	private CheckResultsController checkResultsController;
+
+	@ManagedProperty("#{pageSelectionController}")
+	private PageSelectionController pageSelectionController;
+
+	private Integer pageId;
 
 	@PostConstruct
 	public void init() {
@@ -79,16 +91,28 @@ public class CheckController implements Serializable {
 	}
 
 	public void setCheck(Check check) {
+		if (check.getPage() != null) {
+			int checkId = -1;
+			if (check.getPage() != null) {
+				checkId = check.getPage().getId();
+			}
+			pageSelectionController.setSelectedPage(checkId);
+		}
 		this.check = check;
 	}
 
+	public void loadChecksForPage(Integer pageId) {
+		this.pageId = pageId;
+		loadChecks();
+	}
+
 	public void loadChecks() {
-		checks = checkService.findAll();
+		checks = checkService.findByPageId(pageId);
 		clearCheck();
 	}
 
 	public void updateResults() {
-		checks = checkService.findAll();
+		loadChecks();
 		checkResultsController.updateResults();
 	}
 
@@ -151,6 +175,9 @@ public class CheckController implements Serializable {
 		check.setScheduledStartDate(calendar.getTime());
 		check.setChartPeriodType(IntervalType.HOUR);
 		check.setChartPeriodValue(3);
+		if (pageId != null && pageId > 0) {
+			pageSelectionController.setSelectedPage(pageId);
+		}
 	}
 
 	public void save() {
@@ -160,6 +187,11 @@ public class CheckController implements Serializable {
 		} else {
 			check.setHttpMethod(HttpMethod.HEAD);
 		}
+		if (pageSelectionController.getSelectedPage() > -1) {
+			check.setPage(pageService.findOne(pageSelectionController.getSelectedPage()));
+		} else {
+			check.setPage(null);
+		}
 		checkService.save(check);
 		if (removeCredentialsAfterSave) {
 			checkService.removeCredentials(check.getCredentials().getId());
@@ -167,6 +199,7 @@ public class CheckController implements Serializable {
 		clearCheck();
 		checkResultsController.loadChecks();
 		updateResults();
+		pageController.loadPages();
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Check saved"));
 	}
 

@@ -1,7 +1,6 @@
 TODO: version 2.2.0
-
-TODO: version 2.1.14
-+ added dashboard
++ dashboard
++ checks split to multiple pages
 
 17.7.2015: version 2.1.13
 > thanks Jan Reges for suggestion

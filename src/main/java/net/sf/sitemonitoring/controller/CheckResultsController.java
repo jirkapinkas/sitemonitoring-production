@@ -70,9 +70,16 @@ public class CheckResultsController implements Serializable {
 	private Map<Integer, CheckResultDto> lastResults;
 
 	private List<Check> checks;
+	
+	private Integer pageId;
+
+	public void loadChecksForPage(Integer pageId) {
+		this.pageId = pageId;
+		loadChecks();
+	}
 
 	public void loadChecks() {
-		checks = checkService.findAll();
+		checks = checkService.findByPageId(pageId);
 		loadLastResults();
 	}
 

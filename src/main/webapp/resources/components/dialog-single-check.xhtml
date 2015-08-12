@@ -14,6 +14,13 @@
 			<p:messages />
 
 			<p:panelGrid columns="2" columnClasses="panelColumnSmall" id="panelGrid">
+			
+				page:
+				<h:panelGroup>
+					<p:selectOneMenu value="#{pageSelectionController.selectedPage}">
+						<f:selectItems value="#{pageSelectionController.selectOneMenuValues}" />
+					</p:selectOneMenu>
+				</h:panelGroup>
 		
 				name:
 				<p:inputText value="#{checkController.check.name}" style="width:100%"/>

@@ -75,6 +75,10 @@ public class CheckService {
 	public List<Check> findAll() {
 		return checkRepository.findAll(new Sort("id"));
 	}
+	
+	public List<Check> findByPageId(Integer pageId) {
+		return checkRepository.findByPageId(pageId, new Sort("id"));
+	}
 
 	public void updateChartInterval(int checkId, IntervalType chartIntervalType, int chartIntervalValue) {
 		checkRepository.updateChartInterval(checkId, chartIntervalType, chartIntervalValue);

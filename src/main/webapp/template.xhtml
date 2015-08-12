@@ -21,16 +21,22 @@
 
 	<div>
 		<h:form id="menubarForm">
-			<p:menubar>
-				<p:menuitem>
-					<a href="dashboard.xhtml">
-						<i class="fa fa-clock-o fa-2x" style="color:#00a8ec;margin-top:3px;"></i>
-					</a>
-				</p:menuitem>
-				<p:menuitem value="Dashboard" url="dashboard.xhtml" styleClass="customMenuItem" />
-				<p:menuitem value="Checks" url="checks.xhtml" styleClass="customMenuItem" />
-				<p:menuitem value="Configuration" url="configuration.xhtml" styleClass="customMenuItem" />
-				<p:menuitem value="Logout" url="/logout" styleClass="customMenuItem" />
+			<a href="dashboard.xhtml" style="float:left;padding-left:5px;padding-top:5px;">
+				<i class="fa fa-clock-o fa-2x" style="color:#00a8ec;margin-top:3px;"></i>
+			</a>
+			<p:menubar model="#{menubarController.menubar}" style="margin-left:50px">
+<!-- 				<p:menuitem> -->
+<!-- 					<a href="dashboard.xhtml"> -->
+<!-- 						<i class="fa fa-clock-o fa-2x" style="color:#00a8ec;margin-top:3px;"></i> -->
+<!-- 					</a> -->
+<!-- 				</p:menuitem> -->
+<!-- 				<p:menuitem value="Dashboard" url="dashboard.xhtml" styleClass="customMenuItem" /> -->
+<!-- 				<p:submenu label="Checks" styleClass="customSubMenu"> -->
+<!-- 					<p:menuitem value="Uncategorized" url="checks.xhtml" styleClass="customMenuItem" /> -->
+<!-- 				</p:submenu> -->
+<!-- 				<p:menuitem value="Pages" url="pages.xhtml" styleClass="customMenuItem" /> -->
+<!-- 				<p:menuitem value="Configuration" url="configuration.xhtml" styleClass="customMenuItem" /> -->
+<!-- 				<p:menuitem value="Logout" url="/logout" styleClass="customMenuItem" /> -->
 			</p:menubar>
 		</h:form>
 	</div>

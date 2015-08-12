@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
@@ -213,5 +214,9 @@ public class Check implements Serializable {
 
 	@Transient
 	private String httpProxyPassword;
+
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "page_id")
+	private Page page;
 
 }

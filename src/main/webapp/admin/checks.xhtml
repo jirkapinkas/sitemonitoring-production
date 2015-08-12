@@ -11,8 +11,8 @@
 	<ui:define name="content">
 
 		<f:metadata>
-			<f:viewAction action="#{checkController.loadChecks()}" />
-			<f:viewAction action="#{checkResultsController.loadChecks()}" />
+			<f:viewAction action="#{checkController.loadChecksForPage(param.page)}" />
+			<f:viewAction action="#{checkResultsController.loadChecksForPage(param.page)}" />
 		</f:metadata>
 
 		<p:socket channel="/running" onMessage="handleCheckMessage" />

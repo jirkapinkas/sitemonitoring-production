@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition template="/template.xhtml">
+
+	<ui:param name="title" value="pages" />
+
+	<ui:define name="content">
+	
+		<h:form>
+			<h:outputText value="new page:" style="font-size:22px;padding-right:5px;" />
+			<p:inputText binding="#{pageName}" style="margin-right:5px;" />
+			<p:commandButton action="#{pageController.save(pageName.value)}" value="add page" update=":pagesTable, :menubarForm" />
+		</h:form>
+		
+		<br />
+		
+		<h:form id="pagesTable">
+			<p:dataTable value="#{pageController.pages}" var="page">
+				<p:column headerText="name">
+					<a href="checks.xhtml?page=#{page.id}">#{page.name}</a>
+				</p:column>
+				<p:column headerText="checks">
+					#{page.checks.size()}
+				</p:column>
+				<p:column headerText="operations">
+					<p:commandButton value="delete" update="pagesTable, :menubarForm" action="#{pageController.delete(page.id)}">
+						<p:confirm header="Confirmation" message="Really delete?" icon="ui-icon-alert"/>
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	
+	</ui:define>
+</ui:composition>
+</html>
