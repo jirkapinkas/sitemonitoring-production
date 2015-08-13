@@ -17,7 +17,7 @@ public class CheckResultDto {
 	private Date finishDate;
 
 	private long responseTime;
-
+	
 	public String getDateInterval() {
 		if (startDate == null && finishDate == null) {
 			return "";

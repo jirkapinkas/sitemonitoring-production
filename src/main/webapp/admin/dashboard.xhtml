@@ -2,7 +2,8 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:f="http://xmlns.jcp.org/jsf/core">
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:components="http://xmlns.jcp.org/jsf/composite/components">
 <ui:composition template="/template.xhtml">
 
 	<ui:param name="title" value="dashboard" />
@@ -13,26 +14,43 @@
 			<f:viewAction action="#{dashboardController.loadChecks()}" />
 		</f:metadata>
 
-		<div class="center" style="width:3	00px;">
+		<h1>Quick overview:</h1>
 
-			<h1>Quick overview:</h1>
-	
-			<p:panelGrid columns="2" styleClass="tableNoBorder">
-				<h:panelGroup>
-					<i class="fa fa-check fa-green" style="padding-right:5px"></i>
-					<h:outputText value="Success count:" />
-				</h:panelGroup>
-				#{dashboardController.successCount()}
-	
-				<h:panelGroup>
-					<i class="fa fa-warning fa-red" style="padding-right:5px"></i>
-					<h:outputText value="Failure count:" />
-				</h:panelGroup>
-				#{dashboardController.failureCount()}
-			</p:panelGrid>
+		<p:panelGrid columns="2" styleClass="tableNoBorder">
+			<h:panelGroup>
+				<i class="fa fa-check fa-green" style="padding-right:5px"></i>
+				<h:outputText value="Success:" />
+			</h:panelGroup>
+			#{dashboardController.successCount()}x
+
+			<h:panelGroup>
+				<i class="fa fa-warning fa-red" style="padding-right:5px"></i>
+				<h:outputText value="Failure:" />
+			</h:panelGroup>
+			#{dashboardController.failureCount()}x
+		</p:panelGrid>
 		
-		</div>
-
+		
+		<h:panelGroup rendered="#{dashboardController.failureCount() > 0}">
+			<h2>All errors:</h2>
+			
+			<p:dataTable value="#{dashboardController.checksWithResults.values()}" var="checkWithResult">
+				<p:column headerText="detail">
+					<components:check-icon checkType="#{checkWithResult.check.type}" />
+					<strong>
+						<h:panelGroup rendered="#{checkWithResult.check.page eq null}">
+							<a href="checks.xhtml">#{checkWithResult.check.name}</a>:
+						</h:panelGroup>
+						<h:panelGroup rendered="#{checkWithResult.check.page ne null}">
+							<a href="checks.xhtml?page=#{checkWithResult.check.page.id}">#{checkWithResult.check.name}</a>:
+						</h:panelGroup>
+					</strong>
+					#{checkWithResult.checkResultDto.result}
+					<br />
+				</p:column>
+			</p:dataTable>
+		</h:panelGroup>
+		
 	</ui:define>
 </ui:composition>
 </html>

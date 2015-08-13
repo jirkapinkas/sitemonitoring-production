@@ -83,10 +83,7 @@
 			<p:column style="width:250px;vertical-align:top;" styleClass="greyBackground">
 
 				<h:panelGroup style="float:left;padding-top:5px">
-					<h:panelGroup styleClass="fa fa-header" rendered="#{check.type eq 'SINGLE_PAGE'}"></h:panelGroup>
-					<h:panelGroup styleClass="fa fa-sitemap" rendered="#{check.type eq 'SITEMAP'}"></h:panelGroup>
-					<h:panelGroup styleClass="fa fa-bug" rendered="#{check.type eq 'SPIDER'}"></h:panelGroup>
-					<h:panelGroup styleClass="fa fa-code" rendered="#{check.type eq 'XML' or check.type eq 'JSON'}"></h:panelGroup>
+					<components:check-icon checkType="#{check.type}" />
 					<strong style="#{check.active eq true ? '' : 'text-decoration:line-through;'}">#{check.name}</strong>
 				</h:panelGroup>
 

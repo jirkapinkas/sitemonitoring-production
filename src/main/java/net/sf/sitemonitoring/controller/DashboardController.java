@@ -1,5 +1,6 @@
 package net.sf.sitemonitoring.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,10 +18,25 @@ import net.sf.sitemonitoring.service.CheckService;
 @ViewScoped
 @Data
 public class DashboardController {
+	
+	@Data
+	public class CheckAndCheckResultDto {
+		private Check check;
+		private CheckResultDto checkResultDto;
+		public CheckAndCheckResultDto(Check check, CheckResultDto checkResultDto) {
+			this.check = check;
+			this.checkResultDto = checkResultDto;
+		}
+	}
 
 	private Map<Integer, CheckResultDto> lastResults;
 
 	private List<Check> checks;
+	
+	/**
+	 * contains only erroneous results
+	 */
+	private Map<Integer, CheckAndCheckResultDto> checksWithResults;
 
 	@ManagedProperty("#{checkResultService}")
 	private CheckResultService checkResultService;
@@ -30,7 +46,14 @@ public class DashboardController {
 
 	public void loadChecks() {
 		checks = checkService.findAll();
+		checksWithResults = new HashMap<Integer, CheckAndCheckResultDto>();
 		lastResults = checkResultService.getLastResults(checks);
+		for (Check check : checks) {
+			CheckResultDto lastResult = lastResults.get(check.getId());
+			if(lastResult.getSuccess() != null && lastResult.getSuccess() == false) {
+				checksWithResults.put(check.getId(), new CheckAndCheckResultDto(check, lastResult));
+			}
+		}
 	}
 
 	public int successCount() {
@@ -52,5 +75,5 @@ public class DashboardController {
 		}
 		return result;
 	}
-
+	
 }
