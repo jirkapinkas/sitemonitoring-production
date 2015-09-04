@@ -166,6 +166,9 @@ public class Check implements Serializable {
 
 	@Column(name = "last_sent_email", updatable = false)
 	private Date lastSentEmail;
+	
+	@Column(name="follow_outbound_broken_links")
+	private Boolean followOutboundBrokenLinks;
 
 	// TODO Change to FetchType.LAZY
 	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })

@@ -95,7 +95,8 @@ public class SitemapCheckThread extends AbstractCheckThread {
 			singleCheck.setUrl(url.getLoc());
 			singleCheck.setDoNotFollowUrls(sitemapCheck.getDoNotFollowUrls());
 			singleCheck.setCheckBrokenLinks(sitemapCheck.isCheckBrokenLinks());
-			if (sitemapCheck.getCondition() != null && !sitemapCheck.getCondition().isEmpty()) {
+			singleCheck.setFollowOutboundBrokenLinks(sitemapCheck.getFollowOutboundBrokenLinks());
+			if ((sitemapCheck.getCondition() != null && !sitemapCheck.getCondition().isEmpty()) || check.isCheckBrokenLinks()) {
 				singleCheck.setHttpMethod(HttpMethod.GET);
 			} else {
 				singleCheck.setHttpMethod(HttpMethod.HEAD);

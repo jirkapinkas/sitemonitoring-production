@@ -182,7 +182,7 @@ public class CheckController implements Serializable {
 
 	public void save() {
 		log.debug("save check: " + check.getType());
-		if (check.getCondition() != null && !check.getCondition().isEmpty()) {
+		if ((check.getCondition() != null && !check.getCondition().isEmpty()) || check.isCheckBrokenLinks()) {
 			check.setHttpMethod(HttpMethod.GET);
 		} else {
 			check.setHttpMethod(HttpMethod.HEAD);

@@ -34,14 +34,14 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 		log.debug("start perform check");
 		CloseableHttpResponse httpResponse = null;
 		try {
-			if(check.getHttpMethod() == HttpMethod.HEAD) {
+			if (check.getHttpMethod() == HttpMethod.HEAD) {
 				httpResponse = doHead(check.getUrl());
 				if (httpResponse == null) {
 					return;
 				} else {
 					checkStatusCode(httpResponse, check.getUrl());
 				}
-			} else if(check.getHttpMethod() == HttpMethod.GET) {
+			} else if (check.getHttpMethod() == HttpMethod.GET) {
 				httpResponse = doGet(check.getUrl());
 				if (httpResponse == null) {
 					return;
@@ -81,19 +81,27 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 							String url = element.absUrl("href").trim();
 
 							if (!url.isEmpty() && !url.startsWith("mailto:") && !SinglePageCheckService.ignoreUrl(url, check.getDoNotFollowUrls())) {
-								Check subCheck = new Check();
-								copyConnectionSettings(check, subCheck);
-								subCheck.setId(check.getId());
-								subCheck.setUrl(url);
-								subCheck.setType(CheckType.SINGLE_PAGE);
-								subCheck.setCheckBrokenLinks(check.isCheckBrokenLinks());
-								subCheck.setHttpMethod(HttpMethod.HEAD);
-								SinglePageCheckThread checkThread = new SinglePageCheckThread(subCheck, visitedPagesGet, visitedPagesHead);
-								log.debug("check sub-link: " + subCheck.getUrl());
-								checkThread.start();
-								checkThread.join();
-								if (checkThread.getOutput() != null && !checkThread.getOutput().trim().isEmpty()) {
-									appendMessage(check.getUrl() + " has error: " + checkThread.getOutput() + "<br />");
+								boolean skip = false;
+								if (check.getFollowOutboundBrokenLinks() != null && check.getFollowOutboundBrokenLinks() == false) {
+									if (!SinglePageCheckService.isSameDomain(url, check.getUrl())) {
+										skip = true;
+									}
+								}
+								if (!skip) {
+									Check subCheck = new Check();
+									copyConnectionSettings(check, subCheck);
+									subCheck.setId(check.getId());
+									subCheck.setUrl(url);
+									subCheck.setType(CheckType.SINGLE_PAGE);
+									subCheck.setCheckBrokenLinks(check.isCheckBrokenLinks());
+									subCheck.setHttpMethod(HttpMethod.HEAD);
+									SinglePageCheckThread checkThread = new SinglePageCheckThread(subCheck, visitedPagesGet, visitedPagesHead);
+									log.debug("check sub-link: " + subCheck.getUrl());
+									checkThread.start();
+									checkThread.join();
+									if (checkThread.getOutput() != null && !checkThread.getOutput().trim().isEmpty()) {
+										appendMessage(check.getUrl() + " has error: " + checkThread.getOutput() + "<br />");
+									}
 								}
 							}
 						}

@@ -70,7 +70,7 @@ public class MonitoringService {
 		check.setHttpProxyPort(configuration.getHttpProxyPort());
 		check.setHttpProxyUsername(configuration.getHttpProxyUsername());
 		check.setHttpProxyPassword(configuration.getHttpProxyPassword());
-		
+
 		switch (check.getType()) {
 		case SINGLE_PAGE:
 			checkResultText = singleCheckService.performCheck(check);

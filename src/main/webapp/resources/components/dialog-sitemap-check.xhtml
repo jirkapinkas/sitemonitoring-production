@@ -70,7 +70,7 @@
 				
 				<h:outputText value="check broken links on your pages:" escape="false" />
 				<p:selectBooleanCheckbox value="#{checkController.check.checkBrokenLinks}">
-					<p:ajax event="change" update="checkBrokenText, checkBrokenValue" />
+					<p:ajax event="change" update="checkBrokenText, checkBrokenValue, followOutboundBrokenLinksText, followOutboundBrokenLinksValue" />
 				</p:selectBooleanCheckbox>
 		
 				<h:panelGroup id="checkBrokenText">
@@ -79,7 +79,14 @@
 				<h:panelGroup id="checkBrokenValue">
 					<p:inputTextarea value="#{checkController.check.doNotFollowUrls}" style="width:100%" rendered="#{checkController.check.checkBrokenLinks eq true}" />
 				</h:panelGroup>
-				
+
+				<h:panelGroup id="followOutboundBrokenLinksText">
+					<h:outputText value="follow outbound broken links:" escape="false" rendered="#{checkController.check.checkBrokenLinks eq true}" />
+				</h:panelGroup>
+				<h:panelGroup id="followOutboundBrokenLinksValue">
+					<p:selectBooleanCheckbox value="#{checkController.check.followOutboundBrokenLinks}" style="width:100%" rendered="#{checkController.check.checkBrokenLinks eq true}" />
+				</h:panelGroup>
+
 				timeouts (in milliseconds):
 				<h:panelGrid columns="2">
 					<h:panelGrid columns="3">
