@@ -25,12 +25,20 @@ import org.apache.http.util.EntityUtils;
 @Slf4j
 public class SitemapCheckThread extends AbstractCheckThread {
 
-	private JAXBContext jaxbContext;
+	private static JAXBContext jaxbContextSitemap;
+
+	static {
+		try {
+			jaxbContextSitemap = JAXBContext.newInstance(Urlset.class, Url.class);
+		} catch (JAXBException e) {
+			log.error("Cannot create instance of Urlset JAXBContext", e);
+		}
+	}
+
 	private SinglePageCheckService singlePageCheckService;
 
-	public SitemapCheckThread(JAXBContext jaxbContext, SinglePageCheckService singlePageCheckService, Check check) {
+	public SitemapCheckThread(SinglePageCheckService singlePageCheckService, Check check) {
 		super(check);
-		this.jaxbContext = jaxbContext;
 		this.singlePageCheckService = singlePageCheckService;
 	}
 
@@ -60,7 +68,7 @@ public class SitemapCheckThread extends AbstractCheckThread {
 		InputStream inputStream = null;
 		try {
 			inputStream = IOUtils.toInputStream(sitemapXml, "UTF-8");
-			return (Urlset) jaxbContext.createUnmarshaller().unmarshal(inputStream);
+			return (Urlset) jaxbContextSitemap.createUnmarshaller().unmarshal(inputStream);
 		} catch (JAXBException e) {
 			throw new JAXBException("Error reading sitemap", e);
 		} catch (IOException e) {

@@ -8,12 +8,10 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.entity.Check.CheckCondition;
-import net.sf.sitemonitoring.jaxb.sitemap.Url;
 import net.sf.sitemonitoring.jaxb.sitemap.Urlset;
 
 import org.apache.commons.io.FileUtils;
@@ -45,7 +43,7 @@ public class SitemapCheckServiceTest {
 		visitedPagesHead = new HashMap<URI, Object>();
 		SinglePageCheckService singlePageCheckService = new SinglePageCheckService();
 		singlePageCheckService.setEventBus(new EventBus());
-		sitemapCheckThread = new SitemapCheckThread(JAXBContext.newInstance(Urlset.class, Url.class), singlePageCheckService, null);
+		sitemapCheckThread = new SitemapCheckThread(singlePageCheckService, null);
 	}
 
 	@Test

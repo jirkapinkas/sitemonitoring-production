@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
 import net.sf.sitemonitoring.entity.Check;
@@ -14,8 +13,6 @@ import net.sf.sitemonitoring.entity.Check.CheckCondition;
 import net.sf.sitemonitoring.entity.Check.CheckType;
 import net.sf.sitemonitoring.entity.Check.HttpMethod;
 import net.sf.sitemonitoring.entity.Credentials;
-import net.sf.sitemonitoring.jaxb.sitemap.Url;
-import net.sf.sitemonitoring.jaxb.sitemap.Urlset;
 import net.sf.sitemonitoring.service.check.util.JettyServerUtil;
 import net.sf.sitemonitoring.service.check.util.ProxyServerUtil;
 
@@ -74,7 +71,7 @@ public class HttpCheckServiceTest {
 	public void before() throws JAXBException {
 		singlePageCheckService = new SinglePageCheckService();
 		singlePageCheckService.setEventBus(new EventBus());
-		sitemapCheckThread = new SitemapCheckThread(JAXBContext.newInstance(Urlset.class, Url.class), singlePageCheckService, null);
+		sitemapCheckThread = new SitemapCheckThread(singlePageCheckService, null);
 		// created in AbstractCheckThread.run(), that's why I have to create it
 		// here.
 		sitemapCheckThread.httpClient = HttpClients.createDefault();
