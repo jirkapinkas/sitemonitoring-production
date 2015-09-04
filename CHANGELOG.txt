@@ -1,3 +1,8 @@
+04.9.2015: version 2.2.2
++ enhanced broken links functionality in HTTP and Sitemap check:
+   now user can select if the check will follow outbound broken links
++ also now check broken links functionality doesn't require filled condition
+
 13.8.2015: version 2.2.1
 + enhanced dashboard, now contains list of errors
 
