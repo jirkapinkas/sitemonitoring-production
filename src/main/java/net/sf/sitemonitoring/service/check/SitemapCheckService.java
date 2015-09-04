@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class SitemapCheckService extends AbstractCheckService {
 
-
 	@Autowired
 	private SinglePageCheckService singlePageCheckService;
 
