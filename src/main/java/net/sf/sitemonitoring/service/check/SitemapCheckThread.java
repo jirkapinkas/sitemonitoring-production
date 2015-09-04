@@ -14,6 +14,8 @@ import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.entity.Check.HttpMethod;
 import net.sf.sitemonitoring.jaxb.sitemap.Url;
 import net.sf.sitemonitoring.jaxb.sitemap.Urlset;
+import net.sf.sitemonitoring.jaxb.sitemapindex.Sitemap;
+import net.sf.sitemonitoring.jaxb.sitemapindex.Sitemapindex;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
@@ -27,11 +29,18 @@ public class SitemapCheckThread extends AbstractCheckThread {
 
 	private static JAXBContext jaxbContextSitemap;
 
+	private static JAXBContext jaxbContextSitemapIndex;
+
 	static {
 		try {
 			jaxbContextSitemap = JAXBContext.newInstance(Urlset.class, Url.class);
 		} catch (JAXBException e) {
-			log.error("Cannot create instance of Urlset JAXBContext", e);
+			log.error("Cannot create an instance of Urlset JAXBContext", e);
+		}
+		try {
+			jaxbContextSitemapIndex = JAXBContext.newInstance(Sitemapindex.class, Sitemap.class);
+		} catch (JAXBException e) {
+			log.error("Cannot create an instance of Sitemapindex JAXBContext", e);
 		}
 	}
 
@@ -73,6 +82,26 @@ public class SitemapCheckThread extends AbstractCheckThread {
 			throw new JAXBException("Error reading sitemap", e);
 		} catch (IOException e) {
 			throw new JAXBException("Cannot convert sitemap using UTF-8", e);
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					log.error("Error closing input stream", e);
+				}
+			}
+		}
+	}
+
+	protected Sitemapindex readSitemapIndex(String sitemapIndexXml) throws JAXBException {
+		InputStream inputStream = null;
+		try {
+			inputStream = IOUtils.toInputStream(sitemapIndexXml, "UTF-8");
+			return (Sitemapindex) jaxbContextSitemapIndex.createUnmarshaller().unmarshal(inputStream);
+		} catch (JAXBException e) {
+			throw new JAXBException("Error reading sitemap index", e);
+		} catch (IOException e) {
+			throw new JAXBException("Cannot convert sitemap index using UTF-8", e);
 		} finally {
 			if (inputStream != null) {
 				try {
@@ -128,9 +157,29 @@ public class SitemapCheckThread extends AbstractCheckThread {
 		log.debug("sitemap performCheck() start");
 		try {
 			String sitemapXml = downloadSitemap(httpClient, check.getUrl());
-			Urlset urlset = readSitemap(sitemapXml);
-			log.debug("sitemap contains " + urlset.getUrls().size() + " urls");
-			output = check(urlset, check, visitedPagesGet, visitedPagesHead);
+			if(sitemapXml.indexOf("</sitemapindex>") != -1) {
+				// it's sitemapindex
+				Sitemapindex sitemapindex = readSitemapIndex(sitemapXml);
+				log.debug("sitemap index contains " + sitemapindex.getSitemaps().size() + " sitemaps");
+				StringBuilder outputStringBuilder = new StringBuilder();
+				for (Sitemap sitemap : sitemapindex.getSitemaps()) {
+					String realSitemapXml = downloadSitemap(httpClient, sitemap.getLoc());
+					Urlset urlset = readSitemap(realSitemapXml);
+					log.debug("sitemap contains " + urlset.getUrls().size() + " urls");
+					String realSitemapOutput = check(urlset, check, visitedPagesGet, visitedPagesHead);
+					if(realSitemapOutput != null) {
+						outputStringBuilder.append(realSitemapOutput);
+					}
+				}
+				if(!outputStringBuilder.toString().trim().isEmpty()) {
+					output = outputStringBuilder.toString();
+				}
+			} else {
+				// it's sitemap
+				Urlset urlset = readSitemap(sitemapXml);
+				log.debug("sitemap contains " + urlset.getUrls().size() + " urls");
+				output = check(urlset, check, visitedPagesGet, visitedPagesHead);
+			}
 		} catch (JAXBException e) {
 			log.error("JAXB exception", e);
 			output = "Invalid sitemap: " + check.getUrl();

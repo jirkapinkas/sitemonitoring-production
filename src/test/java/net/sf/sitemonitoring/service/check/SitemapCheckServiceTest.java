@@ -13,6 +13,7 @@ import javax.xml.bind.JAXBException;
 import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.entity.Check.CheckCondition;
 import net.sf.sitemonitoring.jaxb.sitemap.Urlset;
+import net.sf.sitemonitoring.jaxb.sitemapindex.Sitemapindex;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -52,6 +53,14 @@ public class SitemapCheckServiceTest {
 		Urlset urlset = sitemapCheckThread.readSitemap(sitemapXml);
 		assertEquals(2, urlset.getUrls().size());
 		assertEquals("http://www.sqlvids.com/", urlset.getUrls().get(0).getLoc());
+	}
+
+	@Test
+	public void testConvertSitemapIndex() throws Exception {
+		String sitemapIndexXml = FileUtils.readFileToString(new File("src/test/resources/sitemap-index.xml"));
+		Sitemapindex sitemapindex = sitemapCheckThread.readSitemapIndex(sitemapIndexXml);
+		assertEquals(2, sitemapindex.getSitemaps().size());
+		assertEquals("http://localhost:8081/local-sitemap.xml", sitemapindex.getSitemaps().get(0).getLoc());
 	}
 
 	@Test(expected = JAXBException.class)
