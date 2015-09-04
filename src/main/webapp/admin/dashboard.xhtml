@@ -34,8 +34,8 @@
 		<h:panelGroup rendered="#{dashboardController.failureCount() > 0}">
 			<h2>All errors:</h2>
 			
-			<p:dataTable value="#{dashboardController.checksWithResults.values()}" var="checkWithResult">
-				<p:column headerText="detail">
+			<p:dataTable value="#{dashboardController.checksWithResults.values()}" var="checkWithResult" styleClass="hide-column-names">
+				<p:column styleClass="greyBackground">
 					<components:check-icon checkType="#{checkWithResult.check.type}" />
 					<strong>
 						<h:panelGroup rendered="#{checkWithResult.check.page eq null}">
