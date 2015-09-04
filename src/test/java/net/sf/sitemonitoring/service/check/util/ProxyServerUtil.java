@@ -11,7 +11,7 @@ public final class ProxyServerUtil {
 
 	public static HttpProxyServer start() {
 		System.out.println("*** STARTED TEST PROXY SERVER ***");
-		HttpProxyServer proxyServer = DefaultHttpProxyServer.bootstrap().withPort(8082).withProxyAuthenticator(new ProxyAuthenticator() {
+		HttpProxyServer proxyServer = DefaultHttpProxyServer.bootstrap().withPort(8089).withProxyAuthenticator(new ProxyAuthenticator() {
 			@Override
 			public boolean authenticate(String username, String password) {
 				return username.equals("test") && password.equals("works");

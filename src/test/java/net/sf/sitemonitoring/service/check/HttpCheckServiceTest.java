@@ -102,6 +102,23 @@ public class HttpCheckServiceTest {
 	}
 
 	@Test
+	public void testPerformCheckSinglePageWeirdBrokenLink() throws Exception {
+		Check check = new Check();
+		check.setCondition("</html>");
+		check.setReturnHttpCode(200);
+		check.setType(CheckType.SINGLE_PAGE);
+		check.setConditionType(CheckCondition.CONTAINS);
+		check.setUrl(TEST_JETTY_HTTP + "contains-weird-broken-link.html");
+		check.setCheckBrokenLinks(true);
+		check.setSocketTimeout(timeout);
+		check.setConnectionTimeout(timeout);
+		check.setHttpMethod(HttpMethod.GET);
+
+		assertEquals("http://localhost:8081/contains-weird-broken-link.html has error: java.net.URISyntaxException: Illegal character in fragment at index 19: http://github.com/#{github}",
+				singlePageCheckService.performCheck(check));
+	}
+
+	@Test
 	public void testPerformCheckSinglePageContainsWithProxy() throws Exception {
 		Check check = new Check();
 		check.setCondition("</html>");
@@ -113,7 +130,7 @@ public class HttpCheckServiceTest {
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
 		check.setHttpProxyServer("localhost");
-		check.setHttpProxyPort(8082);
+		check.setHttpProxyPort(8089);
 		check.setHttpProxyUsername("test");
 		check.setHttpProxyPassword("works");
 		check.setHttpMethod(HttpMethod.GET);
@@ -213,7 +230,7 @@ public class HttpCheckServiceTest {
 		check.setConnectionTimeout(timeout);
 		check.setHttpMethod(HttpMethod.HEAD);
 
-		assertEquals("Incorrect URL: http://", singlePageCheckService.performCheck(check));
+		assertEquals("http:// has error: incorrect URL: http://", singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -350,7 +367,7 @@ public class HttpCheckServiceTest {
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
 		assertEquals(
-				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: Error downloading: http://www.doesntexist93283893289292947987498.com/<br /><br />",
+				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: http://www.doesntexist93283893289292947987498.com/ has error: error downloading: http://www.doesntexist93283893289292947987498.com/<br /><br />",
 				sitemapCheckThread.output);
 	}
 
@@ -431,7 +448,7 @@ public class HttpCheckServiceTest {
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
 		check.setHttpProxyServer("localhost");
-		check.setHttpProxyPort(8082);
+		check.setHttpProxyPort(8089);
 		check.setHttpProxyUsername("test");
 		check.setHttpProxyPassword("works");
 		check.setHttpMethod(HttpMethod.GET);

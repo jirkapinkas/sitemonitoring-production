@@ -112,19 +112,19 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 			}
 			log.debug("check successful");
 		} catch (IllegalArgumentException ex) {
-			output = "Incorrect URL: " + check.getUrl();
+			output = check.getUrl() + " has error: incorrect URL: " + check.getUrl();
 			log.debug(output, ex);
 		} catch (ConnectTimeoutException ex) {
-			output = "Connect timeout: " + check.getUrl();
+			output = check.getUrl() + " has error: connect timeout: " + check.getUrl();
 			log.debug(output, ex);
 		} catch (SocketTimeoutException ex) {
-			output = "Socket timeout: " + check.getUrl();
+			output = check.getUrl() + " has error: socket timeout: " + check.getUrl();
 			log.debug(output, ex);
 		} catch (IOException ex) {
-			output = "Error downloading: " + check.getUrl();
+			output = check.getUrl() + " has error: error downloading: " + check.getUrl();
 			log.debug(output, ex);
 		} catch (Exception ex) {
-			output = "Error: " + ex.getMessage();
+			output = check.getUrl() + " has error: " + ex.getMessage();
 			log.debug(output, ex);
 		} finally {
 			if (httpResponse != null) {
