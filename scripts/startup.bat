@@ -1,1 +1,1 @@
-java -jar sitemonitoring.jar --port=8081 --dbport=9001
+java -jar -Xmx512m sitemonitoring.jar --port=8081 --dbport=9001
