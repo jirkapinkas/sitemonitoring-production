@@ -2,6 +2,8 @@
 + enhanced broken links functionality in HTTP and Sitemap check:
    now user can select if the check will follow outbound broken links
 + also now check broken links functionality doesn't require filled condition
++ added support for testing sitemapindex (part of existing sitemap check): 
+   http://www.sitemaps.org/protocol.html#index
 
 13.8.2015: version 2.2.1
 + enhanced dashboard, now contains list of errors
