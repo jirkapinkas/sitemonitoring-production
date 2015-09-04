@@ -47,7 +47,7 @@ public class HttpCheckServiceTest {
 	private SpiderCheckThread spiderCheckThread;
 
 	private static Server jettyServer;
-	
+
 	private static HttpProxyServer httpProxyServer;
 
 	public static final String TEST_JETTY_HTTP = "http://localhost:8081/";
@@ -59,7 +59,7 @@ public class HttpCheckServiceTest {
 		jettyServer = JettyServerUtil.start();
 		httpProxyServer = ProxyServerUtil.start();
 	}
-	
+
 	public static void main(String[] args) throws Exception {
 		JettyServerUtil.start();
 	}
@@ -296,7 +296,8 @@ public class HttpCheckServiceTest {
 
 	}
 
-	// TODO Somehow this doesn't show the same error on Ubuntu. I must investigate more why the test differs.
+	// TODO Somehow this doesn't show the same error on Ubuntu. I must
+	// investigate more why the test differs.
 	@Ignore
 	@Test
 	public void testSpiderWithBrokenLinks() {
@@ -347,11 +348,56 @@ public class HttpCheckServiceTest {
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
 		check.setHttpMethod(HttpMethod.GET);
+		check.setFollowOutboundBrokenLinks(true);
 
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
 		assertEquals(
 				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: Error downloading: http://www.doesntexist93283893289292947987498.com/<br /><br />",
+				sitemapCheckThread.output);
+	}
+
+	@Test
+	public void testPerformCheckSitemapWithErrorsAndBrokenLinksDoNotFollowOutboundUnspecified() throws Exception {
+		Check check = new Check();
+		check.setType(CheckType.SITEMAP);
+		check.setReturnHttpCode(200);
+		check.setConditionType(CheckCondition.CONTAINS);
+		check.setCondition("</html>");
+		check.setExcludedUrls("*pdf");
+		check.setUrl(TEST_JETTY_HTTP + "local-sitemap-with-errors.xml");
+		check.setCheckBrokenLinks(true);
+		check.setSocketTimeout(timeout);
+		check.setConnectionTimeout(timeout);
+		check.setHttpMethod(HttpMethod.GET);
+		check.setFollowOutboundBrokenLinks(null);
+
+		sitemapCheckThread.check = check;
+		sitemapCheckThread.performCheck();
+		assertEquals(
+				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br /><br />",
+				sitemapCheckThread.output);
+	}
+
+	@Test
+	public void testPerformCheckSitemapWithErrorsAndBrokenLinksDoNotFollowOutboundFalse() throws Exception {
+		Check check = new Check();
+		check.setType(CheckType.SITEMAP);
+		check.setReturnHttpCode(200);
+		check.setConditionType(CheckCondition.CONTAINS);
+		check.setCondition("</html>");
+		check.setExcludedUrls("*pdf");
+		check.setUrl(TEST_JETTY_HTTP + "local-sitemap-with-errors.xml");
+		check.setCheckBrokenLinks(true);
+		check.setSocketTimeout(timeout);
+		check.setConnectionTimeout(timeout);
+		check.setHttpMethod(HttpMethod.GET);
+		check.setFollowOutboundBrokenLinks(false);
+
+		sitemapCheckThread.check = check;
+		sitemapCheckThread.performCheck();
+		assertEquals(
+				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br /><br />",
 				sitemapCheckThread.output);
 	}
 
@@ -367,7 +413,7 @@ public class HttpCheckServiceTest {
 		check.setSocketTimeout(timeout);
 		check.setConnectionTimeout(timeout);
 		check.setHttpMethod(HttpMethod.GET);
-		
+
 		Credentials credentials = new Credentials();
 		credentials.setUsername("admin");
 		credentials.setPassword("admin");
@@ -375,7 +421,6 @@ public class HttpCheckServiceTest {
 
 		assertNull(singlePageCheckService.performCheck(check));
 	}
-
 
 	@Test
 	public void testSingleCheckBasicAuthenticationWithProxy() throws Exception {
@@ -401,6 +446,5 @@ public class HttpCheckServiceTest {
 
 		assertNull(singlePageCheckService.performCheck(check));
 	}
-
 
 }

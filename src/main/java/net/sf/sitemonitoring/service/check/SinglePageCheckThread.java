@@ -82,7 +82,7 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 
 							if (!url.isEmpty() && !url.startsWith("mailto:") && !SinglePageCheckService.ignoreUrl(url, check.getDoNotFollowUrls())) {
 								boolean skip = false;
-								if (check.getFollowOutboundBrokenLinks() != null && check.getFollowOutboundBrokenLinks() == false) {
+								if (check.getFollowOutboundBrokenLinks() == null || check.getFollowOutboundBrokenLinks() == false) {
 									if (!SinglePageCheckService.isSameDomain(url, check.getUrl())) {
 										skip = true;
 									}
