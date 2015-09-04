@@ -45,12 +45,12 @@
 							<a href="checks.xhtml?page=#{checkWithResult.check.page.id}">#{checkWithResult.check.name}</a>:
 						</h:panelGroup>
 					</strong>
-					#{checkWithResult.checkResultDto.result}
+					<h:outputText value="#{checkWithResult.checkResultDto.result}" styleClass="content" escape="false" />
 					<br />
 				</p:column>
 			</p:dataTable>
 		</h:panelGroup>
-		
+
 	</ui:define>
 </ui:composition>
 </html>
