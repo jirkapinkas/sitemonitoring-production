@@ -50,7 +50,7 @@ public abstract class AbstractSingleCheckThread extends AbstractCheckThread {
 	protected boolean checkStatusCode(HttpResponse httpResponse, String url) {
 		int statusCode = httpResponse.getStatusLine().getStatusCode();
 		if (statusCode != check.getReturnHttpCode()) {
-			output = "Invalid status: " + url + " required: " + check.getReturnHttpCode() + ", received: " + statusCode;
+			output = "Invalid status: " + url + " required: " + check.getReturnHttpCode() + ", received: " + statusCode + " ";
 			return false;
 		}
 		return true;
