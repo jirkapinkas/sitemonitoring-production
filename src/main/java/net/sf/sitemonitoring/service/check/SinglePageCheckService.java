@@ -54,6 +54,9 @@ public class SinglePageCheckService extends AbstractCheckService {
 		try {
 			URI uri1 = new URI(url1);
 			URI uri2 = new URI(url2);
+			if(uri1.getHost() == null || uri2.getHost() == null) {
+				return false;
+			}
 			String domain1 = uri1.getHost().replace("www.", "");
 			String domain2 = uri2.getHost().replace("www.", "");
 			return domain1.equals(domain2);

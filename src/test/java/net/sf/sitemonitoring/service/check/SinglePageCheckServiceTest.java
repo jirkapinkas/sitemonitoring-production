@@ -11,6 +11,7 @@ public class SinglePageCheckServiceTest {
 		Assert.assertTrue(SinglePageCheckService.isSameDomain("http://www.javalibs.com/a/b", "http://javalibs.com/b/a"));
 		Assert.assertTrue(SinglePageCheckService.isSameDomain("https://www.javalibs.com/a/b", "http://javalibs.com/b/a"));
 		Assert.assertFalse(SinglePageCheckService.isSameDomain("https://test.javalibs.com/a/b", "http://javalibs.com/b/a"));
+		Assert.assertFalse(SinglePageCheckService.isSameDomain("https:///test.javalibs.com/a/b", "http://javalibs.com/b/a"));
 	}
 
 }
