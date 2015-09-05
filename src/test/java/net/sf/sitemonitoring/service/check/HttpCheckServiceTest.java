@@ -202,7 +202,7 @@ public class HttpCheckServiceTest {
 		check.setConnectionTimeout(timeout);
 		check.setHttpMethod(HttpMethod.GET);
 
-		assertEquals("Invalid status: http://localhost:8081/not-exists.html required: 200, received: 404", singlePageCheckService.performCheck(check));
+		assertEquals("Invalid status: http://localhost:8081/not-exists.html required: 200, received: 404 ", singlePageCheckService.performCheck(check));
 	}
 
 	@Test
@@ -305,7 +305,7 @@ public class HttpCheckServiceTest {
 		spiderCheckThread.check = check;
 		spiderCheckThread.performCheck();
 		assertEquals(
-				"http://localhost:8081/spider/ has error: Invalid status: http://localhost:8081/spider/broken-link.html required: 200, received: 404<br />http://localhost:8081/spider/contains-broken-links.html has error: Invalid status: http://localhost:8081/spider/doesnt-exist required: 200, received: 404<br />http://localhost:8081/spider/page?id=9 has error: Invalid status: http://localhost:8081/spider/not-found.html required: 200, received: 404<br />",
+				"http://localhost:8081/spider/ has error: Invalid status: http://localhost:8081/spider/broken-link.html required: 200, received: 404 <br />http://localhost:8081/spider/contains-broken-links.html has error: Invalid status: http://localhost:8081/spider/doesnt-exist required: 200, received: 404 <br />http://localhost:8081/spider/page?id=9 has error: Invalid status: http://localhost:8081/spider/not-found.html required: 200, received: 404 <br />",
 				spiderCheckThread.output);
 
 	}
@@ -346,7 +346,7 @@ public class HttpCheckServiceTest {
 
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
-		assertEquals("Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />", sitemapCheckThread.output);
+		assertEquals("Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404 <br />", sitemapCheckThread.output);
 	}
 
 	@Test
@@ -367,7 +367,7 @@ public class HttpCheckServiceTest {
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
 		assertEquals(
-				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: http://www.doesntexist93283893289292947987498.com/ has error: error downloading: http://www.doesntexist93283893289292947987498.com/<br /><br />",
+				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404 <br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404 <br />http://localhost:8081/contains-broken-links.html has error: http://www.doesntexist93283893289292947987498.com/ has error: error downloading: http://www.doesntexist93283893289292947987498.com/<br /><br />",
 				sitemapCheckThread.output);
 	}
 
@@ -389,7 +389,7 @@ public class HttpCheckServiceTest {
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
 		assertEquals(
-				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br /><br />",
+				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404 <br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404 <br /><br />",
 				sitemapCheckThread.output);
 	}
 
@@ -411,7 +411,7 @@ public class HttpCheckServiceTest {
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
 		assertEquals(
-				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404<br /><br />",
+				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404 <br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404 <br /><br />",
 				sitemapCheckThread.output);
 	}
 
