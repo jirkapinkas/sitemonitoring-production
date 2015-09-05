@@ -18,11 +18,12 @@ import net.sf.sitemonitoring.service.CheckService;
 @ViewScoped
 @Data
 public class DashboardController {
-	
+
 	@Data
 	public class CheckAndCheckResultDto {
 		private Check check;
 		private CheckResultDto checkResultDto;
+
 		public CheckAndCheckResultDto(Check check, CheckResultDto checkResultDto) {
 			this.check = check;
 			this.checkResultDto = checkResultDto;
@@ -32,7 +33,7 @@ public class DashboardController {
 	private Map<Integer, CheckResultDto> lastResults;
 
 	private List<Check> checks;
-	
+
 	/**
 	 * contains only erroneous results
 	 */
@@ -50,7 +51,7 @@ public class DashboardController {
 		lastResults = checkResultService.getLastResults(checks);
 		for (Check check : checks) {
 			CheckResultDto lastResult = lastResults.get(check.getId());
-			if(lastResult.getSuccess() != null && lastResult.getSuccess() == false) {
+			if (lastResult != null && lastResult.getSuccess() != null && lastResult.getSuccess() == false) {
 				checksWithResults.put(check.getId(), new CheckAndCheckResultDto(check, lastResult));
 			}
 		}
@@ -75,5 +76,15 @@ public class DashboardController {
 		}
 		return result;
 	}
-	
+
+	public int inactiveCount() {
+		int result = 0;
+		for (Check check : checks) {
+			if (!check.isActive()) {
+				result++;
+			}
+		}
+		return result;
+	}
+
 }

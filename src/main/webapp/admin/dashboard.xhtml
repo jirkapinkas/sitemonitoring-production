@@ -28,6 +28,12 @@
 				<h:outputText value="Failure:" />
 			</h:panelGroup>
 			#{dashboardController.failureCount()}x
+
+			<h:panelGroup>
+				<i class="fa fa-grey fa-question-circle" style="padding-right:5px"></i>
+				<h:outputText value="Inactive:" />
+			</h:panelGroup>
+			#{dashboardController.inactiveCount()}x
 		</p:panelGrid>
 		
 		
