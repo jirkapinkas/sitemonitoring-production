@@ -65,7 +65,7 @@ public class MenubarController implements Serializable {
 		menubar.addElement(menuItemConfiguration);
 
 		DefaultMenuItem menuItemLogout = new DefaultMenuItem();
-		menuItemLogout.setUrl("logout");
+		menuItemLogout.setUrl("../logout");
 		menuItemLogout.setValue("Logout");
 		menubar.addElement(menuItemLogout);
 	}
