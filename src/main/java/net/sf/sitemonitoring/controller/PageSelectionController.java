@@ -1,5 +1,6 @@
 package net.sf.sitemonitoring.controller;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,9 @@ import net.sf.sitemonitoring.entity.Page;
 @Data
 @ManagedBean
 @ViewScoped
-public class PageSelectionController {
+public class PageSelectionController implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@ManagedProperty("#{pageController}")
 	private PageController pageController;

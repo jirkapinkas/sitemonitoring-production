@@ -1,5 +1,6 @@
 package net.sf.sitemonitoring.controller;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,9 @@ import net.sf.sitemonitoring.service.CheckService;
 @ManagedBean
 @ViewScoped
 @Data
-public class DashboardController {
+public class DashboardController implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Data
 	public class CheckAndCheckResultDto {
