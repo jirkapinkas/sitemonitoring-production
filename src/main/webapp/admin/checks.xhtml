@@ -31,7 +31,7 @@
         
         <h:form>
         	<p:menuButton value="add">
-        		<p:menuitem value="HTML check" icon="fa fa-header fa-menu"
+        		<p:menuitem value="web page check" icon="fa fa-header fa-menu"
 							action="#{checkController.prepareSingleCheck()}"
 							oncomplete="PF('checkDialogSingle').show()"
 							update=":checkFormSingle"
@@ -242,7 +242,7 @@
 		</p:dataTable>
 
 
-		<p:dialog widgetVar="checkDialogSingle" closeOnEscape="true" modal="true" header="HTML check" styleClass="dialog-single">
+		<p:dialog widgetVar="checkDialogSingle" closeOnEscape="true" modal="true" header="web page check" styleClass="dialog-single">
 			<h:form id="checkFormSingle">
 				<components:dialog-single-check />
 				<p:commandButton id="save" value="save" action="#{checkController.save()}"
