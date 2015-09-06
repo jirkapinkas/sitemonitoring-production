@@ -153,6 +153,14 @@ public class CheckController implements Serializable {
 		prepareCheck();
 	}
 
+	public void prepareXsdCheck() {
+		log.debug("create xsd check");
+		check = new Check(CheckType.XSD);
+		check.setScheduledInterval(configurationService.find().getDefaultSingleCheckInterval());
+		check.setConditionType(CheckCondition.CONTAINS);
+		prepareCheck();
+	}
+
 	public void prepareJsonCheck() {
 		log.debug("create json check");
 		check = new Check(CheckType.JSON);

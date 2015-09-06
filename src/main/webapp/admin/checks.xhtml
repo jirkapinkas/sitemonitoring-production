@@ -51,6 +51,11 @@
 							oncomplete="PF('checkDialogXml').show()"
 							update=":checkFormXml"
 							resetValues="true" />
+				<p:menuitem value="XSD check" icon="fa fa-code fa-menu"
+							action="#{checkController.prepareXsdCheck()}"
+							oncomplete="PF('checkDialogXsd').show()"
+							update=":checkFormXsd"
+							resetValues="true" />
 				<p:menuitem value="JSON check" icon="fa fa-code fa-menu"
 							action="#{checkController.prepareJsonCheck()}"
 							oncomplete="PF('checkDialogJson').show()"
@@ -269,6 +274,15 @@
 				<components:dialog-xml-check />
 				<p:commandButton id="save" value="save" action="#{checkController.save()}"
 					update="checkFormXml, :checksTable" oncomplete="handleDialogSubmit(args, 'checkDialogXml')" />
+				<p:defaultCommand target="save" />
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog widgetVar="checkDialogXsd" closeOnEscape="true" modal="true" header="XSD check" styleClass="dialog-xml">
+			<h:form id="checkFormXsd">
+				<components:dialog-xsd-check />
+				<p:commandButton id="save" value="save" action="#{checkController.save()}"
+					update="checkFormXsd, :checksTable" oncomplete="handleDialogSubmit(args, 'checkDialogXsd')" />
 				<p:defaultCommand target="save" />
 			</h:form>
 		</p:dialog>

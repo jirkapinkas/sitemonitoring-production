@@ -5,6 +5,7 @@
 + added support for testing sitemapindex (part of existing sitemap check): 
    http://www.sitemaps.org/protocol.html#index
 + increased default maximum memory
++ added XSD check
 
 13.8.2015: version 2.2.1
 + enhanced dashboard, now contains list of errors

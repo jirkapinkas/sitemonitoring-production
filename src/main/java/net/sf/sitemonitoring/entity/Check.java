@@ -41,7 +41,7 @@ public class Check implements Serializable {
 	private int id;
 
 	public enum CheckType {
-		SITEMAP, SINGLE_PAGE, SPIDER, XML, JSON
+		SITEMAP, SINGLE_PAGE, SPIDER, XML, XSD, JSON
 	}
 
 	public enum CheckCondition {

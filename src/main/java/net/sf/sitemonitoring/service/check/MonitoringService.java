@@ -35,6 +35,9 @@ public class MonitoringService {
 	private XmlCheckService xmlCheckService;
 
 	@Autowired
+	private XsdCheckService xsdCheckService;
+
+	@Autowired
 	private JsonCheckService jsonCheckService;
 
 	@Autowired
@@ -86,6 +89,9 @@ public class MonitoringService {
 			break;
 		case JSON:
 			checkResultText = jsonCheckService.performCheck(check);
+			break;
+		case XSD:
+			checkResultText = xsdCheckService.performCheck(check);
 			break;
 		default:
 			throw new UnsupportedOperationException("this check type is not supported!");
