@@ -4,22 +4,23 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 
 import lombok.Data;
+import net.sf.sitemonitoring.annotation.ScopeView;
 import net.sf.sitemonitoring.entity.Page;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 @Data
-@ManagedBean
-@ViewScoped
+@Component
+@ScopeView
 public class PageSelectionController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@ManagedProperty("#{pageController}")
+	@Autowired
 	private PageController pageController;
 
 	private int selectedPage;

@@ -1,4 +1,16 @@
-06.9.2015: version 2.2.2
+8.9.2015: version 3.0.0
++ moved core architecture to Spring Boot, this will allow more future enhancements. 
+  Note that if you upgrade from 2.X version that this will require some modifications.
+  See UPGRADE-3.0.txt for details. 
++ removed Heroku support. It's easy to add if you need it, though.
+  I don't use Heroku anymore, so I removed it.
++ now at least Java 7 is required to run this application
++ hopefully everything will work, but there has been some radical changes under-the-hood,
+  so if you upgrade from older version be prepared for anything
++ NOTE that Windows service support is currently removed,
+  in the next minor version it will be reimplemented from scratch.
+
+6.9.2015: version 2.2.2
 + enhanced broken links functionality in HTTP and Sitemap check:
    now user can select if the check will follow outbound broken links
 + also now check broken links functionality doesn't require filled condition

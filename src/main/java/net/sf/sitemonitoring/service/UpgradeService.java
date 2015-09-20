@@ -126,6 +126,11 @@ public class UpgradeService {
 			configurationService.saveExcludingPassword(configuration);
 			configuration = configurationService.find();
 		}
+		if (configuration.getMonitoringVersion().equals("2.2.2")) {
+			configuration.setMonitoringVersion("3.0.0");
+			configurationService.saveExcludingPassword(configuration);
+			configuration = configurationService.find();
+		}
 	}
 
 	private void update(String sql) {

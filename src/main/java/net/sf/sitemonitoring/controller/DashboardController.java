@@ -5,19 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-
 import lombok.Data;
+import net.sf.sitemonitoring.annotation.ScopeView;
 import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.push.CheckResultDto;
 import net.sf.sitemonitoring.service.CheckResultService;
 import net.sf.sitemonitoring.service.CheckService;
 
-@ManagedBean
-@ViewScoped
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 @Data
+@Component
+@ScopeView
 public class DashboardController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -42,10 +42,10 @@ public class DashboardController implements Serializable {
 	 */
 	private Map<Integer, CheckAndCheckResultDto> checksWithResults;
 
-	@ManagedProperty("#{checkResultService}")
+	@Autowired
 	private CheckResultService checkResultService;
 
-	@ManagedProperty("#{checkService}")
+	@Autowired
 	private CheckService checkService;
 
 	public void loadChecks() {

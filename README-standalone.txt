@@ -14,7 +14,3 @@ Have fun :-)
 Having some issue with the application? Go to:
 
 https://github.com/jirkapinkas/sitemonitoring-production/issues
-
-or:
-
-https://sourceforge.net/p/sitemonitoring/tickets/

@@ -1,9 +1,14 @@
 package net.sf.sitemonitoring;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
+import net.sf.sitemonitoring.annotation.ViewScope;
+
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
@@ -54,6 +59,16 @@ public class SpringConfiguration implements AsyncConfigurer {
 		SimpleCacheManager cacheManager = new SimpleCacheManager();
 		cacheManager.setCaches(Arrays.asList(new ConcurrentMapCache("configuration")));
 		return cacheManager;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Bean
+	public CustomScopeConfigurer viewScopeConfigurer() {
+		CustomScopeConfigurer customScopeConfigurer = new CustomScopeConfigurer();
+		Map scopes = new HashMap();
+		scopes.put("view", new ViewScope());
+		customScopeConfigurer.setScopes(scopes);
+		return customScopeConfigurer;
 	}
 
 }

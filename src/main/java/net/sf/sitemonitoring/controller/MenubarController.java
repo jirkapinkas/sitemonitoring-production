@@ -3,11 +3,9 @@ package net.sf.sitemonitoring.controller;
 import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
 
 import lombok.Data;
+import net.sf.sitemonitoring.annotation.ScopeSession;
 import net.sf.sitemonitoring.entity.Page;
 import net.sf.sitemonitoring.service.PageService;
 
@@ -15,17 +13,19 @@ import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Data
-@ManagedBean
-@SessionScoped
+@Component
+@ScopeSession
 public class MenubarController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private MenuModel menubar;
 	
-	@ManagedProperty("#{pageService}")
+	@Autowired
 	private PageService pageService;
 
 	@PostConstruct

@@ -43,7 +43,7 @@ public class InitDbService {
 		}
 		System.out.println("*** DATABASE INIT STARTED ***");
 		configuration = new Configuration();
-		configuration.setMonitoringVersion("2.2.2");
+		configuration.setMonitoringVersion("3.0.0");
 		configuration.setEmailSubject("sitemonitoring error");
 		configuration.setEmailBody("check name:{CHECK-NAME}\n\ncheck url: {CHECK-URL}\n\nerror:\n{ERROR}");
 		configuration.setDefaultSingleCheckInterval(5);

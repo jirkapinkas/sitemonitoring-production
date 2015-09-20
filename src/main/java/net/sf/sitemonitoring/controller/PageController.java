@@ -4,25 +4,26 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
 
 import lombok.Data;
+import net.sf.sitemonitoring.annotation.ScopeSession;
 import net.sf.sitemonitoring.entity.Page;
 import net.sf.sitemonitoring.service.PageService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 @Data
-@ManagedBean
-@SessionScoped
+@Component
+@ScopeSession
 public class PageController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@ManagedProperty("#{pageService}")
+	@Autowired
 	private PageService pageService;
 
-	@ManagedProperty("#{menubarController}")
+	@Autowired
 	private MenubarController menubarController;
 
 	private List<Page> pages;

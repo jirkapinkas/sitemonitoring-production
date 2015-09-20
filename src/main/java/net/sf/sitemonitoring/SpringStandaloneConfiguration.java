@@ -3,14 +3,13 @@ package net.sf.sitemonitoring;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
-import javax.servlet.ServletContext;
 import javax.sql.DataSource;
 
 import net.sf.sitemonitoring.annotation.StandaloneProfile;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.jpa.HibernatePersistenceProvider;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -20,8 +19,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 @Configuration
 public class SpringStandaloneConfiguration {
 
-	@Autowired
-	private ServletContext context;
+	@Value("${dbport}")
+	private int dbPort;
 
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
@@ -30,7 +29,6 @@ public class SpringStandaloneConfiguration {
 		Properties jpaProperties = new Properties();
 		jpaProperties.put("hibernate.hbm2ddl.auto", "update");
 		jpaProperties.put("hibernate.show_sql", "false");
-		// jpaProperties.put("hibernate.format_sql", "true");
 		entityManagerFactory.setJpaProperties(jpaProperties);
 		entityManagerFactory.setPackagesToScan("net.sf.sitemonitoring.entity");
 		entityManagerFactory.setPersistenceProvider(new HibernatePersistenceProvider());
@@ -47,7 +45,7 @@ public class SpringStandaloneConfiguration {
 	@Bean
 	public DataSource dataSource() {
 		BasicDataSource dataSource = new BasicDataSource();
-		dataSource.setUrl("jdbc:hsqldb:hsql://localhost:" + context.getInitParameter("hsqlPort") + "/data");
+		dataSource.setUrl("jdbc:hsqldb:hsql://localhost:" + dbPort + "/data");
 		dataSource.setUsername("sa");
 		dataSource.setPassword("");
 		return dataSource;

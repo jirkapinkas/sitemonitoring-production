@@ -1,0 +1,12 @@
+NOTE that Windows service support is currently removed,
+in the next minor version it will be reimplemented from scratch.
+
+1. Don't forget to backup current version. 
+2. Delete temp directory, it won't be used anymore
+3. Copy sitemonitoring.war and delete old sitemonitoring.jar
+4. These configuration files must be changed manually: 
+      startup.bat
+      reset-admin-credentials.bat
+   (it should be self-explanatory)
+   Note: if you didn't make changes to your configuration files, 
+   just simply copy them

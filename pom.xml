@@ -3,40 +3,84 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sf.sitemonitoring</groupId>
 	<artifactId>sitemonitoring</artifactId>
-	<version>2.2.2</version>
+	<version>3.0.0</version>
 	<packaging>war</packaging>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.2.5.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
 
 	<properties>
 		<jetty.version>9.2.3.v20140905</jetty.version>
 		<spring.security.version>3.2.5.RELEASE</spring.security.version>
+		<java.version>1.7</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<start-class>net.sf.sitemonitoring.Main</start-class>
 	</properties>
 
 	<dependencies>
 
-		<!-- gzip compression -->
 		<dependency>
-			<groupId>com.github.ziplet</groupId>
-			<artifactId>ziplet</artifactId>
-			<version>2.0.0</version>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-loader</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 			<exclusions>
+				<!-- excluded Logback in favour of Log4j -->
 				<exclusion>
-					<artifactId>servlet-api</artifactId>
-					<groupId>javax.servlet</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+					<groupId>org.springframework.boot</groupId>
 				</exclusion>
+				<!-- not needed right now -->
 				<exclusion>
-					<artifactId>slf4j-nop</artifactId>
-					<groupId>org.slf4j</groupId>
+					<artifactId>jackson-databind</artifactId>
+					<groupId>com.fasterxml.jackson.core</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.web</groupId>
+			<artifactId>el-impl</artifactId>
+			<version>2.2</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.jayway.jsonpath</groupId>
 			<artifactId>json-path</artifactId>
-			<version>1.2.0</version>
+			<version>1.2.0</version><!--$NO-MVN-MAN-VER$ -->
 			<exclusions>
-				<!-- I had to exclude this package and repackage it inside WEB-INF/lib 
-					(without org/objectweb/asm package) to avoid conflict with asm 5.0.3 -->
 				<exclusion>
 					<artifactId>asm</artifactId>
 					<groupId>net.minidev</groupId>
@@ -51,23 +95,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.el</groupId>
-			<artifactId>javax.el-api</artifactId>
-			<version>3.0.0</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-plus</artifactId>
-			<version>${jetty.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-annotations</artifactId>
-			<version>${jetty.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -81,7 +116,6 @@
 		<dependency>
 			<groupId>com.sun.mail</groupId>
 			<artifactId>javax.mail</artifactId>
-			<version>1.5.2</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>activation</artifactId>
@@ -99,20 +133,17 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-			<version>${spring.security.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
-			<version>${spring.security.version}</version>
 		</dependency>
 
 		<dependency>
@@ -124,7 +155,6 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.7</version>
 		</dependency>
 
 		<dependency>
@@ -136,7 +166,6 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>1.9.5</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -161,41 +190,27 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-webapp</artifactId>
-			<version>${jetty.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
-			<version>1.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.3.5</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>5.1.2.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>4.3.11.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -211,11 +226,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-jpa</artifactId>
-			<version>1.8.2.RELEASE</version>
-		</dependency>
-		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.16.6</version>
@@ -223,355 +233,43 @@
 		</dependency>
 	</dependencies>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-framework-bom</artifactId>
-				<version>4.2.0.RELEASE</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<build>
 		<finalName>sitemonitoring</finalName>
-
-		<!-- This defines source files for filtering -->
-		<filters>
-			<filter>${basedir}/src/main/filters/${filter.name}.properties</filter>
-		</filters>
-
 		<resources>
-			<!-- http://stackoverflow.com/questions/7475811/how-to-filter-resources-when-using-maven-jetty-plugin -->
-			<!-- Jetty-specific -->
-			<resource>
-				<directory>src/main/webapp/WEB-INF</directory>
-				<filtering>true</filtering>
-				<targetPath>../jettyFilteredResources</targetPath>
-			</resource>
 			<resource>
 				<directory>src/main/resources</directory>
 				<targetPath>../classes</targetPath>
 			</resource>
 		</resources>
-
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<!-- exclude unwanted dependencies, scope provided doesn't work with 
+						spring-boot-maven-plugin the usual way -->
+					<excludeArtifactIds>ecj,lombok,javax.servlet-api</excludeArtifactIds>
 				</configuration>
 			</plugin>
-
-			<!-- https://community.jboss.org/wiki/HowToConfigureJavaEEApplicationToApplyDifferentSettingsinWebxmlEtcForVariousEnvironmentsByMaven -->
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version>
-				<configuration>
-					<webResources>
-						<resource>
-							<directory>${basedir}/src/main/webapp</directory>
-							<!-- Turn on filtering. If you want to filter more files you can use 
-								wildcards like **/*.xml -->
-							<filtering>true</filtering>
-							<includes>
-								<include>WEB-INF/web.xml</include>
-							</includes>
-						</resource>
-					</webResources>
-				</configuration>
-			</plugin>
-
 		</plugins>
 	</build>
 
 	<profiles>
 		<profile>
-			<id>war</id>
-			<properties>
-				<filter.name>war</filter.name>
-			</properties>
-			<dependencies>
-				<dependency>
-					<groupId>org.hsqldb</groupId>
-					<artifactId>hsqldb</artifactId>
-					<version>2.3.3</version>
-				</dependency>
-				<!-- just to resolve compilation problems (because of Main class, which 
-					uses these libraries in standalone profile -->
-				<dependency>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-webapp</artifactId>
-					<version>${jetty.version}</version>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-
-		<profile>
-			<id>dev</id>
-			<properties>
-				<filter.name>dev</filter.name>
-			</properties>
-			<dependencies>
-				<dependency>
-					<groupId>org.hsqldb</groupId>
-					<artifactId>hsqldb</artifactId>
-					<version>2.3.3</version>
-				</dependency>
-				<!-- just to resolve compilation problems (because of Main class, which 
-					uses these libraries in standalone profile -->
-				<dependency>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-webapp</artifactId>
-					<version>${jetty.version}</version>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.eclipse.jetty</groupId>
-						<artifactId>jetty-maven-plugin</artifactId>
-						<version>${jetty.version}</version>
-						<configuration>
-							<systemProperties>
-								<systemProperty>
-									<name>log4j.configuration</name>
-									<value>log4j-dev.properties</value>
-								</systemProperty>
-							</systemProperties>
-							<webAppConfig>
-								<descriptor>target/jettyFilteredResources/web.xml</descriptor>
-							</webAppConfig>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
-			<id>heroku</id>
-			<properties>
-				<filter.name>heroku</filter.name>
-			</properties>
-			<dependencies>
-				<dependency>
-					<groupId>postgresql</groupId>
-					<artifactId>postgresql</artifactId>
-					<version>9.1-901-1.jdbc4</version>
-				</dependency>
-				<!-- just to resolve compilation problems (because of Main class, which 
-					uses these libraries in standalone profile -->
-				<dependency>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-webapp</artifactId>
-					<version>${jetty.version}</version>
-					<scope>provided</scope>
-				</dependency>
-				<dependency>
-					<groupId>org.hsqldb</groupId>
-					<artifactId>hsqldb</artifactId>
-					<version>2.3.3</version>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-			<build>
-				<plugins>
-					<!-- deploy this application to Heroku -->
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<version>1.2.1</version>
-						<executions>
-							<execution>
-								<phase>install</phase>
-								<goals>
-									<goal>exec</goal>
-								</goals>
-								<configuration>
-									<executable>heroku</executable>
-									<arguments>
-										<argument>deploy:war</argument>
-										<argument>--war</argument>
-										<argument>target/sitemonitoring.war</argument>
-										<argument>--app</argument>
-										<argument>sitemonitoring</argument>
-									</arguments>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<profile>
+			<id>standalone</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
-			<id>myserver</id>
-			<properties>
-				<filter.name>myserver</filter.name>
-			</properties>
-			<dependencies>
-				<dependency>
-					<groupId>postgresql</groupId>
-					<artifactId>postgresql</artifactId>
-					<version>9.1-901-1.jdbc4</version>
-				</dependency>
-				<!-- just to resolve compilation problems (because of Main class, which 
-					uses these libraries in standalone profile -->
-				<dependency>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-webapp</artifactId>
-					<version>${jetty.version}</version>
-					<scope>provided</scope>
-				</dependency>
-				<dependency>
-					<groupId>org.hsqldb</groupId>
-					<artifactId>hsqldb</artifactId>
-					<version>2.3.3</version>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-
-		<!-- basic inspiration: http://uguptablog.blogspot.cz/2012/09/embedded-jetty-executable-war-with.html -->
-		<profile>
-			<id>standalone</id>
-			<properties>
-				<filter.name>standalone</filter.name>
-			</properties>
-			<dependencies>
-				<dependency>
-					<groupId>org.hsqldb</groupId>
-					<artifactId>hsqldb</artifactId>
-					<version>2.3.3</version>
-					<scope>provided</scope>
-				</dependency>
-				<dependency>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-webapp</artifactId>
-					<version>${jetty.version}</version>
-					<scope>provided</scope>
-				</dependency>
-				<dependency>
-					<groupId>org.glassfish</groupId>
-					<artifactId>javax.el</artifactId>
-					<version>3.0.0</version>
-				</dependency>
-				<dependency>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-jsp</artifactId>
-					<version>${jetty.version}</version>
-					<scope>provided</scope>
-				</dependency>
-				<dependency>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-plus</artifactId>
-					<version>${jetty.version}</version>
-					<scope>provided</scope>
-				</dependency>
-				<dependency>
-					<groupId>org.eclipse.jetty</groupId>
-					<artifactId>jetty-annotations</artifactId>
-					<version>${jetty.version}</version>
-					<scope>provided</scope>
-				</dependency>
-				<dependency>
-					<groupId>org.eclipse.jetty.websocket</groupId>
-					<artifactId>websocket-server</artifactId>
-					<version>${jetty.version}</version>
-					<scope>provided</scope>
-				</dependency>
-				<dependency>
-					<groupId>javax.annotation</groupId>
-					<artifactId>javax.annotation-api</artifactId>
-					<version>1.2</version>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
 			<build>
 				<plugins>
-					<plugin>
-						<artifactId>maven-war-plugin</artifactId>
-						<version>2.1.1</version>
-						<configuration>
-							<warName>${project.artifactId}</warName>
-							<archive>
-								<manifest>
-									<mainClass>main.Main</mainClass>
-								</manifest>
-							</archive>
-						</configuration>
-						<executions>
-							<execution>
-								<id>default-war</id>
-								<phase>package</phase>
-								<goals>
-									<goal>war</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<executions>
-							<execution>
-								<id>main-class-placement</id>
-								<phase>prepare-package</phase>
-								<configuration>
-									<tasks>
-										<move todir="${project.build.directory}/${project.artifactId}/main">
-											<fileset dir="${project.build.directory}/classes/main">
-												<include name="*.class" />
-											</fileset>
-										</move>
-									</tasks>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
-						<version>2.3</version>
-						<executions>
-							<execution>
-								<id>jetty-classpath</id>
-								<phase>prepare-package</phase>
-								<goals>
-									<goal>unpack-dependencies</goal>
-								</goals>
-								<configuration>
-									<includeGroupIds>org.eclipse.jetty,javax.servlet,org.hsqldb,org.ow2.asm,javax.annotation</includeGroupIds>
-									<excludeArtifactIds>jsp-api,jstl,org.eclipse.jdt.core</excludeArtifactIds>
-									<excludes>META-INF/ECLIPSEF.*,about.html,jetty-dir.css,readme.txt,plugin.properties,about_files/*</excludes>
-									<outputDirectory>
-										${project.build.directory}/${project.artifactId}
-									</outputDirectory>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-					<!-- assembly ZIP file for sourceforge deployment -->
+					<!-- assembly ZIP file for standalone binary release -->
 					<plugin>
 						<artifactId>maven-assembly-plugin</artifactId>
-						<version>2.4</version>
 						<configuration>
 							<appendAssemblyId>false</appendAssemblyId>
 							<finalName>${project.artifactId}-${project.version}</finalName>
 							<descriptors>
-								<descriptor>src/main/resources/assembly-sourceforge.xml</descriptor>
+								<descriptor>src/main/resources/assembly-standalone.xml</descriptor>
 							</descriptors>
 						</configuration>
 						<executions>

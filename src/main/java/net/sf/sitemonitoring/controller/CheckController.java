@@ -7,13 +7,11 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.sitemonitoring.annotation.ScopeView;
 import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.entity.Check.CheckCondition;
 import net.sf.sitemonitoring.entity.Check.CheckType;
@@ -26,37 +24,40 @@ import net.sf.sitemonitoring.service.CheckService;
 import net.sf.sitemonitoring.service.ConfigurationService;
 import net.sf.sitemonitoring.service.PageService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 @Data
-@ManagedBean
-@ViewScoped
+@Component
+@ScopeView
 @Slf4j
 public class CheckController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@ManagedProperty("#{checkService}")
+	@Autowired
 	private CheckService checkService;
 
-	@ManagedProperty("#{checkResultService}")
+	@Autowired
 	private CheckResultService checkResultService;
 
-	@ManagedProperty("#{configurationService}")
+	@Autowired
 	private ConfigurationService configurationService;
 
-	@ManagedProperty("#{pageService}")
+	@Autowired
 	private PageService pageService;
 
-	@ManagedProperty("#{pageController}")
+	@Autowired
 	private PageController pageController;
 
 	private Check check;
 
 	private List<Check> checks;
 
-	@ManagedProperty("#{checkResultsController}")
+	@Autowired
 	private CheckResultsController checkResultsController;
 
-	@ManagedProperty("#{pageSelectionController}")
+	@Autowired
 	private PageSelectionController pageSelectionController;
 
 	private Integer pageId;

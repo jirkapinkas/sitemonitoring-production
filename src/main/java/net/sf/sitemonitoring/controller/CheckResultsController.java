@@ -6,12 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.sitemonitoring.annotation.ScopeView;
 import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.push.ChartResultsStats;
 import net.sf.sitemonitoring.push.CheckResultDto;
@@ -25,10 +23,12 @@ import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.DateAxis;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@ManagedBean
 @Data
-@ViewScoped
+@Component
+@ScopeView
 @Slf4j
 public class CheckResultsController implements Serializable {
 
@@ -61,16 +61,16 @@ public class CheckResultsController implements Serializable {
 
 	private Check currentCheck;
 
-	@ManagedProperty("#{checkService}")
+	@Autowired
 	private CheckService checkService;
 
-	@ManagedProperty("#{checkResultService}")
+	@Autowired
 	private CheckResultService checkResultService;
 
 	private Map<Integer, CheckResultDto> lastResults;
 
 	private List<Check> checks;
-	
+
 	private Integer pageId;
 
 	public void loadChecksForPage(Integer pageId) {
@@ -205,7 +205,7 @@ public class CheckResultsController implements Serializable {
 		updateResults();
 		checkController.loadChecks();
 	}
-	
+
 	public void updateChartMaxMillis(Integer chartMaxMillis) {
 		checkService.updateChartMaxMillis(currentCheck.getId(), chartMaxMillis);
 		updateResults();

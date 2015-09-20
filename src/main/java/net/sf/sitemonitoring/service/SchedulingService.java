@@ -39,7 +39,7 @@ public class SchedulingService {
 	/**
 	 * Schedule monitoring
 	 */
-	@Scheduled(fixedDelay = 1000)
+	@Scheduled(fixedDelay = 3000)
 	public void runMonitoring() {
 		if (EventBusFactory.getDefault() == null) {
 			// Atmosphere is not yet initialized (this can happen because it's a
