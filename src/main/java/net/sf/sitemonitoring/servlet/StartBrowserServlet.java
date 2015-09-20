@@ -20,12 +20,10 @@ public class StartBrowserServlet extends HttpServlet {
 	public void init() throws ServletException {
 		Environment environment = WebApplicationContextUtils.getWebApplicationContext(getServletContext()).getEnvironment();
 		boolean standaloneProfileActive = environment.acceptsProfiles("standalone");
-		System.out.println("standalone profile active: " + standaloneProfileActive);
 		if (!standaloneProfileActive) {
 			return;
 		}
 		try {
-			System.out.println("desktop supported: " + Desktop.isDesktopSupported());
 			if (Desktop.isDesktopSupported()) {
 				System.out.println("*** START DEFAULT BROWSER ***");
 				Desktop.getDesktop().browse(new URI("http://localhost:" + environment.getProperty("server.port")));

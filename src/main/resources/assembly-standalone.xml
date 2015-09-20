@@ -47,5 +47,10 @@ http://maven.apache.org/xsd/assembly-1.1.2.xsd">
 			<outputDirectory>/${project.artifactId}-${project.version}</outputDirectory>
 			<destName>UPGRADE-3.0.txt</destName>
 		</file>
+		<file>
+			<source>src/main/resources/log4j-standalone.properties</source>
+			<outputDirectory>/${project.artifactId}-${project.version}</outputDirectory>
+			<destName>log4j.properties</destName>
+		</file>
 	</files>
 </assembly>
