@@ -1,7 +1,5 @@
 Run startup.bat. 
 
-To run this application as a Windows service, see win-service/README.txt
-
 Video documentation is here: http://sitemonitoring.sourceforge.net/
 
 Be sure to see not only Getting started, but also Advanced video tutorial
