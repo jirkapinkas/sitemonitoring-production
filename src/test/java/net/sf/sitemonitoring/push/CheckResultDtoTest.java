@@ -1,16 +1,15 @@
 package net.sf.sitemonitoring.push;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class CheckResultDtoTest {
-	
+
 	CheckResultDto checkResultDto;
 
 	@Before

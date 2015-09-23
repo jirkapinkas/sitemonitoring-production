@@ -10,8 +10,6 @@ import javax.servlet.SessionTrackingMode;
 
 import net.sf.sitemonitoring.servlet.StartBrowserServlet;
 
-import org.primefaces.push.PushServlet;
-
 import com.google.common.collect.ImmutableSet;
 import com.sun.faces.config.FacesInitializer;
 
@@ -35,15 +33,8 @@ public final class WebXmlCommon {
 		clazz.add(WebXmlSpringBoot.class);
 		facesInitializer.onStartup(clazz, servletContext);
 
-		Dynamic pushServlet = servletContext.addServlet("Push Servlet", PushServlet.class);
-		pushServlet.setAsyncSupported(true);
-		pushServlet.setLoadOnStartup(1);
-		pushServlet.addMapping("/primepush/*");
-		pushServlet.setInitParameter("org.atmosphere.annotation.packages", "org.primefaces.push");
-		pushServlet.setInitParameter("org.atmosphere.cpr.packages", "net.sf.sitemonitoring.push");
-
 		Dynamic startBrowserServlet = servletContext.addServlet("StartBrowserServlet", StartBrowserServlet.class);
 		startBrowserServlet.setLoadOnStartup(2);
-
 	}
+	
 }

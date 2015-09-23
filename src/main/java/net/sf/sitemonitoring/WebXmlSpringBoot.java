@@ -1,15 +1,19 @@
 package net.sf.sitemonitoring;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.atmosphere.cpr.ContainerInitializer;
+import org.primefaces.push.PushServlet;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.MimeMappings;
+import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +44,7 @@ public class WebXmlSpringBoot extends WebMvcConfigurerAdapter implements Embedde
 		mappings.add("woff2", "application/x-font-woff2");
 		container.setMimeMappings(mappings);
 	}
-	
+
 	class JsfServletRegistrationBean extends ServletRegistrationBean {
 
 		private boolean dev;
@@ -60,7 +64,6 @@ public class WebXmlSpringBoot extends WebMvcConfigurerAdapter implements Embedde
 		}
 	}
 
-
 	@Bean
 	public ServletRegistrationBean facesServletRegistration(Environment environment) {
 		boolean dev = false;
@@ -70,6 +73,31 @@ public class WebXmlSpringBoot extends WebMvcConfigurerAdapter implements Embedde
 		}
 		ServletRegistrationBean servletRegistrationBean = new JsfServletRegistrationBean(dev);
 		return servletRegistrationBean;
+	}
+
+	@Bean
+	public ServletRegistrationBean pushServlet() {
+		ServletRegistrationBean pushServlet = new ServletRegistrationBean(new PushServlet(), "/primepush/*");
+		pushServlet.addInitParameter("org.atmosphere.annotation.packages", "org.primefaces.push");
+		pushServlet.addInitParameter("org.atmosphere.cpr.packages", "WEB-INF/classes/net.sf.sitemonitoring.push,net.sf.sitemonitoring.push");
+		pushServlet.setAsyncSupported(true);
+		pushServlet.setLoadOnStartup(0);
+		pushServlet.setOrder(Ordered.HIGHEST_PRECEDENCE);
+		return pushServlet;
+	}
+
+	private static class EmbeddedAtmosphereInitializer extends ContainerInitializer implements ServletContextInitializer {
+
+		@Override
+		public void onStartup(ServletContext servletContext) throws ServletException {
+			onStartup(Collections.<Class<?>> emptySet(), servletContext);
+		}
+
+	}
+
+	@Bean
+	public EmbeddedAtmosphereInitializer atmosphereInitializer() {
+		return new EmbeddedAtmosphereInitializer();
 	}
 
 }
