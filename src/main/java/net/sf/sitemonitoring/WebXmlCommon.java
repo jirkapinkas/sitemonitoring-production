@@ -1,5 +1,7 @@
 package net.sf.sitemonitoring;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,12 +10,24 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration.Dynamic;
 import javax.servlet.SessionTrackingMode;
 
+import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.servlet.StartBrowserServlet;
+
+import org.atmosphere.cpr.ContainerInitializer;
+import org.primefaces.push.PushServlet;
+import org.springframework.boot.context.embedded.ServletContextInitializer;
+import org.springframework.boot.context.embedded.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.env.Environment;
 
 import com.google.common.collect.ImmutableSet;
 import com.sun.faces.config.FacesInitializer;
 
-public final class WebXmlCommon {
+@Configuration
+@Slf4j
+public class WebXmlCommon {
 
 	public static void initialize(ServletContext servletContext, boolean dev) throws ServletException {
 		FacesInitializer facesInitializer = new FacesInitializer();
@@ -36,5 +50,63 @@ public final class WebXmlCommon {
 		Dynamic startBrowserServlet = servletContext.addServlet("StartBrowserServlet", StartBrowserServlet.class);
 		startBrowserServlet.setLoadOnStartup(2);
 	}
-	
+
+	class JsfServletRegistrationBean extends ServletRegistrationBean {
+
+		private boolean dev;
+
+		public JsfServletRegistrationBean(boolean dev) {
+			super();
+			this.dev = dev;
+		}
+
+		@Override
+		public void onStartup(ServletContext servletContext) throws ServletException {
+			try {
+				WebXmlCommon.initialize(servletContext, dev);
+			} catch (ServletException ex) {
+				log.error("couldn't initialize WebXmlCommon", ex);
+			}
+		}
+	}
+
+	@Bean
+	public ServletRegistrationBean facesServletRegistration(Environment environment) {
+		boolean dev = false;
+		String[] activeProfiles = environment.getActiveProfiles();
+		if (Arrays.asList(activeProfiles).contains("dev")) {
+			dev = true;
+		}
+		ServletRegistrationBean servletRegistrationBean = new JsfServletRegistrationBean(dev);
+		return servletRegistrationBean;
+	}
+
+	@Bean
+	public ServletRegistrationBean pushServlet() {
+		log.info("Constructed pushServlet");
+		ServletRegistrationBean pushServlet = new ServletRegistrationBean(new PushServlet(), "/primepush/*");
+		pushServlet.addInitParameter("org.atmosphere.annotation.packages", "org.primefaces.push");
+		pushServlet.addInitParameter("org.atmosphere.cpr.packages", "WEB-INF/classes/net.sf.sitemonitoring.push,net.sf.sitemonitoring.push");
+		pushServlet.setAsyncSupported(true);
+		pushServlet.setLoadOnStartup(0);
+		pushServlet.setOrder(Ordered.HIGHEST_PRECEDENCE);
+		return pushServlet;
+	}
+
+	private static class EmbeddedAtmosphereInitializer extends ContainerInitializer implements ServletContextInitializer {
+
+		@Override
+		public void onStartup(ServletContext servletContext) throws ServletException {
+			log.info("Called EmbeddedAtmosphereInitializer onStartup()");
+			onStartup(Collections.<Class<?>> emptySet(), servletContext);
+		}
+
+	}
+
+	@Bean
+	public EmbeddedAtmosphereInitializer atmosphereInitializer() {
+		log.info("Constructed atmosphereInitializer");
+		return new EmbeddedAtmosphereInitializer();
+	}
+
 }

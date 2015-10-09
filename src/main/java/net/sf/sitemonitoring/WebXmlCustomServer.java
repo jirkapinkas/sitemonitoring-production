@@ -18,9 +18,10 @@ public class WebXmlCustomServer implements WebApplicationInitializer {
 
 	@Override
 	public void onStartup(ServletContext servletContext) {
+		log.info("Called WebXmlCustomServer onStartup()");
 		// Create the 'root' Spring application context
 		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-		rootContext.register(Main.class);
+		rootContext.register(Main.class, SpringConfiguration.class);
 		
 		// Manage the lifecycle of the root application context
 		servletContext.addListener(new ContextLoaderListener(rootContext));

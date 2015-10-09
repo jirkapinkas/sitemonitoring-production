@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.Map;
 
 import javax.xml.XMLConstants;
@@ -21,6 +23,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.util.EntityUtils;
 
 @Slf4j
@@ -64,8 +67,22 @@ public class XsdCheckThread extends AbstractSingleCheckThread {
 		} catch (SocketTimeoutException ex) {
 			output = "Socket timeout: " + check.getUrl();
 			log.debug(output, ex);
+		} catch (UnknownHostException ex) {
+			try {
+				output = check.getUrl() + ": Unknown host: " + new URI(check.getUrl()).getHost();
+			} catch (URISyntaxException e) {
+				output = "Unknown host: " + check.getUrl();
+			}
+			log.debug(output, ex);
+		} catch (HttpHostConnectException ex) {
+			try {
+				output = check.getUrl() + ": Cannot connect to: " + new URI(check.getUrl()).getHost();
+			} catch (URISyntaxException e) {
+				output = check.getUrl() + ": Cannot connect to: " + check.getUrl();
+			}
+			log.debug(output, ex);
 		} catch (IOException ex) {
-			output = "Error downloading: " + check.getUrl();
+			output = "Error downloading: " + check.getUrl() + " exception: " + ex.getClass().getName();
 			log.debug(output, ex);
 		} catch (Exception ex) {
 			output = "Error: " + ex.getMessage();

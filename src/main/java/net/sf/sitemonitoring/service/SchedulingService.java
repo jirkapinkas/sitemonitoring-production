@@ -142,4 +142,13 @@ public class SchedulingService {
 			}
 		}
 	}
+	
+	public void setCheckService(CheckService checkService) {
+		this.checkService = checkService;
+	}
+	
+	public void setConfigurationService(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
+	}
+	
 }

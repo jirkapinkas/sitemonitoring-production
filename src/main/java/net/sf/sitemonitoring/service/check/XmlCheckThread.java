@@ -3,6 +3,8 @@ package net.sf.sitemonitoring.service.check;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -19,6 +21,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.util.EntityUtils;
 
 import com.google.common.xml.XmlEscapers;
@@ -35,14 +38,14 @@ public class XmlCheckThread extends AbstractSingleCheckThread {
 		log.debug("start perform check");
 		CloseableHttpResponse httpResponse = null;
 		try {
-			if(check.getHttpMethod() == HttpMethod.HEAD) {
+			if (check.getHttpMethod() == HttpMethod.HEAD) {
 				httpResponse = doHead(check.getUrl());
 				if (httpResponse == null) {
 					return;
 				} else {
 					checkStatusCode(httpResponse, check.getUrl());
 				}
-			} else if(check.getHttpMethod() == HttpMethod.GET) {
+			} else if (check.getHttpMethod() == HttpMethod.GET) {
 				httpResponse = doGet(check.getUrl());
 				if (httpResponse == null) {
 					return;
@@ -62,8 +65,9 @@ public class XmlCheckThread extends AbstractSingleCheckThread {
 						XPathExpression expr = xpath.compile(check.getCondition());
 						// TODO Retrieve whole XML fragment
 						String result = expr.evaluate(doc);
-						if(!result.equals(check.getTextResult())) {
-							appendMessage(check.getUrl() + " has unexpected result: " + XmlEscapers.xmlContentEscaper().escape(result) + " instead of: " + XmlEscapers.xmlContentEscaper().escape(check.getTextResult()));
+						if (!result.equals(check.getTextResult())) {
+							appendMessage(check.getUrl() + " has unexpected result: " + XmlEscapers.xmlContentEscaper().escape(result) + " instead of: "
+									+ XmlEscapers.xmlContentEscaper().escape(check.getTextResult()));
 						}
 					}
 				}
@@ -80,8 +84,22 @@ public class XmlCheckThread extends AbstractSingleCheckThread {
 		} catch (SocketTimeoutException ex) {
 			output = "Socket timeout: " + check.getUrl();
 			log.debug(output, ex);
+		} catch (UnknownHostException ex) {
+			try {
+				output = check.getUrl() + ": Unknown host: " + new URI(check.getUrl()).getHost();
+			} catch (URISyntaxException e) {
+				output = check.getUrl() + ": Unknown host: " + check.getUrl();
+			}
+			log.debug(output, ex);
+		} catch (HttpHostConnectException ex) {
+			try {
+				output = check.getUrl() + ": Cannot connect to: " + new URI(check.getUrl()).getHost();
+			} catch (URISyntaxException e) {
+				output = check.getUrl() + ": Cannot connect to: " + check.getUrl();
+			}
+			log.debug(output, ex);
 		} catch (IOException ex) {
-			output = "Error downloading: " + check.getUrl();
+			output = "Error downloading: " + check.getUrl() + " exception: " + ex.getClass().getName();
 			log.debug(output, ex);
 		} catch (Exception ex) {
 			output = "Error: " + ex.getMessage();

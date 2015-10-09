@@ -9,13 +9,12 @@ import net.sf.sitemonitoring.annotation.ViewScope;
 
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -25,8 +24,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.google.common.eventbus.EventBus;
 
-@ComponentScan
-@Configuration
+@SpringBootApplication
 @EnableJpaRepositories
 @EnableTransactionManagement
 @EnableScheduling

@@ -17,7 +17,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
-@Configuration
+@Deprecated
+//@Configuration
 public class SpringCustomConfiguration {
 
 	@Bean

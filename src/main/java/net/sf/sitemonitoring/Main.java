@@ -11,10 +11,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.hsqldb.jdbc.JDBCDataSource;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.annotation.Profile;
 
+@Slf4j
+@Profile({ "dev", "standalone" })
 @SpringBootApplication
 public class Main {
 
@@ -46,6 +51,7 @@ public class Main {
 	 *            Arguments
 	 */
 	public static void start(String[] args) {
+		log.info("Starting HSQL database in server mode");
 		System.out.println("*** STARTING DATABASE ***");
 		// first start server
 		startHsqlServer();
@@ -61,6 +67,7 @@ public class Main {
 			startHsqlServer();
 		}
 		System.out.println("*** DATABASE STARTED ***");
+		log.info("Starting Spring Boot application");
 		new SpringApplicationBuilder(Main.class).headless(false).run(args);
 	}
 

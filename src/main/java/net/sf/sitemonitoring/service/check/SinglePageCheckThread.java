@@ -3,6 +3,8 @@ package net.sf.sitemonitoring.service.check;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -14,6 +16,7 @@ import net.sf.sitemonitoring.entity.Check.HttpMethod;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -112,16 +115,30 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 			}
 			log.debug("check successful");
 		} catch (IllegalArgumentException ex) {
-			output = check.getUrl() + " has error: incorrect URL: " + check.getUrl();
+			output = check.getUrl() + " has error: incorrect URL";
 			log.debug(output, ex);
 		} catch (ConnectTimeoutException ex) {
-			output = check.getUrl() + " has error: connect timeout: " + check.getUrl();
+			output = check.getUrl() + " has error: connect timeout";
 			log.debug(output, ex);
 		} catch (SocketTimeoutException ex) {
-			output = check.getUrl() + " has error: socket timeout: " + check.getUrl();
+			output = check.getUrl() + " has error: socket timeout";
+			log.debug(output, ex);
+		} catch (UnknownHostException ex) {
+			try {
+				output = check.getUrl() + ": Unknown host: " + new URI(check.getUrl()).getHost();
+			} catch (URISyntaxException e) {
+				output = check.getUrl() + ": Unknown host: " + check.getUrl();
+			}
+			log.debug(output, ex);
+		} catch (HttpHostConnectException ex) {
+			try {
+				output = check.getUrl() + ": Cannot connect to: " + new URI(check.getUrl()).getHost();
+			} catch (URISyntaxException e) {
+				output = check.getUrl() + ": Cannot connect to: " + check.getUrl();
+			}
 			log.debug(output, ex);
 		} catch (IOException ex) {
-			output = check.getUrl() + " has error: error downloading: " + check.getUrl();
+			output = check.getUrl() + " has error: error downloading: " + check.getUrl() + " exception: " + ex.getClass().getName();
 			log.debug(output, ex);
 		} catch (Exception ex) {
 			output = check.getUrl() + " has error: " + ex.getMessage();

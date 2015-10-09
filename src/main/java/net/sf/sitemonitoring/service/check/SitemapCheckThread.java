@@ -2,7 +2,10 @@ package net.sf.sitemonitoring.service.check;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketTimeoutException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +24,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
@@ -60,8 +65,26 @@ public class SitemapCheckThread extends AbstractCheckThread {
 			}
 			HttpEntity entity = httpResponse.getEntity();
 			return EntityUtils.toString(entity);
+		} catch (IllegalArgumentException ex) {
+			throw new IOException("Error downloading sitemap: " + url + " incorrect URL", ex);
+		} catch (ConnectTimeoutException ex) {
+			throw new IOException("Error downloading sitemap: " + url + " connect timeout", ex);
+		} catch (SocketTimeoutException ex) {
+			throw new IOException("Error downloading sitemap: " + url + " socket timeout", ex);
+		} catch (UnknownHostException ex) {
+			try {
+				throw new IOException("Error downloading sitemap: " + url + " Cannot connect to: " + new URI(url).getHost(), ex);
+			} catch (URISyntaxException e) {
+				throw new IOException("Error downloading sitemap: " + url + " Cannot connect to: " + url, ex);
+			}
+		} catch (HttpHostConnectException ex) {
+			try {
+				throw new IOException("Error downloading sitemap: " + url + " Cannot connect to: " + new URI(url).getHost(), ex);
+			} catch (URISyntaxException e) {
+				throw new IOException("Error downloading sitemap: " + url + " Cannot connect to: " + url, ex);
+			}
 		} catch (IOException ex) {
-			throw new IOException("Error downloading sitemap: " + url, ex);
+			throw new IOException("Error downloading sitemap: " + url + " exception: " + ex.getClass().getName(), ex);
 		} finally {
 			if (httpResponse != null) {
 				try {
@@ -157,7 +180,7 @@ public class SitemapCheckThread extends AbstractCheckThread {
 		log.debug("sitemap performCheck() start");
 		try {
 			String sitemapXml = downloadSitemap(httpClient, check.getUrl());
-			if(sitemapXml.indexOf("</sitemapindex>") != -1) {
+			if (sitemapXml.indexOf("</sitemapindex>") != -1) {
 				// it's sitemapindex
 				Sitemapindex sitemapindex = readSitemapIndex(sitemapXml);
 				log.debug("sitemap index contains " + sitemapindex.getSitemaps().size() + " sitemaps");
@@ -167,11 +190,11 @@ public class SitemapCheckThread extends AbstractCheckThread {
 					Urlset urlset = readSitemap(realSitemapXml);
 					log.debug("sitemap contains " + urlset.getUrls().size() + " urls");
 					String realSitemapOutput = check(urlset, check, visitedPagesGet, visitedPagesHead);
-					if(realSitemapOutput != null) {
+					if (realSitemapOutput != null) {
 						outputStringBuilder.append(realSitemapOutput);
 					}
 				}
-				if(!outputStringBuilder.toString().trim().isEmpty()) {
+				if (!outputStringBuilder.toString().trim().isEmpty()) {
 					output = outputStringBuilder.toString();
 				}
 			} else {
