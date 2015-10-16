@@ -150,5 +150,8 @@ public class SchedulingService {
 	public void setConfigurationService(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}
-	
+
+	public void setCheckResultService(CheckResultService checkResultService) {
+		this.checkResultService = checkResultService;
+	}
 }

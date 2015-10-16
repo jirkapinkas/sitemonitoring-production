@@ -14,4 +14,18 @@ public class SinglePageCheckServiceTest {
 		Assert.assertFalse(SinglePageCheckService.isSameDomain("https:///test.javalibs.com/a/b", "http://javalibs.com/b/a"));
 	}
 
+	@Test
+	public void testIgnoreUrlShouldIgnoreUrl() {
+		String url = "http://www.seznam.cz/*";
+		String excludedUrls = "http://www.seznam.cz*\r\nhttp://www.google.com*";
+		Assert.assertTrue(SinglePageCheckService.ignoreUrl(url, excludedUrls));
+	}
+
+	@Test
+	public void testIgnoreUrlShouldNotIgnoreUrl() {
+		String url = "http://www.seznamka.cz/*";
+		String excludedUrls = "http://www.seznam.cz*\r\nhttp://www.google.com*";
+		Assert.assertFalse(SinglePageCheckService.ignoreUrl(url, excludedUrls));
+	}
+
 }
