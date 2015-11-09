@@ -11,7 +11,7 @@
 	<li>Platform independent</li>
 	<li>Can run standalone (also as a Windows Service) or on your custom Java EE server and your database</li>
 	<li>Monitor single web page, pages in sitemap and even your whole web site using spider</li>
-	<li>Check not only HTTP result codes, but also page contents</li>
+	<li>Check not only HTTP result codes, but also page contents; Can specify HTTP header for web page request;</li>
 	<li>Find broken links on your website</li>
 	<li>Microservice (REST APIs) monitoring - XML (using XPath and XSD) and JSON (using JSONPath)</li>
 	<li>Periodic checking (built-in cron mechanism)</li>
