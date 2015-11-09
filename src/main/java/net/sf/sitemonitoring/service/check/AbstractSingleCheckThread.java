@@ -9,8 +9,8 @@ import javax.net.ssl.SSLHandshakeException;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.entity.Check;
 
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.http.*;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.config.RequestConfig.Builder;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -91,6 +91,15 @@ public abstract class AbstractSingleCheckThread extends AbstractCheckThread {
 		}
 		RequestConfig requestConfig = requestConfigBuilder.build();
 		request.setConfig(requestConfig);
+        String header = check.getHeader();
+
+        if(null!=header && header.length()>0 && header.contains(":"))
+        {
+            log.info("header:" + header);
+            String[] headerKV = header.split(":");
+            request.setHeader(headerKV[0],headerKV[1]);
+        }
+
 		CloseableHttpResponse response = null;
 		try {
 			request.setHeader("User-Agent", check.getUserAgent());
