@@ -1,16 +1,32 @@
 package net.sf.sitemonitoring.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.validator.constraints.URL;
-
-import javax.persistence.*;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.URL;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -156,6 +172,9 @@ public class Check implements Serializable {
 	
 	@Column(name="follow_outbound_broken_links")
 	private Boolean followOutboundBrokenLinks;
+
+	@Column(name = "check_for_changes", nullable = false)
+    private boolean checkForChanges;
 
 	// TODO Change to FetchType.LAZY
 	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })

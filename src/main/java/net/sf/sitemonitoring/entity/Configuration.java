@@ -104,5 +104,8 @@ public class Configuration implements Serializable {
 	private String infoMessage;
 
 	private Boolean hideInfoMessage;
+	
+	@Column(name = "check_for_changes", nullable = false)
+    private boolean checkForChanges;
 
 }

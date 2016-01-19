@@ -54,6 +54,7 @@ public class InitDbService {
 		configuration.setConnectionTimeout(20000);
 		configuration.setTooLongRunningCheckMinutes(30);
 		configuration.setCheckBrokenLinks(false);
+		configuration.setCheckForChanges(false);
 		configuration.setAdminUsername("admin");
 		configuration.setAdminPassword(new BCryptPasswordEncoder().encode("admin"));
 		configuration.setSendEmails(false);

@@ -140,7 +140,11 @@
 					user agent:
 					<p:inputText value="#{configurationController.configuration.userAgent}" />
 					<h:outputText value="User-Agent header" />
-	
+                    
+                    default check for changes:
+                    <p:selectBooleanCheckbox value="#{configurationController.configuration.checkForChanges}" />
+                    <h:outputText value="Check web pages (and sub pages) for changes" />
+                    
 				</p:panelGrid>
 			</p:tab>
 			
