@@ -89,7 +89,7 @@
 
 				<h:panelGroup style="float:left;padding-top:5px">
 					<components:check-icon checkType="#{check.type}" />
-					<strong style="#{check.active eq true ? '' : 'text-decoration:line-through;'}">#{check.name}</strong>
+					<strong style="#{check.active eq true ? '' : 'text-decoration:line-through;'}"><a href="#{check.url}" target="_blanc">#{check.name}</a></strong>
 				</h:panelGroup>
 
 				<br style="clear:both" />

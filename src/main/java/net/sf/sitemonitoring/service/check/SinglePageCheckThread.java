@@ -1,6 +1,15 @@
 package net.sf.sitemonitoring.service.check;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -8,11 +17,7 @@ import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.Map;
 
-import lombok.extern.slf4j.Slf4j;
-import net.sf.sitemonitoring.entity.Check;
-import net.sf.sitemonitoring.entity.Check.CheckType;
-import net.sf.sitemonitoring.entity.Check.HttpMethod;
-
+import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.conn.ConnectTimeoutException;
@@ -24,6 +29,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.google.common.xml.XmlEscapers;
+
+import lombok.extern.slf4j.Slf4j;
+import net.sf.sitemonitoring.entity.Check;
+import net.sf.sitemonitoring.entity.Check.CheckType;
+import net.sf.sitemonitoring.entity.Check.HttpMethod;
 
 @Slf4j
 public class SinglePageCheckThread extends AbstractSingleCheckThread {
@@ -51,7 +61,7 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 				}
 				HttpEntity entity = httpResponse.getEntity();
 				if (entity != null) {
-					String webPage = EntityUtils.toString(entity);
+				    String webPage = EntityUtils.toString(entity);
 					if (check.isStoreWebpage()) {
 						check.setWebPage(webPage);
 					}
@@ -109,6 +119,20 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 							}
 						}
 					}
+
+					String filteredWebPage = filterWebPage(webPage);
+					if (check.isCheckForChanges()) {
+						log.info("Check page for changes:" + check.getUrl());
+						String cachedWebPage = loadCachedWebPage(check);
+						updateCachedWebPage(check, filteredWebPage);
+						if (cachedWebPage != null && isWebPageChanged(filteredWebPage, cachedWebPage)) {
+							log.info("PageChanged:" + check.getUrl());
+							appendMessage("Page content is changed");
+							isWebPageChanged(filteredWebPage, cachedWebPage);
+						} else {
+							log.info("First Run or PageUnChanged:" + check.getUrl());
+						}
+					}
 				}
 			} else {
 				throw new UnsupportedOperationException("Unknown HTTP METHOD: " + check.getHttpMethod());
@@ -154,4 +178,108 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 		}
 	}
 
+	private boolean isWebPageChanged(String filteredWebPage, String cachedWebPage) {
+		try (BufferedReader br1 = new BufferedReader(
+				new InputStreamReader(new ByteArrayInputStream(filteredWebPage.getBytes())));
+				BufferedReader br2 = new BufferedReader(
+						new InputStreamReader(new ByteArrayInputStream(cachedWebPage.getBytes())))) {
+			String line1 = br1.readLine();
+			String line2 = br2.readLine();
+			while (line1 != null) {
+				if (!line1.equals(line2)) {
+					log.info("Found diff:\nline1:" + line1 + "\nline2:" + line2);
+					return true;
+				}
+				line1 = br1.readLine();
+				line2 = br2.readLine();
+			}
+		} catch (IOException e) {
+			log.error("Error filtering webPage", e);
+		}
+		return false;
+	}
+
+	private String filterWebPage(String webPage) {
+		try (ByteArrayOutputStream bout = new ByteArrayOutputStream();
+				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(bout));
+				BufferedReader br = new BufferedReader(
+						new InputStreamReader(new ByteArrayInputStream(webPage.getBytes())))) {
+			String line = br.readLine();
+			while (line != null) {
+				if (!line.trim().toLowerCase().startsWith("<meta")
+						&& !line.trim().toLowerCase().contains("builds_counter")
+						&& !line.trim().toLowerCase().contains("issue_counter")) {
+					// TODO RD configure filter
+					// skip meta elements
+					bw.write(line + "\n");
+				}
+				line = br.readLine();
+			}
+			bw.flush();
+			String result = bout.toString();
+			return result;
+		} catch (IOException e) {
+			log.error("Error filtering webPage", e);
+		}
+		return "";
+	}
+
+	private String loadCachedWebPage(Check check) {
+		File webPageCacheFile = getWebPageCacheFile(check);
+		log.error("loadCachedWebPage from :" + webPageCacheFile.getAbsolutePath());
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(webPageCacheFile)))) {
+			if (webPageCacheFile.exists()) {
+				StringBuffer sb = new StringBuffer();
+				String line = br.readLine();
+				while (line != null) {
+					sb.append(line + "\n");
+					line = br.readLine();
+				}
+				return sb.toString();
+			}
+		} catch (Exception e) {
+			log.error("Couldn't read cached webpage from:" + webPageCacheFile.getAbsolutePath());
+		}
+		return null;
+	}
+
+	private void updateCachedWebPage(Check check, String webPage) {
+		File webPageCacheFile = getWebPageCacheFile(check);
+		File webPageCacheBakFile = getWebPageCacheBakFile(check);
+		webPageCacheFile.renameTo(webPageCacheBakFile);
+		log.error("saveCachedWebPage to :" + webPageCacheFile.getAbsolutePath());
+		try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(webPageCacheFile)));
+				BufferedReader br = new BufferedReader(
+						new InputStreamReader(new ByteArrayInputStream(webPage.getBytes())))) {
+			String line = br.readLine();
+			while (line != null) {
+				bw.write(line + "\n");
+				line = br.readLine();
+			}
+		} catch (Exception e) {
+			log.error("Erro saving webPageCache file:" + webPageCacheFile.getAbsolutePath(), e);
+		}
+	}
+
+	private File getWebPageCacheFile(Check check) {
+		String property = "java.io.tmpdir";
+		String tempDirPath = System.getProperty(property);
+		File tempDir = new File(tempDirPath);
+		try {
+		    if (!tempDir.exists()) {
+		    	FileUtils.forceMkdir(tempDir);
+		    }
+		} catch (IOException e) {
+			log.error("Couldn't create tempDir:"+e.getMessage(),e);
+		}
+		File webPageCacheFile = new File(tempDir, "webPageCache_" + check.getId());
+		return webPageCacheFile;
+	}
+
+	private File getWebPageCacheBakFile(Check check) {
+		String property = "java.io.tmpdir";
+		String tempDir = System.getProperty(property);
+		File webPageCacheFile = new File(tempDir, "webPageCache_" + check.getId() + "_bak");
+		return webPageCacheFile;
+	}
 }

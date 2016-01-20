@@ -157,6 +157,9 @@ public class Check implements Serializable {
 	@Column(name="follow_outbound_broken_links")
 	private Boolean followOutboundBrokenLinks;
 
+	@Column(name = "check_for_changes", nullable = false)
+    private boolean checkForChanges;
+
 	// TODO Change to FetchType.LAZY
 	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
 	@JoinColumn(name = "credentials_id")
