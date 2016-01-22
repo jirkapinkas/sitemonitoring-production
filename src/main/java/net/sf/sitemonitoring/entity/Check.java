@@ -159,6 +159,9 @@ public class Check implements Serializable {
 
 	@Column(name = "check_for_changes", nullable = false)
     private boolean checkForChanges;
+	
+	@Column(name = "check_for_changes_filter")
+    private String checkForChangesFilter;
 
 	// TODO Change to FetchType.LAZY
 	@OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })

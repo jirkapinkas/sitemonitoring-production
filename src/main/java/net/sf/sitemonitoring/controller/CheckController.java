@@ -188,6 +188,7 @@ public class CheckController implements Serializable {
 			pageSelectionController.setSelectedPage(pageId);
 		}
 		check.setCheckForChanges(configuration.isCheckForChanges());
+		check.setCheckForChangesFilter(configuration.getCheckForChangesFilter());
 	}
 
 	public void save() {

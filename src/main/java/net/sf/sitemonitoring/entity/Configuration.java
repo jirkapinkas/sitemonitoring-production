@@ -107,5 +107,8 @@ public class Configuration implements Serializable {
 	
 	@Column(name = "check_for_changes", nullable = false)
     private boolean checkForChanges;
+	
+	@Column(name = "check_for_changes_filter")
+    private String checkForChangesFilter;
 
 }

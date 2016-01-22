@@ -65,6 +65,7 @@ public class InitDbService {
 		configuration.setSendEmails(false);
 		configuration.setUserAgent("sitemonitoring http://sitemonitoring.sourceforge.net");
 		configuration.setInfoMessage("Please don't monitor my websites (like javavids.com and sitemonitoring.sourceforge.net). Lot's of people started doing it and effectively DDOSed them. If you monitor them anyway, your IP address will be blocked!");
+		configuration.setCheckForChangesFilter("# filter body (1)|^.*<body[^>]*>|# filter body (2)|</body[^>]*>.*|# filter script|<script[^>]*>.*</script>|# filter tags|<[^>]*>");
 		
 		configurationService.save(configuration);
 

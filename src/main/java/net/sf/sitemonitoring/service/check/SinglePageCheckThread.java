@@ -16,8 +16,12 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.conn.ConnectTimeoutException;
@@ -37,6 +41,10 @@ import net.sf.sitemonitoring.entity.Check.HttpMethod;
 
 @Slf4j
 public class SinglePageCheckThread extends AbstractSingleCheckThread {
+
+    private static final String FILTER_COMMENT = "#";
+    private static final String START_DIFF_MARKER = "<span style='background-color:yellow;'>";
+    private static final String END_DIFF_MARKER = "</span>";
 
 	public SinglePageCheckThread(Check check, Map<URI, Object> visitedPagesGet, Map<URI, Object> visitedPagesHead) {
 		super(check, visitedPagesGet, visitedPagesHead);
@@ -120,19 +128,23 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 						}
 					}
 
-					String filteredWebPage = filterWebPage(webPage);
 					if (check.isCheckForChanges()) {
-						log.info("Check page for changes:" + check.getUrl());
-						String cachedWebPage = loadCachedWebPage(check);
-						updateCachedWebPage(check, filteredWebPage);
-						if (cachedWebPage != null && isWebPageChanged(filteredWebPage, cachedWebPage)) {
-							log.info("PageChanged:" + check.getUrl());
-							appendMessage("Page content is changed");
-							isWebPageChanged(filteredWebPage, cachedWebPage);
-						} else {
-							log.info("First Run or PageUnChanged:" + check.getUrl());
-						}
-					}
+                        String filteredWebPage = filterWebPage(check,webPage);
+                        log.info("Check page for changes:" + check.getUrl());
+                        String cachedWebPage = loadCachedWebPage(check);
+                        updateCachedWebPage(check, filteredWebPage);
+                        if (cachedWebPage != null) {
+                            String pageDiff = diffWebPageChanged(filteredWebPage, cachedWebPage);
+                            if (!StringUtils.isEmpty(pageDiff)) {
+                                log.info("PageChanged:" + check.getUrl());
+                                appendMessage("Page content is changed:\n"+pageDiff);
+                            } else {
+                                log.info("PageUnChanged:" + check.getUrl());
+                            }
+                        } else {
+                            log.info("First check, can't find changes at this time because no cached page is available:" + check.getUrl());
+                        }
+                    }
 				}
 			} else {
 				throw new UnsupportedOperationException("Unknown HTTP METHOD: " + check.getHttpMethod());
@@ -178,51 +190,112 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 		}
 	}
 
-	private boolean isWebPageChanged(String filteredWebPage, String cachedWebPage) {
-		try (BufferedReader br1 = new BufferedReader(
-				new InputStreamReader(new ByteArrayInputStream(filteredWebPage.getBytes())));
-				BufferedReader br2 = new BufferedReader(
-						new InputStreamReader(new ByteArrayInputStream(cachedWebPage.getBytes())))) {
-			String line1 = br1.readLine();
-			String line2 = br2.readLine();
-			while (line1 != null) {
-				if (!line1.equals(line2)) {
-					log.info("Found diff:\nline1:" + line1 + "\nline2:" + line2);
-					return true;
-				}
-				line1 = br1.readLine();
-				line2 = br2.readLine();
-			}
-		} catch (IOException e) {
-			log.error("Error filtering webPage", e);
-		}
-		return false;
-	}
+	private String diffWebPageChanged(String webPage, String cachedWebPage) {
+        StringBuffer diffBuf = new StringBuffer();
+        try (BufferedReader br1 = new BufferedReader(
+                new InputStreamReader(new ByteArrayInputStream(webPage.getBytes())));
+                BufferedReader br2 = new BufferedReader(
+                        new InputStreamReader(new ByteArrayInputStream(cachedWebPage.getBytes())))) {
+            String line1 = br1.readLine();
+            String line2 = br2.readLine();
+            int count = 0;
+            while (line1 != null) {
+                if (line2!=null && !line1.trim().equals(line2.trim())) {
+                    line1 = StringEscapeUtils.escapeHtml(line1);
+                    line2 = StringEscapeUtils.escapeHtml(line2);
+                    count++;
+                    diffBuf.append("<p>Diff ["+count+"]:");
+                    diffBuf.append("<ul>");
+                    boolean marked = false;
+                    for(int n=0 ; n< line1.length() && n<line2.length() ; n++) {
+                        if (line1.charAt(n) != line2.charAt(n)) {
+                            line1 = line1.substring(0,n)+START_DIFF_MARKER+line1.substring(n);
+                            line2 = line2.substring(0,n)+START_DIFF_MARKER+line2.substring(n);
+                            marked = true;
+                            break;
+                        }
+                    }
+                    if (!marked) {
+                        int l1 = line1.length();
+                        int l2 = line2.length();
+                        if (l1 < l2) {
+                            line2 = line2.substring(0,l1)+START_DIFF_MARKER+line2.substring(l1);
+                        } else {
+                            line1 = line1.substring(0,l2)+START_DIFF_MARKER+line1.substring(l2);
+                        }
+                    }
 
-	private String filterWebPage(String webPage) {
-		try (ByteArrayOutputStream bout = new ByteArrayOutputStream();
-				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(bout));
-				BufferedReader br = new BufferedReader(
-						new InputStreamReader(new ByteArrayInputStream(webPage.getBytes())))) {
-			String line = br.readLine();
-			while (line != null) {
-				if (!line.trim().toLowerCase().startsWith("<meta")
-						&& !line.trim().toLowerCase().contains("builds_counter")
-						&& !line.trim().toLowerCase().contains("issue_counter")) {
-					// TODO RD configure filter
-					// skip meta elements
-					bw.write(line + "\n");
-				}
-				line = br.readLine();
-			}
-			bw.flush();
-			String result = bout.toString();
-			return result;
-		} catch (IOException e) {
-			log.error("Error filtering webPage", e);
-		}
-		return "";
-	}
+                    int l1 = line1.length();
+                    int l2=line2.length();
+                    marked = false;
+                    for(int n=0 ; n < l1 && n < l2 ; ) {
+                        n++;
+                        if (line1.charAt(l1-n) != line2.charAt(l2-n)) {
+                            line1 = line1.substring(0,l1-n+1)+END_DIFF_MARKER+line1.substring(l1-n+1);
+                            line2 = line2.substring(0,l2-n+1)+END_DIFF_MARKER+line2.substring(l2-n+1);
+                            marked=true;
+                            break;
+                        }
+                    }
+                    if (!marked) {
+                        if (l1 < l2) {
+                            line2 = line2.substring(0,l1+1)+END_DIFF_MARKER+line2.substring(l1+1);
+                        } else {
+                            line1 = line1.substring(0,l2+1)+END_DIFF_MARKER+line1.substring(l2+1);
+                        }
+                    }
+
+                    diffBuf.append("<li/> "+line1);
+                    diffBuf.append("<li/> "+line2);
+                    diffBuf.append("</ul>");
+                    diffBuf.append("</ul>");
+                }
+                line1 = br1.readLine();
+                line2 = br2.readLine();
+            }
+        } catch (IOException e) {
+            log.error("Error filtering webPage", e);
+        }
+        return diffBuf.toString();
+    }
+
+	private String globalFilterWebPage(Check check, String webPage, String globalFilter) {
+        String url = check.getUrl();
+        Pattern p = Pattern.compile(globalFilter, Pattern.DOTALL);
+        Matcher m = p.matcher(webPage);
+        StringBuffer sb = new StringBuffer();
+        while (m.find()) {
+            m.appendReplacement(sb, "");
+        }
+        m.appendTail(sb);
+        String filteredWebPage = sb.toString();
+        return filteredWebPage;
+    }
+        
+    private String filterWebPage(Check check, String webPage) {        
+        // Read filters
+        String filterSet = check.getCheckForChangesFilter();
+        String[] filters = null;
+        if (filterSet!=null) {
+            if (filterSet.contains("\n")) {
+                filters = filterSet.toLowerCase().split("\n");
+            } else if (filterSet.contains("|")) {
+                filters = filterSet.toLowerCase().split("\\|");
+            }
+        } else {
+            filters = new String[]{};
+        }
+        
+        // Apply filters
+        String filteredWebPage = webPage;
+        for(String filter : filters) {
+            if (!filter.startsWith(FILTER_COMMENT)) {
+                filteredWebPage = globalFilterWebPage(check,filteredWebPage,filter);
+            }
+        }
+        
+        return filteredWebPage;
+    }
 
 	private String loadCachedWebPage(Check check) {
 		File webPageCacheFile = getWebPageCacheFile(check);
