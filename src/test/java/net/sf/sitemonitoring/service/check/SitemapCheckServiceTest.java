@@ -10,11 +10,6 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
-import net.sf.sitemonitoring.entity.Check;
-import net.sf.sitemonitoring.entity.Check.CheckCondition;
-import net.sf.sitemonitoring.jaxb.sitemap.Urlset;
-import net.sf.sitemonitoring.jaxb.sitemapindex.Sitemapindex;
-
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +19,11 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.eventbus.EventBus;
+
+import net.sf.sitemonitoring.entity.Check;
+import net.sf.sitemonitoring.entity.Check.CheckCondition;
+import net.sf.sitemonitoring.jaxb.sitemap.Urlset;
+import net.sf.sitemonitoring.jaxb.sitemapindex.Sitemapindex;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SitemapCheckServiceTest {
@@ -40,8 +40,8 @@ public class SitemapCheckServiceTest {
 
 	@Before
 	public void before() throws JAXBException {
-		visitedPagesGet = new HashMap<URI, Object>();
-		visitedPagesHead = new HashMap<URI, Object>();
+		visitedPagesGet = new HashMap<>();
+		visitedPagesHead = new HashMap<>();
 		SinglePageCheckService singlePageCheckService = new SinglePageCheckService();
 		singlePageCheckService.setEventBus(new EventBus());
 		sitemapCheckThread = new SitemapCheckThread(singlePageCheckService, null);
