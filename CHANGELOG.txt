@@ -1,3 +1,5 @@
++ added support for gzipped sitemaps
+
 8.9.2015: version 3.0.0
 + moved core architecture to Spring Boot, this will allow more future enhancements. 
   Note that if you upgrade from 2.X version that this will require some modifications.
