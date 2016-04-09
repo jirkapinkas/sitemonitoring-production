@@ -1,10 +1,10 @@
 package net.sf.sitemonitoring.service;
 
-import java.util.*;
-
-import net.sf.sitemonitoring.entity.Check;
-import net.sf.sitemonitoring.entity.Check.CheckState;
-import net.sf.sitemonitoring.entity.Configuration;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +12,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import net.sf.sitemonitoring.entity.Check;
+import net.sf.sitemonitoring.entity.Check.CheckState;
+import net.sf.sitemonitoring.entity.Configuration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SchedulingServiceTest {

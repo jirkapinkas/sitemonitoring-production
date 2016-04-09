@@ -1,5 +1,7 @@
 package net.sf.sitemonitoring.service.check;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
@@ -8,17 +10,10 @@ import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-
-import lombok.extern.slf4j.Slf4j;
-import net.sf.sitemonitoring.entity.Check;
-import net.sf.sitemonitoring.entity.Check.HttpMethod;
-import net.sf.sitemonitoring.jaxb.sitemap.Url;
-import net.sf.sitemonitoring.jaxb.sitemap.Urlset;
-import net.sf.sitemonitoring.jaxb.sitemapindex.Sitemap;
-import net.sf.sitemonitoring.jaxb.sitemapindex.Sitemapindex;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
@@ -28,6 +23,14 @@ import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
+
+import lombok.extern.slf4j.Slf4j;
+import net.sf.sitemonitoring.entity.Check;
+import net.sf.sitemonitoring.entity.Check.HttpMethod;
+import net.sf.sitemonitoring.jaxb.sitemap.Url;
+import net.sf.sitemonitoring.jaxb.sitemap.Urlset;
+import net.sf.sitemonitoring.jaxb.sitemapindex.Sitemap;
+import net.sf.sitemonitoring.jaxb.sitemapindex.Sitemapindex;
 
 @Slf4j
 public class SitemapCheckThread extends AbstractCheckThread {
@@ -55,6 +58,45 @@ public class SitemapCheckThread extends AbstractCheckThread {
 		super(check);
 		this.singlePageCheckService = singlePageCheckService;
 	}
+	
+	/**
+	 * Determines if a byte array is compressed. The java.util.zip GZip
+	 * implementaiton does not expose the GZip header so it is difficult to determine
+	 * if a string is compressed.
+	 * 
+	 * @param bytes an array of bytes
+	 * @return true if the array is compressed or false otherwise
+	 * @throws java.io.IOException if the byte array couldn't be read
+	 */
+	 public boolean isCompressed(byte[] bytes) throws IOException
+	 {
+	      if ((bytes == null) || (bytes.length < 2))
+	      {
+	           return false;
+	      }
+	      else
+	      {
+	            return ((bytes[0] == (byte) (GZIPInputStream.GZIP_MAGIC)) && (bytes[1] == (byte) (GZIPInputStream.GZIP_MAGIC >> 8)));
+	      }
+	 }
+	 
+	 /**
+	  * Unzip byte array
+	  * @param bytes
+	  * @throws IOException
+	  */
+    public byte[] gunzipIt(byte[] bytes) throws IOException{
+        byte[] buffer = new byte[1024];
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try(GZIPInputStream gzis = new GZIPInputStream(new ByteArrayInputStream(bytes))){
+           int len;
+           while ((len = gzis.read(buffer)) > 0) {
+           	out.write(buffer, 0, len);
+           }
+       }
+        return out.toByteArray();
+      }
+
 
 	protected String downloadSitemap(CloseableHttpClient httpClient, String url) throws IOException {
 		CloseableHttpResponse httpResponse = null;
@@ -64,7 +106,11 @@ public class SitemapCheckThread extends AbstractCheckThread {
 				throw new IOException();
 			}
 			HttpEntity entity = httpResponse.getEntity();
-			return EntityUtils.toString(entity);
+			byte[] bytes = EntityUtils.toByteArray(entity);
+			if(isCompressed(bytes)) {
+				bytes = gunzipIt(bytes);
+			}
+			return new String(bytes);
 		} catch (IllegalArgumentException ex) {
 			throw new IOException("Error downloading sitemap: " + url + " incorrect URL", ex);
 		} catch (ConnectTimeoutException ex) {
@@ -175,8 +221,8 @@ public class SitemapCheckThread extends AbstractCheckThread {
 
 	@Override
 	public void performCheck() {
-		Map<URI, Object> visitedPagesGet = new HashMap<URI, Object>();
-		Map<URI, Object> visitedPagesHead = new HashMap<URI, Object>();
+		Map<URI, Object> visitedPagesGet = new HashMap<>();
+		Map<URI, Object> visitedPagesHead = new HashMap<>();
 		log.debug("sitemap performCheck() start");
 		try {
 			String sitemapXml = downloadSitemap(httpClient, check.getUrl());
