@@ -5,13 +5,8 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
-
-import lombok.extern.slf4j.Slf4j;
-import net.sf.sitemonitoring.entity.Check;
-import net.sf.sitemonitoring.entity.Check.IntervalType;
-import net.sf.sitemonitoring.event.AbortCheckEvent;
-import net.sf.sitemonitoring.repository.CheckRepository;
-import net.sf.sitemonitoring.repository.CredentialsRepository;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -19,6 +14,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.common.eventbus.EventBus;
+
+import lombok.extern.slf4j.Slf4j;
+import net.sf.sitemonitoring.entity.Check;
+import net.sf.sitemonitoring.entity.Check.IntervalType;
+import net.sf.sitemonitoring.event.AbortCheckEvent;
+import net.sf.sitemonitoring.repository.CheckRepository;
+import net.sf.sitemonitoring.repository.CredentialsRepository;
 
 @Slf4j
 @Named
@@ -33,6 +35,9 @@ public class CheckService {
 
 	@Autowired
 	private EventBus eventBus;
+	
+	 @PersistenceContext
+	 private EntityManager entityManager;
 
 	/**
 	 * When this bean is created (during server startup) set
@@ -48,8 +53,49 @@ public class CheckService {
 		eventBus.post(new AbortCheckEvent(id, reason));
 	}
 
+	/**
+	 * Save check. If check is ranged, multiple checks will be saved.
+	 * @param check
+	 */
+	@Transactional
 	public void save(Check check) {
-		checkRepository.save(check);
+		if(isRangeCheck(check)) {
+			int low = getLowRange(check);
+			int high = getHighRange(check);
+			String originalName = check.getName();
+			String originalUrl = check.getUrl();
+			for(int i = low; i <= high; i++) {
+				check.setName(originalName);
+				check.setUrl(originalUrl);
+				replaceRange(check, i, low, high);
+				check.setId(0);
+				entityManager.persist(check);
+				entityManager.flush();
+				entityManager.clear();
+			}
+		} else {
+			checkRepository.save(check);
+		}
+	}
+	
+	protected void replaceRange(Check check, int index, int low, int high) {
+		check.setName(check.getName().replace("[" + low + ".." + high + "]", Integer.toString(index)));
+		check.setUrl(check.getUrl().replace("[" + low + ".." + high + "]", Integer.toString(index)));
+	}
+	
+	protected int getLowRange(Check check) {
+		return Integer.parseInt(check.getName().split("\\[")[1].split("\\.\\.")[0]);
+	}
+	
+	protected int getHighRange(Check check) {
+		return Integer.parseInt(check.getName().split("\\]")[0].split("\\.\\.")[1]);
+	}
+	
+	protected boolean isRangeCheck(Check check) {
+		if(check.getName() != null && check.getUrl() != null) {
+			return check.getName().matches(".*\\[\\d*\\.\\.\\d*\\].*") && check.getUrl().matches(".*\\[\\d*\\.\\.\\d*\\].*");
+		}
+		return false;
 	}
 
 	public void delete(int id) {
