@@ -5,17 +5,15 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
-import net.sf.sitemonitoring.entity.Check;
-import net.sf.sitemonitoring.entity.Check.CheckState;
-import net.sf.sitemonitoring.service.check.MonitoringService;
-
 import org.primefaces.push.EventBusFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.google.common.eventbus.EventBus;
+import lombok.extern.slf4j.Slf4j;
+import net.sf.sitemonitoring.entity.Check;
+import net.sf.sitemonitoring.entity.Check.CheckState;
+import net.sf.sitemonitoring.service.check.MonitoringService;
 
 @Service
 @Slf4j
@@ -29,9 +27,6 @@ public class SchedulingService {
 
 	@Autowired
 	private CheckResultService checkResultService;
-
-	@Autowired
-	private EventBus eventBus;
 
 	@Autowired
 	private ConfigurationService configurationService;
