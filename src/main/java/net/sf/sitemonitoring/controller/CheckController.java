@@ -9,6 +9,9 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.annotation.ScopeView;
@@ -23,9 +26,6 @@ import net.sf.sitemonitoring.service.CheckResultService;
 import net.sf.sitemonitoring.service.CheckService;
 import net.sf.sitemonitoring.service.ConfigurationService;
 import net.sf.sitemonitoring.service.PageService;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Data
 @Component
@@ -214,6 +214,11 @@ public class CheckController implements Serializable {
 
 	public void delete(int id) {
 		checkService.delete(id);
+		loadChecks();
+	}
+	
+	public void deleteAll() {
+		checkService.deleteAll();
 		loadChecks();
 	}
 

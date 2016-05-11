@@ -150,4 +150,8 @@ public class CheckService {
 		checkRepository.updateChartMaxMillis(checkId, chartMaxMillis);
 	}
 
+	public void deleteAll() {
+		checkRepository.deleteAll();
+	}
+
 }

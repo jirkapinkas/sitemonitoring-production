@@ -1,6 +1,7 @@
 + added support for gzipped sitemaps
 + when creating sitemap with "name" and "url" containing text "[a..b]" 
   (for example [1..99]), multiple sitemaps will be created.
++ added button to delete all checks
 
 8.9.2015: version 3.0.0
 + moved core architecture to Spring Boot, this will allow more future enhancements. 

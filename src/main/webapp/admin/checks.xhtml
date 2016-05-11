@@ -62,6 +62,15 @@
 							update=":checkFormJson"
 							resetValues="true" />
         	</p:menuButton>
+        	
+        	<p:menuButton value="remove" style="padding-left:10px;">
+				<p:menuitem value="remove ALL checks" icon="fa fa-trash fa-menu"
+							action="#{checkController.deleteAll()}"
+							update=":checksTable"
+							resetValues="true">
+					<p:confirm header="Confirmation" message="Really remove ALL checks?" icon="fa fa-warning" />
+				</p:menuitem>
+        	</p:menuButton>
         </h:form>
         
         <h:panelGroup id="infoMessagePanelOuter">
