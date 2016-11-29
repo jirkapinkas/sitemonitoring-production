@@ -9,7 +9,7 @@
 <ul>
 	<li>User friendly</li>
 	<li>Platform independent</li>
-	<li>Can run standalone (also as a Windows Service) or on your custom Java EE server and your database</li>
+	<li>Runs as a standalone Java application</li>
 	<li>Monitor single web page, pages in sitemap and even your whole web site using spider</li>
 	<li>Check not only HTTP result codes, but also page contents; Can specify HTTP header for web page request;</li>
 	<li>Find broken links on your website</li>
@@ -29,11 +29,7 @@ Extract and run: <code>startup.bat</code> (Linux and Mac are also supported)</p>
 
 <p>Note for developers: to build the application run: <code>mvn clean package</code>
 
-<h2>Standard WAR file (with your custom database)</h2>
-
-<p>
-Set database properties in <code>src/main/resources/db.properties</code>, add to classpath JDBC driver and finally run: <code>mvn clean package</code>. Out of the box will be used HSQL embedded database (to validate functionality). Supported databases are MySQL, PostgreSQL and Oracle. See video tutorial how to use it.
-</p>
+<p>How to build binary distribution: <code>mvn clean install</code></p>
 
 <h2>Development (with embedded HSQL database)</h2>
 
