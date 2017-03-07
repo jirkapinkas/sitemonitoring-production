@@ -5,17 +5,17 @@ import java.io.StringWriter;
 import java.security.GeneralSecurityException;
 import java.util.Properties;
 
-import lombok.extern.slf4j.Slf4j;
-import net.sf.sitemonitoring.entity.Check;
-import net.sf.sitemonitoring.entity.Configuration;
-import net.sf.sitemonitoring.repository.CheckRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 import com.sun.mail.util.MailSSLSocketFactory;
+
+import lombok.extern.slf4j.Slf4j;
+import net.sf.sitemonitoring.entity.Check;
+import net.sf.sitemonitoring.entity.Configuration;
+import net.sf.sitemonitoring.repository.CheckRepository;
 
 @Slf4j
 @Service
@@ -120,9 +120,11 @@ public class SendEmailService {
 	}
 
 	private void fixAuth(JavaMailSenderImpl javaMailSender, Properties props) {
-		if (javaMailSender.getPort() == 465) {
+		if (javaMailSender.getPort() == 465 || javaMailSender.getPort() == 587) {
+		    // for two step authentication
+		    // see : https://support.google.com/accounts/answer/185833
 			props.put("mail.smtp.auth", true);
-			props.put("mail.smtp.starttls.enable", false);
+			props.put("mail.smtp.starttls.enable", true);
 			props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 			props.put("mail.smtp.socketFactory.fallback", false);
 			props.put("mail.debug", true);

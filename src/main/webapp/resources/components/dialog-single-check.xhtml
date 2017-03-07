@@ -89,7 +89,19 @@
 				<h:panelGroup id="followOutboundBrokenLinksValue">
 					<p:selectBooleanCheckbox value="#{checkController.check.followOutboundBrokenLinks}" style="width:100%" rendered="#{checkController.check.checkBrokenLinks eq true}" />
 				</h:panelGroup>
-				
+
+				<h:outputText value="check for changes" escape="false" />
+				<p:selectBooleanCheckbox value="#{checkController.check.checkForChanges}">
+                    <p:ajax event="change" update="checkForChangesFilterText, checkForChangesFilterValue" />
+				</p:selectBooleanCheckbox>
+                
+                <h:panelGroup id="checkForChangesFilterText">
+                    <h:outputText value="Change filter" escape="false" rendered="#{checkController.check.checkForChanges eq true}" />
+                </h:panelGroup>
+                <h:panelGroup id="checkForChangesFilterValue">
+                    <p:inputTextarea value="#{checkController.check.checkForChangesFilter}" style="width:100%" rendered="#{checkController.check.checkForChanges eq true}" />
+                </h:panelGroup>
+		
 				timeouts (in milliseconds):
 				<h:panelGrid columns="2">
 					<h:panelGrid columns="3">

@@ -187,11 +187,13 @@ public class CheckController implements Serializable {
 		if (pageId != null && pageId > 0) {
 			pageSelectionController.setSelectedPage(pageId);
 		}
+		check.setCheckForChanges(configuration.isCheckForChanges());
+		check.setCheckForChangesFilter(configuration.getCheckForChangesFilter());
 	}
 
 	public void save() {
 		log.debug("save check: " + check.getType());
-		if ((check.getCondition() != null && !check.getCondition().isEmpty()) || check.isCheckBrokenLinks()) {
+		if ((check.getCondition() != null && !check.getCondition().isEmpty()) || check.isCheckBrokenLinks() || check.isCheckForChanges()) {
 			check.setHttpMethod(HttpMethod.GET);
 		} else {
 			check.setHttpMethod(HttpMethod.HEAD);
