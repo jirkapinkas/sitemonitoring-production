@@ -89,7 +89,11 @@
 				<h:panelGroup id="followOutboundBrokenLinksValue">
 					<p:selectBooleanCheckbox value="#{checkController.check.followOutboundBrokenLinks}" style="width:100%" rendered="#{checkController.check.checkBrokenLinks eq true}" />
 				</h:panelGroup>
-				
+
+				<h:outputText value="check for changes" escape="false" />
+				<p:selectBooleanCheckbox value="#{checkController.check.checkForChanges}">
+				</p:selectBooleanCheckbox>
+		
 				timeouts (in milliseconds):
 				<h:panelGrid columns="2">
 					<h:panelGrid columns="3">
