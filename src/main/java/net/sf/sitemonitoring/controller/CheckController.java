@@ -9,10 +9,11 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.annotation.ScopeView;
 import net.sf.sitemonitoring.entity.Check;
@@ -27,7 +28,8 @@ import net.sf.sitemonitoring.service.CheckService;
 import net.sf.sitemonitoring.service.ConfigurationService;
 import net.sf.sitemonitoring.service.PageService;
 
-@Data
+@Getter
+@Setter
 @Component
 @ScopeView
 @Slf4j
