@@ -44,4 +44,4 @@ build:
 
 run (with postgresql server):
 
-`java -jar -Dlog4j.debug -Dlog4j.configuration=file:/hosting/sitemonitoring/log4j-standalone.properties -Dspring.profiles.active=myserver sitemonitoring.war --server.port=TODO_PORT --spring.datasource.url=jdbc:postgresql://localhost:5432/TODO_DB_NAME --spring.datasource.username=TODO_USERNAME --spring.datasource.password=TODO_PASSWORD`
+`java -jar -Dlog4j.debug -Dlog4j.configuration=file:/hosting/sitemonitoring/log4j-standalone.properties -Dspring.profiles.active=myserver sitemonitoring.war --server.port=TODO_PORT --spring.datasource.url=jdbc:postgresql://localhost:5432/TODO_DB_NAME --spring.datasource.username=TODO_USERNAME --spring.datasource.password=TODO_PASSWORD  --spring.datasource.hikari.maximumPoolSize=3`
