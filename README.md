@@ -35,3 +35,13 @@ Extract and run: <code>startup.bat</code> (Linux and Mac are also supported)</p>
 
 <p>To run in development mode run this class: <code>net.sf.sitemonitoring.Main</code> <br />
 with these VM arguments: <code>-Djava.io.tmpdir=sitemonitoring-temp -Dspring.profiles.active=dev -Ddbport=9001 -Dserver.port=8081</code></p>
+
+<h2>My server:</h2>
+
+build:
+
+`mvn clean package -P myserver`
+
+run (with postgresql server):
+
+`java -jar -Dlog4j.debug -Dlog4j.configuration=file:/hosting/sitemonitoring/log4j-standalone.properties -Dspring.profiles.active=myserver sitemonitoring.war --server.port=TODO_PORT --spring.datasource.url=jdbc:postgresql://localhost:5432/TODO_DB_NAME --spring.datasource.username=TODO_USERNAME --spring.datasource.password=TODO_PASSWORD`
