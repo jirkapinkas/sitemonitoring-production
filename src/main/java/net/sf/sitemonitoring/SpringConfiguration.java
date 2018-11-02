@@ -1,6 +1,7 @@
 package net.sf.sitemonitoring;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -55,7 +56,7 @@ public class SpringConfiguration implements AsyncConfigurer {
 	public CacheManager cacheManager() {
 		// configure and return an implementation of Spring's CacheManager SPI
 		SimpleCacheManager cacheManager = new SimpleCacheManager();
-		cacheManager.setCaches(Arrays.asList(new ConcurrentMapCache("configuration")));
+		cacheManager.setCaches(Collections.singletonList(new ConcurrentMapCache("configuration")));
 		return cacheManager;
 	}
 

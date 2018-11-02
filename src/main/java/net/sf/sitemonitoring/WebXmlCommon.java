@@ -1,18 +1,8 @@
 package net.sf.sitemonitoring;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration.Dynamic;
-import javax.servlet.SessionTrackingMode;
-
+import com.google.common.collect.ImmutableSet;
+import com.sun.faces.config.FacesInitializer;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.sitemonitoring.servlet.StartBrowserServlet;
-
 import org.atmosphere.cpr.ContainerInitializer;
 import org.primefaces.push.PushServlet;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
@@ -22,8 +12,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
 
-import com.google.common.collect.ImmutableSet;
-import com.sun.faces.config.FacesInitializer;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.SessionTrackingMode;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @Configuration
 @Slf4j
@@ -43,12 +38,9 @@ public class WebXmlCommon {
 		}
 		servletContext.setSessionTrackingModes(ImmutableSet.of(SessionTrackingMode.COOKIE));
 
-		Set<Class<?>> clazz = new HashSet<Class<?>>();
+		Set<Class<?>> clazz = new HashSet<>();
 		clazz.add(WebXmlSpringBoot.class);
 		facesInitializer.onStartup(clazz, servletContext);
-
-		Dynamic startBrowserServlet = servletContext.addServlet("StartBrowserServlet", StartBrowserServlet.class);
-		startBrowserServlet.setLoadOnStartup(2);
 	}
 
 	class JsfServletRegistrationBean extends ServletRegistrationBean {
@@ -77,8 +69,7 @@ public class WebXmlCommon {
 		if (Arrays.asList(activeProfiles).contains("dev")) {
 			dev = true;
 		}
-		ServletRegistrationBean servletRegistrationBean = new JsfServletRegistrationBean(dev);
-		return servletRegistrationBean;
+		return new JsfServletRegistrationBean(dev);
 	}
 
 	@Bean
@@ -98,7 +89,7 @@ public class WebXmlCommon {
 		@Override
 		public void onStartup(ServletContext servletContext) throws ServletException {
 			log.info("Called EmbeddedAtmosphereInitializer onStartup()");
-			onStartup(Collections.<Class<?>> emptySet(), servletContext);
+			onStartup(Collections.emptySet(), servletContext);
 		}
 
 	}

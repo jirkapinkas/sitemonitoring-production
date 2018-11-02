@@ -30,20 +30,12 @@ public class InitDbService {
 	@Autowired
 	private CheckResultRepository checkResultRepository;
 	
-	@Autowired
-	private UpgradeService upgradeService;
-
 	@PostConstruct
 	public void init() throws Exception {
 		Configuration configuration = configurationService.find();
-		if (configuration != null) {
-			// configuration already exists -> we're using production database
-			upgradeService.upgradeDatabase(configuration);
-			return;
-		}
 		System.out.println("*** DATABASE INIT STARTED ***");
 		configuration = new Configuration();
-		configuration.setMonitoringVersion("3.0.0");
+		configuration.setMonitoringVersion("4.0.0");
 		configuration.setEmailSubject("sitemonitoring error");
 		configuration.setEmailBody("check name:{CHECK-NAME}\n\ncheck url: {CHECK-URL}\n\nerror:\n{ERROR}");
 		configuration.setDefaultSingleCheckInterval(5);
