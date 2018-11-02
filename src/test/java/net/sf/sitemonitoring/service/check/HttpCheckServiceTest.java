@@ -1,33 +1,24 @@
 package net.sf.sitemonitoring.service.check;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-
-import javax.xml.bind.JAXBException;
-
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.eclipse.jetty.server.Server;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.littleshoot.proxy.HttpProxyServer;
-
 import com.google.common.eventbus.EventBus;
-
 import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.entity.Check.CheckCondition;
 import net.sf.sitemonitoring.entity.Check.CheckType;
 import net.sf.sitemonitoring.entity.Check.HttpMethod;
 import net.sf.sitemonitoring.entity.Credentials;
-import net.sf.sitemonitoring.service.check.util.JettyServerUtil;
-import net.sf.sitemonitoring.service.check.util.ProxyServerUtil;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.io.IOException;
+
+import static org.junit.Assert.*;
 
 /**
  * This class tests all checks, which perform http requests
@@ -35,6 +26,8 @@ import net.sf.sitemonitoring.service.check.util.ProxyServerUtil;
  * @author pinkas
  *
  */
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class HttpCheckServiceTest {
 
 	private SinglePageCheckService singlePageCheckService;
@@ -43,32 +36,12 @@ public class HttpCheckServiceTest {
 
 	private SpiderCheckThread spiderCheckThread;
 
-	private static Server jettyServer;
-
-	private static HttpProxyServer httpProxyServer;
-
-	public static final String TEST_JETTY_HTTP = "http://localhost:8081/";
+	public static String TEST_JETTY_HTTP = "http://localhost:8081/";
 
 	private static final int timeout = 10000;
 
-	@BeforeClass
-	public static void setUp() throws Exception {
-		jettyServer = JettyServerUtil.start();
-		httpProxyServer = ProxyServerUtil.start();
-	}
-
-	public static void main(String[] args) throws Exception {
-		JettyServerUtil.start();
-	}
-
-	@AfterClass
-	public static void tearDown() throws Exception {
-		JettyServerUtil.stop(jettyServer); // this will also stop proxy
-		ProxyServerUtil.stop(httpProxyServer);
-	}
-
 	@Before
-	public void before() throws JAXBException {
+	public void before() throws InterruptedException {
 		singlePageCheckService = new SinglePageCheckService();
 		singlePageCheckService.setEventBus(new EventBus());
 		sitemapCheckThread = new SitemapCheckThread(singlePageCheckService, null);

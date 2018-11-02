@@ -1,21 +1,15 @@
 package net.sf.sitemonitoring;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Executor;
-
+import com.google.common.eventbus.EventBus;
 import net.sf.sitemonitoring.annotation.ViewScope;
-
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -23,14 +17,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.google.common.eventbus.EventBus;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Executor;
 
-@SpringBootApplication
-@EnableJpaRepositories
-@EnableTransactionManagement
-@EnableScheduling
-@EnableAsync
-@EnableCaching
+@Configuration
 public class SpringConfiguration implements AsyncConfigurer {
 
 	@Bean
@@ -62,7 +54,7 @@ public class SpringConfiguration implements AsyncConfigurer {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Bean
-	public CustomScopeConfigurer viewScopeConfigurer() {
+	public static CustomScopeConfigurer viewScopeConfigurer() {
 		CustomScopeConfigurer customScopeConfigurer = new CustomScopeConfigurer();
 		Map scopes = new HashMap();
 		scopes.put("view", new ViewScope());
