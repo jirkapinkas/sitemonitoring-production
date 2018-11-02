@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+	<sitemap>
+		<loc>http://localhost:8081/local-sitemap.xml</loc>
+		<lastmod>2015-08-31T09:38:32.802+02:00</lastmod>
+	</sitemap>
+	<sitemap>
+		<loc>http://localhost:8081/sitemap.xml</loc>
+		<lastmod>2015-08-31T09:38:35.324+02:00</lastmod>
+	</sitemap>
+</sitemapindex>
