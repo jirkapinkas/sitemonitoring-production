@@ -89,8 +89,9 @@
 
 		<br />
 
-		<p:autoUpdate />
-		<p:messages severity="info" />
+		<p:messages severity="info">
+			<p:autoUpdate />
+		</p:messages>
 		
 		<p:dataTable value="#{checkController.checks}" var="check"
 			id="checksTable" styleClass="resultsTable, hide-column-names" emptyMessage="No checks.">
