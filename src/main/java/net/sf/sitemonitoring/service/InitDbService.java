@@ -30,6 +30,10 @@ public class InitDbService {
 
     @PostConstruct
     public void init() {
+        if(configurationService.find() != null) {
+            log.info("Configuration detected, won't perform database initialization");
+            return;
+        }
         log.info("*** DATABASE INIT STARTED ***");
         Configuration configuration = new Configuration();
         configuration.setMonitoringVersion("4.0.0");

@@ -4,6 +4,7 @@
 	<groupId>net.sf.sitemonitoring</groupId>
 	<artifactId>sitemonitoring</artifactId>
 	<version>4.0-SNAPSHOT</version>
+	<packaging>war</packaging>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -155,9 +156,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludeGroupIds>org.projectlombok</excludeGroupIds>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -183,7 +181,7 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <excludeGroupIds>org.projectlombok,org.hsqldb,org.eclipse.jdt</excludeGroupIds>
+                            <excludeGroupIds>org.projectlombok,org.hsqldb</excludeGroupIds>
                         </configuration>
                     </plugin>
                 </plugins>
