@@ -98,6 +98,7 @@ public class HttpCheckServiceTest {
 
 	@Test
 	public void testPerformCheckSinglePageContainsWithProxy() throws Exception {
+		HttpProxyServer proxyServer = ProxyServerUtil.start();
 		Check check = new Check();
 		check.setCondition("</html>");
 		check.setReturnHttpCode(200);
@@ -114,6 +115,7 @@ public class HttpCheckServiceTest {
 		check.setHttpMethod(HttpMethod.GET);
 
 		assertNull(singlePageCheckService.performCheck(check));
+		ProxyServerUtil.stop(proxyServer);
 	}
 
 	@Test
@@ -239,8 +241,6 @@ public class HttpCheckServiceTest {
 		}
 	}
 
-	// works at home, not at work, dunno why :-( ... maybe internet provider?
-	@Ignore
 	@Test
 	public void testCheckSitemap() throws Exception {
 		Check check = new Check();
