@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import com.google.common.eventbus.EventBus;
 
@@ -24,6 +23,7 @@ import net.sf.sitemonitoring.entity.Check;
 import net.sf.sitemonitoring.entity.Check.CheckCondition;
 import net.sf.sitemonitoring.jaxb.sitemap.Urlset;
 import net.sf.sitemonitoring.jaxb.sitemapindex.Sitemapindex;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SitemapCheckServiceTest {
@@ -39,7 +39,7 @@ public class SitemapCheckServiceTest {
 	private static final int timeout = 1000;
 
 	@Before
-	public void before() throws JAXBException {
+	public void before() {
 		visitedPagesGet = new HashMap<>();
 		visitedPagesHead = new HashMap<>();
 		SinglePageCheckService singlePageCheckService = new SinglePageCheckService();

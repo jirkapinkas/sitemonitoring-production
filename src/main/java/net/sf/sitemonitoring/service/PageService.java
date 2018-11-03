@@ -23,7 +23,7 @@ public class PageService {
 	}
 
 	public void delete(int pageId) {
-		pageRepository.delete(pageId);
+		pageRepository.deleteById(pageId);
 	}
 
 	public Page findOne(int id) {

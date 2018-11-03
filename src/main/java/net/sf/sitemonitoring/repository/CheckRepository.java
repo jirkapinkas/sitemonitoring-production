@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface CheckRepository extends JpaRepository<Check, Integer> {
 
+	@Query("select c from Check c where c.id = ?1")
+	Check findOne(int id);
+
 	@Modifying(clearAutomatically = true)
 	@Query("update Check set startDate = current_timestamp, scheduledNextDate = ?1, checkState = 'RUNNING' where id = ?2")
 	void startCheck(Date scheduledNextDate, int checkId);

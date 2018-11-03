@@ -140,15 +140,15 @@ public class CheckResultService {
 	}
 
 	public Map<Integer, CheckResultDto> getLastResults(List<Check> checks) {
-		Map<Integer, CheckResultDto> map = new HashMap<Integer, CheckResultDto>();
+		Map<Integer, CheckResultDto> map = new HashMap<>();
 		for (Check check : checks) {
 			// skip inactive checks
 			if (!check.isActive()) {
 				continue;
 			}
-			List<CheckResult> checkResultList = checkResultRepository.findByCheck(check, new PageRequest(0, 1, new Sort(Direction.DESC, "id")));
+			List<CheckResult> checkResultList = checkResultRepository.findByCheck(check, PageRequest.of(0, 1, Sort.by(Direction.DESC, "id")));
 			CheckResultDto checkResultDto = new CheckResultDto();
-			if (checkResultList.size() == 0) {
+			if (checkResultList.isEmpty()) {
 				// first time, no results yet
 			} else {
 				checkResultDto = transformCheckToDto(checkResultList.get(0));
