@@ -6,6 +6,7 @@ import net.sf.sitemonitoring.entity.Check.CheckCondition;
 import net.sf.sitemonitoring.entity.Check.CheckType;
 import net.sf.sitemonitoring.entity.Check.HttpMethod;
 import net.sf.sitemonitoring.entity.Credentials;
+import net.sf.sitemonitoring.service.check.util.PagingServlet;
 import net.sf.sitemonitoring.service.check.util.ProxyServerUtil;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -16,6 +17,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.littleshoot.proxy.HttpProxyServer;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
@@ -42,13 +45,13 @@ public class HttpCheckServiceTest {
 
 	private static final int timeout = 10000;
 
+
 	@Before
-	public void before() throws InterruptedException {
+	public void before() {
 		singlePageCheckService = new SinglePageCheckService();
 		singlePageCheckService.setEventBus(new EventBus());
 		sitemapCheckThread = new SitemapCheckThread(singlePageCheckService, null);
-		// created in AbstractCheckThread.run(), that's why I have to create it
-		// here.
+		// created in AbstractCheckThread.run(), that's why I have to create it here.
 		sitemapCheckThread.httpClient = HttpClients.createDefault();
 		spiderCheckThread = new SpiderCheckThread(singlePageCheckService, null);
 		spiderCheckThread.httpClient = HttpClients.createDefault();
@@ -282,14 +285,11 @@ public class HttpCheckServiceTest {
 		spiderCheckThread.check = check;
 		spiderCheckThread.performCheck();
 		assertEquals(
-				"http://localhost:8081/spider/ has error: Invalid status: http://localhost:8081/spider/broken-link.html required: 200, received: 404 <br />http://localhost:8081/spider/contains-broken-links.html has error: Invalid status: http://localhost:8081/spider/doesnt-exist required: 200, received: 404 <br />http://localhost:8081/spider/page?id=9 has error: Invalid status: http://localhost:8081/spider/not-found.html required: 200, received: 404 <br />",
+				"http://localhost:8081/spider/ has error: Invalid status: http://localhost:8081/spider/broken-link.html required: 200, received: 500 <br />http://localhost:8081/spider/contains-broken-links.html has error: Invalid status: http://localhost:8081/spider/doesnt-exist required: 200, received: 500 <br />http://localhost:8081/spider/page?id=9 has error: Invalid status: http://localhost:8081/spider/not-found.html required: 200, received: 500 <br />",
 				spiderCheckThread.output);
 
 	}
 
-	// TODO Somehow this doesn't show the same error on Ubuntu. I must
-	// investigate more why the test differs.
-	@Ignore
 	@Test
 	public void testSpiderWithBrokenLinks() {
 		Check check = new Check();
@@ -301,9 +301,8 @@ public class HttpCheckServiceTest {
 		check.setConnectionTimeout(timeout);
 		spiderCheckThread.check = check;
 		spiderCheckThread.performCheck();
-		// TODO prints more than necessary
 		assertEquals(
-				"http://localhost:8081/spider/ has error: Invalid status: http://localhost:8081/spider/broken-link.html required: 200, received: 404<br />http://localhost:8081/spider/ has error: http://localhost:8081/spider/contains-broken-links.html has error: Invalid status: http://localhost:8081/spider/doesnt-exist required: 200, received: 404<br />http://localhost:8081/spider/contains-broken-links.html has error: Error downloading: http://www.doesntexist93283893289292947987498.com/<br /><br />http://localhost:8081/spider/ has error: Invalid status: http://localhost:8081/spider/broken-link.html required: 200, received: 404<br />http://localhost:8081/spider/contains-broken-links.html has error: Invalid status: http://localhost:8081/spider/doesnt-exist required: 200, received: 404<br />http://localhost:8081/spider/page?id=8 has error: http://localhost:8081/spider/page?id=9 has error: Invalid status: http://localhost:8081/spider/not-found.html required: 200, received: 404<br /><br />http://localhost:8081/spider/page?id=9 has error: Invalid status: http://localhost:8081/spider/not-found.html required: 200, received: 404<br />",
+				"http://localhost:8081/spider/ has error: Invalid status: http://localhost:8081/spider/broken-link.html required: 200, received: 500 <br />http://localhost:8081/spider/ has error: http://localhost:8081/spider/contains-broken-links.html has error: Invalid status: http://localhost:8081/spider/doesnt-exist required: 200, received: 500 <br /><br />http://localhost:8081/spider/ has error: Invalid status: http://localhost:8081/spider/broken-link.html required: 200, received: 500 <br />http://localhost:8081/spider/contains-broken-links.html has error: Invalid status: http://localhost:8081/spider/doesnt-exist required: 200, received: 500 <br />http://localhost:8081/spider/page?id=8 has error: http://localhost:8081/spider/page?id=9 has error: Invalid status: http://localhost:8081/spider/not-found.html required: 200, received: 500 <br /><br />http://localhost:8081/spider/page?id=9 has error: Invalid status: http://localhost:8081/spider/not-found.html required: 200, received: 500 <br />",
 				spiderCheckThread.output);
 	}
 
