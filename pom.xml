@@ -19,6 +19,13 @@
 
 	<dependencies>
 
+		<!-- JAXB implementation, needed since Java 9 -->
+		<!--<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>2.4.0-b180830.0438</version>
+		</dependency>-->
+
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
@@ -130,7 +137,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.16.16</version>
+			<version>1.18.4</version>
 			<scope>provided</scope>
 		</dependency>
 
