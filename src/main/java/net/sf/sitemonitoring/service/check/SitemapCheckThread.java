@@ -226,7 +226,7 @@ public class SitemapCheckThread extends AbstractCheckThread {
 		log.debug("sitemap performCheck() start");
 		try {
 			String sitemapXml = downloadSitemap(httpClient, check.getUrl());
-			if (sitemapXml.indexOf("</sitemapindex>") != -1) {
+			if (sitemapXml.contains("</sitemapindex>")) {
 				// it's sitemapindex
 				Sitemapindex sitemapindex = readSitemapIndex(sitemapXml);
 				log.debug("sitemap index contains " + sitemapindex.getSitemaps().size() + " sitemaps");

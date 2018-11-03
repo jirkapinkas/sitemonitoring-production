@@ -182,13 +182,13 @@ public class HttpCheckServiceTest {
 		check.setConnectionTimeout(timeout);
 		check.setHttpMethod(HttpMethod.GET);
 
-		assertEquals("Invalid status: http://localhost:8081/not-exists.html required: 200, received: 404 ", singlePageCheckService.performCheck(check));
+		assertEquals("Invalid status: http://localhost:8081/not-exists.html required: 200, received: 500 ", singlePageCheckService.performCheck(check));
 	}
 
 	@Test
 	public void testPerformCheckSinglePageExpectedDoesntExist() throws Exception {
 		Check check = new Check();
-		check.setReturnHttpCode(404);
+		check.setReturnHttpCode(500);
 		check.setType(CheckType.SINGLE_PAGE);
 		check.setUrl(TEST_JETTY_HTTP + "not-exists.html");
 		check.setCheckBrokenLinks(false);
@@ -322,7 +322,7 @@ public class HttpCheckServiceTest {
 
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
-		assertEquals("Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404 <br />", sitemapCheckThread.output);
+		assertEquals("Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 500 <br />", sitemapCheckThread.output);
 	}
 
 	@Test
@@ -343,7 +343,7 @@ public class HttpCheckServiceTest {
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
 		assertEquals(
-				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404 <br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404 <br />http://localhost:8081/contains-broken-links.html has error: http://www.doesntexist93283893289292947987498.com/: Unknown host: www.doesntexist93283893289292947987498.com<br /><br />",
+				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 500 <br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 500 <br />http://localhost:8081/contains-broken-links.html has error: http://www.doesntexist93283893289292947987498.com/: Unknown host: www.doesntexist93283893289292947987498.com<br /><br />",
 				sitemapCheckThread.output);
 	}
 
@@ -365,7 +365,7 @@ public class HttpCheckServiceTest {
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
 		assertEquals(
-				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404 <br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404 <br /><br />",
+				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 500 <br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 500 <br /><br />",
 				sitemapCheckThread.output);
 	}
 
@@ -387,7 +387,7 @@ public class HttpCheckServiceTest {
 		sitemapCheckThread.check = check;
 		sitemapCheckThread.performCheck();
 		assertEquals(
-				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404 <br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 404 <br /><br />",
+				"Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 500 <br />http://localhost:8081/contains-broken-links.html has error: Invalid status: http://localhost:8081/doesnt-exist required: 200, received: 500 <br /><br />",
 				sitemapCheckThread.output);
 	}
 
