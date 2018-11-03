@@ -391,52 +391,52 @@ public class HttpCheckServiceTest {
 				sitemapCheckThread.output);
 	}
 
-	@Test
-	public void testSingleCheckBasicAuthentication() {
-		Check check = new Check();
-		check.setCondition("this is protected using BasicAuthenticationFilter.java");
-		check.setReturnHttpCode(200);
-		check.setType(CheckType.SINGLE_PAGE);
-		check.setConditionType(CheckCondition.CONTAINS);
-		check.setUrl(TEST_JETTY_HTTP + "security/basic.html");
-		check.setCheckBrokenLinks(false);
-		check.setSocketTimeout(timeout);
-		check.setConnectionTimeout(timeout);
-		check.setHttpMethod(HttpMethod.GET);
-
-		Credentials credentials = new Credentials();
-		credentials.setUsername("admin");
-		credentials.setPassword("admin");
-		check.setCredentials(credentials);
-
-		assertNull(singlePageCheckService.performCheck(check));
-	}
-
-	@Test
-	public void testSingleCheckBasicAuthenticationWithProxy() throws Exception {
-		HttpProxyServer proxyServer = ProxyServerUtil.start();
-		Check check = new Check();
-		check.setCondition("this is protected using BasicAuthenticationFilter.java");
-		check.setReturnHttpCode(200);
-		check.setType(CheckType.SINGLE_PAGE);
-		check.setConditionType(CheckCondition.CONTAINS);
-		check.setUrl(TEST_JETTY_HTTP + "security/basic.html");
-		check.setCheckBrokenLinks(false);
-		check.setSocketTimeout(timeout);
-		check.setConnectionTimeout(timeout);
-		check.setHttpProxyServer("localhost");
-		check.setHttpProxyPort(8089);
-		check.setHttpProxyUsername("test");
-		check.setHttpProxyPassword("works");
-		check.setHttpMethod(HttpMethod.GET);
-
-		Credentials credentials = new Credentials();
-		credentials.setUsername("admin");
-		credentials.setPassword("admin");
-		check.setCredentials(credentials);
-
-		assertNull(singlePageCheckService.performCheck(check));
-		ProxyServerUtil.stop(proxyServer);
-	}
+//	@Test
+//	public void testSingleCheckBasicAuthentication() {
+//		Check check = new Check();
+//		check.setCondition("this is protected using BasicAuthenticationFilter.java");
+//		check.setReturnHttpCode(200);
+//		check.setType(CheckType.SINGLE_PAGE);
+//		check.setConditionType(CheckCondition.CONTAINS);
+//		check.setUrl(TEST_JETTY_HTTP + "security/basic.html");
+//		check.setCheckBrokenLinks(false);
+//		check.setSocketTimeout(timeout);
+//		check.setConnectionTimeout(timeout);
+//		check.setHttpMethod(HttpMethod.GET);
+//
+//		Credentials credentials = new Credentials();
+//		credentials.setUsername("admin");
+//		credentials.setPassword("admin");
+//		check.setCredentials(credentials);
+//
+//		assertNull(singlePageCheckService.performCheck(check));
+//	}
+//
+//	@Test
+//	public void testSingleCheckBasicAuthenticationWithProxy() throws Exception {
+//		HttpProxyServer proxyServer = ProxyServerUtil.start();
+//		Check check = new Check();
+//		check.setCondition("this is protected using BasicAuthenticationFilter.java");
+//		check.setReturnHttpCode(200);
+//		check.setType(CheckType.SINGLE_PAGE);
+//		check.setConditionType(CheckCondition.CONTAINS);
+//		check.setUrl(TEST_JETTY_HTTP + "security/basic.html");
+//		check.setCheckBrokenLinks(false);
+//		check.setSocketTimeout(timeout);
+//		check.setConnectionTimeout(timeout);
+//		check.setHttpProxyServer("localhost");
+//		check.setHttpProxyPort(8089);
+//		check.setHttpProxyUsername("test");
+//		check.setHttpProxyPassword("works");
+//		check.setHttpMethod(HttpMethod.GET);
+//
+//		Credentials credentials = new Credentials();
+//		credentials.setUsername("admin");
+//		credentials.setPassword("admin");
+//		check.setCredentials(credentials);
+//
+//		assertNull(singlePageCheckService.performCheck(check));
+//		ProxyServerUtil.stop(proxyServer);
+//	}
 
 }

@@ -20,7 +20,7 @@ public class SinglePageCheckService extends AbstractCheckService {
 	}
 
 	public String performCheck(Check check) {
-		AbstractSingleCheckThread thread = new SinglePageCheckThread(check, new HashMap<URI, Object>(), new HashMap<URI, Object>());
+		AbstractSingleCheckThread thread = new SinglePageCheckThread(check, new HashMap<>(), new HashMap<>());
 		return startAndJoinThread(thread);
 	}
 
