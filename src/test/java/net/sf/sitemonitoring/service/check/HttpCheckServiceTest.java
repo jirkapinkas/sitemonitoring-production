@@ -6,6 +6,7 @@ import net.sf.sitemonitoring.entity.Check.CheckCondition;
 import net.sf.sitemonitoring.entity.Check.CheckType;
 import net.sf.sitemonitoring.entity.Check.HttpMethod;
 import net.sf.sitemonitoring.entity.Credentials;
+import net.sf.sitemonitoring.service.check.util.ProxyServerUtil;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.junit.After;
@@ -13,6 +14,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.littleshoot.proxy.HttpProxyServer;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -413,6 +415,7 @@ public class HttpCheckServiceTest {
 
 	@Test
 	public void testSingleCheckBasicAuthenticationWithProxy() throws Exception {
+		HttpProxyServer proxyServer = ProxyServerUtil.start();
 		Check check = new Check();
 		check.setCondition("this is protected using BasicAuthenticationFilter.java");
 		check.setReturnHttpCode(200);
@@ -434,6 +437,7 @@ public class HttpCheckServiceTest {
 		check.setCredentials(credentials);
 
 		assertNull(singlePageCheckService.performCheck(check));
+		ProxyServerUtil.stop(proxyServer);
 	}
 
 }
