@@ -12,7 +12,7 @@ public class SendEmailServiceTest {
 	private SendEmailService sendEmailService;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		sendEmailService = new SendEmailService();
 	}
 

@@ -74,7 +74,7 @@ public class SitemapCheckServiceTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testCheckSitemapErrors() throws Exception {
-		Mockito.when(singlePageCheckServiceMock.performCheck(Mockito.any(Check.class), Mockito.any(Map.class), Mockito.any(Map.class))).thenReturn("Error!");
+		Mockito.when(singlePageCheckServiceMock.performCheck(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn("Error!");
 		sitemapCheckThread.setSinglePageCheckService(singlePageCheckServiceMock);
 
 		String sitemapXml = FileUtils.readFileToString(new File("src/test/resources/sitemap.xml"));
@@ -92,7 +92,7 @@ public class SitemapCheckServiceTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testCheckSitemapNoErrors() throws Exception {
-		Mockito.when(singlePageCheckServiceMock.performCheck(Mockito.any(Check.class), Mockito.any(Map.class), Mockito.any(Map.class))).thenReturn(null);
+		Mockito.when(singlePageCheckServiceMock.performCheck(Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(null);
 		sitemapCheckThread.setSinglePageCheckService(singlePageCheckServiceMock);
 
 		String sitemapXml = FileUtils.readFileToString(new File("src/test/resources/sitemap.xml"));

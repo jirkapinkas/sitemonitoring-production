@@ -28,14 +28,14 @@ public class CheckResultServiceTest {
 	private CheckResultRepository checkResultRepository;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		checkResultService = new CheckResultService();
 		checkResultService.setCheckResultRepository(checkResultRepository);
 	}
 
 	@Test
 	public void testGetLastResultsTwoActive() {
-		List<Check> checks = new ArrayList<Check>();
+		List<Check> checks = new ArrayList<>();
 		Check check1 = new Check();
 		check1.setActive(true);
 		check1.setId(1);
@@ -44,7 +44,7 @@ public class CheckResultServiceTest {
 		check2.setId(2);
 		checks.add(check1);
 		checks.add(check2);
-		List<CheckResult> checkResults = new ArrayList<CheckResult>();
+		List<CheckResult> checkResults = new ArrayList<>();
 		checkResults.add(new CheckResult());
 		Mockito.when(checkResultRepository.findByCheck(Mockito.any(Check.class), 
 				Mockito.any(PageRequest.class))).thenReturn(checkResults);
@@ -56,7 +56,7 @@ public class CheckResultServiceTest {
 
 	@Test
 	public void testGetLastResultsTwoInactive() {
-		List<Check> checks = new ArrayList<Check>();
+		List<Check> checks = new ArrayList<>();
 		Check check1 = new Check();
 		check1.setActive(false);
 		check1.setId(1);
@@ -65,10 +65,6 @@ public class CheckResultServiceTest {
 		check2.setId(2);
 		checks.add(check1);
 		checks.add(check2);
-		List<CheckResult> checkResults = new ArrayList<CheckResult>();
-		checkResults.add(new CheckResult());
-		Mockito.when(checkResultRepository.findByCheck(Mockito.any(Check.class), 
-				Mockito.any(PageRequest.class))).thenReturn(checkResults);
 		Map<Integer, CheckResultDto> map = checkResultService.getLastResults(checks);
 		assertEquals(0, map.size());
 	}

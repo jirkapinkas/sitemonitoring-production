@@ -31,7 +31,7 @@ public class SchedulingServiceTest {
 	private CheckResultService checkResultService;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		schedulingService = new SchedulingService();
 		schedulingService.setCheckService(checkService);
 		schedulingService.setConfigurationService(configurationService);
