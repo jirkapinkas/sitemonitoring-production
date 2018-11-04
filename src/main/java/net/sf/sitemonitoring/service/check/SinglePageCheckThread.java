@@ -79,13 +79,13 @@ public class SinglePageCheckThread extends AbstractSingleCheckThread {
 								appendMessage("aborted");
 								break;
 							}
-							Element element = (Element) iterator.next();
+							Element element = iterator.next();
 							element.setBaseUri(check.getUrl());
 							String url = element.absUrl("href").trim();
 
 							if (!url.isEmpty() && !url.startsWith("mailto:") && !SinglePageCheckService.ignoreUrl(url, check.getDoNotFollowUrls())) {
 								boolean skip = false;
-								if (check.getFollowOutboundBrokenLinks() == null || check.getFollowOutboundBrokenLinks() == false) {
+								if (check.getFollowOutboundBrokenLinks() == null || !check.getFollowOutboundBrokenLinks()) {
 									if (!SinglePageCheckService.isSameDomain(url, check.getUrl())) {
 										skip = true;
 									}

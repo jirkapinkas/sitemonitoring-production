@@ -95,7 +95,7 @@ public class SendEmailService {
 			sendEmail(javaMailSender, from, to, subject, body);
 			return "all ok";
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.error("Error sending test email", ex);
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			ex.printStackTrace(pw);

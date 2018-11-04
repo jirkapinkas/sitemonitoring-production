@@ -57,7 +57,7 @@ public class ConfigurationService {
 	@Cacheable("configuration")
 	public Configuration find() {
 		List<Configuration> configurations = configurationRepository.findAll();
-		if (configurations.size() == 0) {
+		if (configurations.isEmpty()) {
 			return null;
 		} else if (configurations.size() > 1) {
 			throw new UnsupportedOperationException("Cannot have more than one configuration");
@@ -67,7 +67,7 @@ public class ConfigurationService {
 	
 	@CacheEvict(value = "configuration", allEntries = true)
 	public void clearCacheConfiguration() {
-		
+		// clear cache
 	}
 	
 }

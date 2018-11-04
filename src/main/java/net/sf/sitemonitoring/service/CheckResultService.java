@@ -111,17 +111,16 @@ public class CheckResultService {
 	
 	public CheckResultDtoList getErrorTableResults(int checkId) {
 		List<CheckResult> checkResultList = checkResultRepository.findByCheckIdErrors(checkId);
-		ArrayList<CheckResultDto> list = new ArrayList<CheckResultDto>();
+		ArrayList<CheckResultDto> list = new ArrayList<>();
 		for (CheckResult checkResult : checkResultList) {
 			list.add(transformCheckToDto(checkResult));
 		}
-		CheckResultDtoList checkResultDtoList = new CheckResultDtoList(list);
-		return checkResultDtoList;
+		return new CheckResultDtoList(list);
 	}
 
 	public CheckResultDtoList getChartResults(int checkId, DatePeriod datePeriod) {
 		List<CheckResult> checkResultList = checkResultRepository.findByCheckIdDateRange(checkId, datePeriod.getDateFrom(), datePeriod.getDateTo());
-		ArrayList<CheckResultDto> list = new ArrayList<CheckResultDto>();
+		ArrayList<CheckResultDto> list = new ArrayList<>();
 		for (CheckResult checkResult : checkResultList) {
 			list.add(transformCheckToDto(checkResult));
 		}
@@ -135,8 +134,7 @@ public class CheckResultService {
 			list.add(checkResultDto);
 		}
 
-		CheckResultDtoList checkResultDtoList = new CheckResultDtoList(list);
-		return checkResultDtoList;
+		return new CheckResultDtoList(list);
 	}
 
 	public Map<Integer, CheckResultDto> getLastResults(List<Check> checks) {

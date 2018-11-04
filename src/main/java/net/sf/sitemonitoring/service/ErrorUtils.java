@@ -2,6 +2,10 @@ package net.sf.sitemonitoring.service;
 
 public final class ErrorUtils {
 
+    private ErrorUtils() {
+
+    }
+
     public static final String getError(Throwable ex) {
         if (ex == null) {
             return null;

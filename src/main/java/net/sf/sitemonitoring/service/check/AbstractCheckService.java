@@ -19,6 +19,7 @@ public abstract class AbstractCheckService {
 			thread.join();
 		} catch (InterruptedException e) {
 			log.error("interrupted check url thread", e);
+			thread.interrupt();
 		} finally {
 			eventBus.unregister(thread);
 		}

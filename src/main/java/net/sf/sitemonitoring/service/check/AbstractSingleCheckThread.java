@@ -1,22 +1,20 @@
 package net.sf.sitemonitoring.service.check;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.Map;
-
-import javax.net.ssl.SSLHandshakeException;
-
 import lombok.extern.slf4j.Slf4j;
 import net.sf.sitemonitoring.entity.Check;
-
-import org.apache.commons.codec.binary.StringUtils;
-import org.apache.http.*;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.config.RequestConfig.Builder;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpRequestBase;
+
+import javax.net.ssl.SSLHandshakeException;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Map;
 
 @Slf4j
 public abstract class AbstractSingleCheckThread extends AbstractCheckThread {

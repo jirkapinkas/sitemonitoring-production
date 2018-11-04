@@ -74,6 +74,7 @@ public abstract class AbstractCheckThread extends Thread {
 		httpClientBuilder.setDefaultCredentialsProvider(credsProvider);
 	}
 
+	@Override
 	public void run() {
 		httpClient = buildHttpClient();
 		try {
