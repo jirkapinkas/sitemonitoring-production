@@ -1,5 +1,9 @@
 <h1>Website monitoring</h1>
 
+<h2>
+	This project is archived! Tip: Use Prometheus + AlertManager + Grafana to do the same (and more).
+</h2>
+
 <p>
 <a href="http://sitemonitoring.sourceforge.net/" target="_blank">website monitoring homepage with video tutorials!</a>
 </p>
